@@ -21,9 +21,13 @@ export class MapViewComponent implements AfterViewInit {
     this.map = L.map('map', {
       center: [-22.9068, -43.1729],
       zoom: 13,
-      zoomControl: true,
+      zoomControl: false,
       preferCanvas: false,
     });
+
+    L.control.zoom({
+      position: 'bottomleft'   // <— por exemplo, mover para o canto superior direito
+    }).addTo(this.map);
 
     // 2) Layer base
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

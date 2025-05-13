@@ -1,0 +1,284 @@
+{
+  "version": "6.0",
+  "nxVersion": "21.0.3",
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {
+      "desktop": [
+        {
+          "file": ".editorconfig",
+          "hash": "8037249353422744134"
+        },
+        {
+          "file": ".gitignore",
+          "hash": "10175894702052279752"
+        },
+        {
+          "file": ".vscode/extensions.json",
+          "hash": "11934160580685414355"
+        },
+        {
+          "file": ".vscode/launch.json",
+          "hash": "17406702432687230417"
+        },
+        {
+          "file": ".vscode/tasks.json",
+          "hash": "10093397977228577162"
+        },
+        {
+          "file": "README.md",
+          "hash": "13256350560280558944"
+        },
+        {
+          "file": "angular.json",
+          "hash": "4491326756010787366"
+        },
+        {
+          "file": "package-lock.json",
+          "hash": "11421685492688366884"
+        },
+        {
+          "file": "package.json",
+          "hash": "13764221039715721729",
+          "deps": [
+            "npm:@angular-devkit/build-angular",
+            "npm:@angular/cli",
+            "npm:@angular/compiler-cli",
+            "npm:@spartan-ng/cli",
+            "npm:@types/jasmine",
+            "npm:@types/leaflet",
+            "npm:jasmine-core",
+            "npm:karma",
+            "npm:karma-chrome-launcher",
+            "npm:karma-coverage",
+            "npm:karma-jasmine",
+            "npm:karma-jasmine-html-reporter",
+            "npm:typescript",
+            "npm:@angular/animations",
+            "npm:@angular/common",
+            "npm:@angular/compiler",
+            "npm:@angular/core",
+            "npm:@angular/fire",
+            "npm:@angular/forms",
+            "npm:@angular/platform-browser",
+            "npm:@angular/platform-browser-dynamic",
+            "npm:@angular/router",
+            "npm:@asymmetrik/ngx-leaflet",
+            "npm:axios",
+            "npm:firebase",
+            "npm:leaflet",
+            "npm:rxjs",
+            "npm:tslib",
+            "npm:zone.js"
+          ]
+        },
+        {
+          "file": "public/favicon.ico",
+          "hash": "3988961587069885523"
+        },
+        {
+          "file": "src/app/app.component.html",
+          "hash": "4637883269020045319"
+        },
+        {
+          "file": "src/app/app.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/app.component.spec.ts",
+          "hash": "11660894966911844434"
+        },
+        {
+          "file": "src/app/app.component.ts",
+          "hash": "9332069479956522680"
+        },
+        {
+          "file": "src/app/app.config.ts",
+          "hash": "16561019206697382666"
+        },
+        {
+          "file": "src/app/app.routes.ts",
+          "hash": "12419090245435790781"
+        },
+        {
+          "file": "src/app/auth/login/login.component.html",
+          "hash": "17867980221530361052"
+        },
+        {
+          "file": "src/app/auth/login/login.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/auth/login/login.component.spec.ts",
+          "hash": "10730385221617188498"
+        },
+        {
+          "file": "src/app/auth/login/login.component.ts",
+          "hash": "625238074166437062"
+        },
+        {
+          "file": "src/app/auth/register/register.component.html",
+          "hash": "2489894839149508814"
+        },
+        {
+          "file": "src/app/auth/register/register.component.scss",
+          "hash": "7827508010530521277"
+        },
+        {
+          "file": "src/app/auth/register/register.component.spec.ts",
+          "hash": "3383694944551866045"
+        },
+        {
+          "file": "src/app/auth/register/register.component.ts",
+          "hash": "12141471696929881247"
+        },
+        {
+          "file": "src/app/components/header/header.component.html",
+          "hash": "18017003866663452529"
+        },
+        {
+          "file": "src/app/components/header/header.component.scss",
+          "hash": "5413843695909387706"
+        },
+        {
+          "file": "src/app/components/header/header.component.spec.ts",
+          "hash": "3248092532361185820"
+        },
+        {
+          "file": "src/app/components/header/header.component.ts",
+          "hash": "7354369889349896243"
+        },
+        {
+          "file": "src/app/components/map-view/map-view.component.html",
+          "hash": "13118772478547183460"
+        },
+        {
+          "file": "src/app/components/map-view/map-view.component.scss",
+          "hash": "15773136125826203161"
+        },
+        {
+          "file": "src/app/components/map-view/map-view.component.spec.ts",
+          "hash": "4672627460394262726"
+        },
+        {
+          "file": "src/app/components/map-view/map-view.component.ts",
+          "hash": "4790721629534197808"
+        },
+        {
+          "file": "src/app/map/map.component.html",
+          "hash": "14736454132107762854"
+        },
+        {
+          "file": "src/app/map/map.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/map/map.component.spec.ts",
+          "hash": "17327613978356384418"
+        },
+        {
+          "file": "src/app/map/map.component.ts",
+          "hash": "13798207344527009254"
+        },
+        {
+          "file": "src/app/models/api-response.ts",
+          "hash": "4495837102622204438"
+        },
+        {
+          "file": "src/app/models/pet-location-model.ts",
+          "hash": "10669508369710991087"
+        },
+        {
+          "file": "src/app/services/api-service.service.spec.ts",
+          "hash": "16559885503451060527"
+        },
+        {
+          "file": "src/app/services/api-service.service.ts",
+          "hash": "8751745491725504169"
+        },
+        {
+          "file": "src/app/services/auth.service.spec.ts",
+          "hash": "6927655796975040699"
+        },
+        {
+          "file": "src/app/services/auth.service.ts",
+          "hash": "8452400851065150288"
+        },
+        {
+          "file": "src/app/services/avatar.service.spec.ts",
+          "hash": "7505691606345156607"
+        },
+        {
+          "file": "src/app/services/avatar.service.ts",
+          "hash": "9115883273473083089"
+        },
+        {
+          "file": "src/app/services/camera.service.spec.ts",
+          "hash": "10998138736024830255"
+        },
+        {
+          "file": "src/app/services/camera.service.ts",
+          "hash": "4271209436276359135"
+        },
+        {
+          "file": "src/app/services/googlemap.service.spec.ts",
+          "hash": "203455268478616846"
+        },
+        {
+          "file": "src/app/services/googlemap.service.ts",
+          "hash": "17973446664215308990"
+        },
+        {
+          "file": "src/app/services/pets.service.spec.ts",
+          "hash": "5414120018368363515"
+        },
+        {
+          "file": "src/app/services/pets.service.ts",
+          "hash": "12938601947945537174"
+        },
+        {
+          "file": "src/app/services/theme.service.spec.ts",
+          "hash": "14197313395001699105"
+        },
+        {
+          "file": "src/app/services/theme.service.ts",
+          "hash": "5256316748841871706"
+        },
+        {
+          "file": "src/environments/environment.prod.ts",
+          "hash": "17154524127842771066"
+        },
+        {
+          "file": "src/environments/environment.ts",
+          "hash": "2324477951746707560"
+        },
+        {
+          "file": "src/index.html",
+          "hash": "1647639838868971275"
+        },
+        {
+          "file": "src/main.ts",
+          "hash": "10122342497773807803"
+        },
+        {
+          "file": "src/styles.scss",
+          "hash": "15120362102294809916"
+        },
+        {
+          "file": "tsconfig.app.json",
+          "hash": "14560978611694835822"
+        },
+        {
+          "file": "tsconfig.json",
+          "hash": "5540552589929968073"
+        },
+        {
+          "file": "tsconfig.spec.json",
+          "hash": "11023685540591620072"
+        }
+      ]
+    },
+    "nonProjectFiles": []
+  }
+}

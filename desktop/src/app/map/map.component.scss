@@ -1,0 +1,5 @@
+@media (max-width: 767px) {
+  .map-container, #map {
+    height: calc(100vh - 64px);
+  }
+}

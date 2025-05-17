@@ -2,12 +2,14 @@ import { Component, Input } from '@angular/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
-
-// ícones do Lucide
 import { provideIcons } from '@ng-icons/core';
-import { lucideChevronRight, lucideMenu } from '@ng-icons/lucide';
-
-// componente que realmente renderiza o <ng-icon>
+import {
+  lucideChevronRight,
+  lucideMenu,
+  lucideCircleUserRound,
+  lucideHouse,
+  lucideDog
+} from '@ng-icons/lucide';
 import { NgIcon } from '@ng-icons/core';
 
 @Component({
@@ -17,17 +19,43 @@ import { NgIcon } from '@ng-icons/core';
     HlmButtonDirective,
     HlmSpinnerComponent,
     HlmIconDirective,
-    NgIcon,                 
+    NgIcon,
   ],
   providers: [
-    provideIcons({ lucideChevronRight, lucideMenu }), // Você pode adicionar mais ícones aqui depois
+    provideIcons({ lucideChevronRight, lucideMenu, lucideCircleUserRound, lucideHouse, lucideDog }),
   ],
   template: `
-    <button hlmBtn size="icon" variant='secondary'>
-      <ng-icon hlm size="sm" [name]="iconName" size='sm'></ng-icon>
+    <button
+      hlmBtn
+      [size]="buttonSize"
+      [variant]="buttonVariant"
+      [class.bg-gray-200]="isActive"
+    >
+      <ng-icon hlm [size]="iconSize" [name]="iconName"></ng-icon>
     </button>
   `,
 })
 export class ButtonIconComponent {
+  /** Nome do ícone a ser exibido */
   @Input() iconName: string = 'lucideChevronRight';
+
+  /** Botão ativo (para estilos customizados) */
+  @Input() isActive = false;
+
+  /** Variante do botão (padrão: secondary) */
+  @Input() variant: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | null = 'secondary';
+
+  /** Tamanho do botão (padrão: sm) */
+  @Input() size: 'default' | 'sm' | 'lg' | 'icon' | null = 'sm';
+
+  /** Tamanho do ícone interno (padrão: sm) */
+  @Input() iconSize: 'sm' | 'md' | 'lg' | string = 'sm';
+
+  get buttonSize(): 'default' | 'sm' | 'lg' | 'icon' {
+    return this.size ?? 'sm';
+  }
+
+  get buttonVariant(): 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' {
+    return this.variant ?? 'secondary';
+  }
 }

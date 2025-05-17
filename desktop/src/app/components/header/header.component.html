@@ -1,9 +1,15 @@
 <div class="w-full flex justify-between items-center p-4" id="header">
-    <spartan-button-icon [iconName]="'lucideMenu'"></spartan-button-icon>
+    <!-- Botão de menu: visível apenas em telas médias para cima -->
+    <spartan-button-icon 
+        [iconName]="'lucideMenu'" 
+        class="hidden md:block">
+    </spartan-button-icon>
 
-    <input class="w-96 bg-white" hlmInput placeholder='Pesquisar...' />
+    <!-- Input de pesquisa: ocupa a largura total em mobile -->
+    <input class="w-full md:w-96 bg-white" hlmInput placeholder='Pesquisar...' />
 
-    <div class="flex items-center gap-4">
+    <!-- Botão "Entrar": visível apenas em telas médias para cima -->
+    <div class="hidden md:flex items-center gap-4">
         <spartan-button text="Entrar"></spartan-button>
     </div>
 </div>

@@ -1,25 +1,32 @@
-
 .map-container {
-  position: absolute;
+  position: abos;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  height: 100vh;
   width: 100%;
+  height: 100vh; /* altura padrão */
 }
 
-.map-frame {
-  height: 100%;
-  width: 100%;
+/* Reduz altura no mobile para deixar espaço para o footer */
+@media (max-width: 767px) {
+
+  .map-container, #map {
+    bottom: 64px; /* deixa espaço no final */
+    height: auto;
+  }
+    .leaflet-bottom.leaflet-left,
+  .leaflet-bottom.leaflet-right {
+    bottom: 80px !important; /* ou algo maior que a altura do footer */
+  }
 }
 
-#map {
-  height: 100%;
-  width: 100%;
-}
-
+.map-frame,
+#map,
 .leaflet-container {
   height: 100%;
   width: 100%;
+}
+
+::ng-deep .leaflet-control-attribution .leaflet-control-attribution-logo {
+  display: none !important;
 }

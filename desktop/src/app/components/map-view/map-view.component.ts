@@ -23,16 +23,18 @@ export class MapViewComponent implements AfterViewInit {
       zoom: 13,
       zoomControl: false,
       preferCanvas: false,
+      attributionControl: false,
     });
-
-    L.control.zoom({
-      position: 'bottomleft'   // <— por exemplo, mover para o canto superior direito
-    }).addTo(this.map);
 
     // 2) Layer base
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    L.control.attribution({
+      position: 'bottomright',
+      prefix: false    // <<< tira o link “Leaflet” e a bandeirinha
     }).addTo(this.map);
 
     // 3) Força o Leaflet a recalcular o tamanho do div

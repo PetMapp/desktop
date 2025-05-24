@@ -1,3 +1,49 @@
+<!-- map-view.component.html -->
+<brn-sheet #sheet="brnSheet">
+  <!-- só renderiza quando tiver petDetail -->
+  <ng-container *ngIf="petDetail">
+    <!-- aqui definimos side="right" -->
+    <hlm-sheet side="right">
+      <!-- Trigger (pode ser escondido) -->
+      <button
+        hlmBtn
+        brnSheetTrigger
+        asChild
+        style="display: none;"
+        #hiddenTrigger
+      ></button>
+
+      <!-- Conteúdo do sheet -->
+      <hlm-sheet-content *brnSheetContent="let ctx">
+        <hlm-sheet-header>
+          <h3 hlmSheetTitle>{{ petDetail.apelido }}</h3>
+          <p hlmSheetDescription>{{ petDetail.localizacao }}</p>
+        </hlm-sheet-header>
+
+        <div class="p-4 space-y-2">
+          <img
+            *ngIf="petDetail.petImage"
+            [src]="petDetail.petImage"
+            class="w-24 h-24 rounded-full mx-auto object-cover"
+          />
+          <p><strong>Descrição:</strong> {{ petDetail.descricao }}</p>
+          <p>
+            <strong>Coordenadas:</strong>
+            {{ petDetail.lat }}, {{ petDetail.lng }}
+          </p>
+          <p><strong>Coleira:</strong> {{ petDetail.coleira ? 'Sim' : 'Não' }}</p>
+          <p><strong>User ID:</strong> {{ petDetail.userId }}</p>
+        </div>
+
+        <hlm-sheet-footer>
+          <button hlmBtn (click)="sheet.close()">Fechar</button>
+        </hlm-sheet-footer>
+      </hlm-sheet-content>
+    </hlm-sheet>
+  </ng-container>
+</brn-sheet>
+
+
 <div class="map-container">
   <div class="map-frame">
     <div id="map"></div>

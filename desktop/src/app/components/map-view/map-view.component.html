@@ -1,42 +1,47 @@
-<!-- map-view.component.html -->
 <brn-sheet #sheet="brnSheet">
-  <!-- só renderiza quando tiver petDetail -->
   <ng-container *ngIf="petDetail">
-    <!-- aqui definimos side="right" -->
-    <hlm-sheet side="right">
-      <!-- Trigger (pode ser escondido) -->
-      <button
-        hlmBtn
-        brnSheetTrigger
-        asChild
-        style="display: none;"
-        #hiddenTrigger
-      ></button>
+    <hlm-sheet [side]="isMobile ? 'bottom' : 'right'">
+      <button hlmBtn brnSheetTrigger asChild style="display: none;" #hiddenTrigger></button>
 
       <!-- Conteúdo do sheet -->
-      <hlm-sheet-content *brnSheetContent="let ctx">
-        <hlm-sheet-header>
-          <h3 hlmSheetTitle>{{ petDetail.apelido }}</h3>
-          <p hlmSheetDescription>{{ petDetail.localizacao }}</p>
+      <hlm-sheet-content *brnSheetContent="let ctx" class="p-0">
+        <hlm-sheet-header class="w-full">
+          <img *ngIf="petDetail.petImage" [src]="petDetail.petImage" class="w-full h-full mx-auto object-cover" />
         </hlm-sheet-header>
 
-        <div class="p-4 space-y-2">
-          <img
-            *ngIf="petDetail.petImage"
-            [src]="petDetail.petImage"
-            class="w-24 h-24 rounded-full mx-auto object-cover"
-          />
-          <p><strong>Descrição:</strong> {{ petDetail.descricao }}</p>
-          <p>
-            <strong>Coordenadas:</strong>
-            {{ petDetail.lat }}, {{ petDetail.lng }}
-          </p>
-          <p><strong>Coleira:</strong> {{ petDetail.coleira ? 'Sim' : 'Não' }}</p>
-          <p><strong>User ID:</strong> {{ petDetail.userId }}</p>
+        <div class="p-4 space-y-2 flex flex-col items-start">
+          <div class="flex justify-start items-center">
+            <h2 hlmSheetTitle class="text-2xl">{{ petDetail.apelido }}</h2>
+          </div>
+          <div class="flex justify-start items-center">
+            <spartan-icon iconName="lucideMapPin" iconSize="sm"></spartan-icon>
+            <p hlmSheetDescription class="ml-2 truncate max-w-[350px]" [title]="petDetail.localizacao">{{
+              petDetail.localizacao }}</p>
+          </div>
+          <div class="flex justify-start items-start">
+            <spartan-icon iconName="lucideScrollText" iconSize="sm"></spartan-icon>
+            <p hlmSheetDescription class="ml-2 break-words text-left">
+              {{ petDetail.descricao }}
+            </p>
+          </div>
+          <div class="flex justify-start items-center">
+            <spartan-icon iconName="lucideMap" iconSize="sm"></spartan-icon>
+            <p hlmSheetDescription class="ml-2">{{ petDetail.lat }}, {{ petDetail.lng }}</p>
+          </div>
+          <div class="flex justify-start items-center">
+            <spartan-icon iconName="lucideCheck" iconSize="sm" *ngIf="petDetail.coleira"></spartan-icon>
+            <spartan-icon iconName="lucideX" iconSize="sm" *ngIf="!petDetail.coleira"></spartan-icon>
+            <p hlmSheetDescription class="ml-2">{{ petDetail.coleira ?
+              'Possui coleira' :
+              'Não possui coleira' }}
+            </p>
+          </div>
+
+          
         </div>
 
         <hlm-sheet-footer>
-          <button hlmBtn (click)="sheet.close()">Fechar</button>
+
         </hlm-sheet-footer>
       </hlm-sheet-content>
     </hlm-sheet>

@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, AfterViewInit, ViewChild, NgZone, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, NgZone, ChangeDetectorRef, ElementRef, HostListener, OnInit } from '@angular/core';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import * as L from 'leaflet';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { IconComponent } from '../icon-component/icon-component.component';
 
 import {
   BrnSheetComponent,
@@ -38,6 +39,7 @@ import { PetdetailDTORes } from '../../interfaces/DTOs/petdetail-dto-res';
     HlmSheetDescriptionDirective,
     HlmSheetFooterComponent,
     HlmButtonDirective,
+    IconComponent
   ],
   templateUrl: './map-view.component.html',
   styleUrls: ['./map-view.component.scss'],
@@ -48,6 +50,7 @@ export class MapViewComponent implements AfterViewInit {
 
   public petDetail: PetdetailDTORes | null = null;
   private map!: L.Map;
+  public isMobile = false;
 
   constructor(
     private api: ApiServiceService,
@@ -203,5 +206,14 @@ export class MapViewComponent implements AfterViewInit {
     } else {
       console.error('Trigger não está disponível');
     }
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    this.isMobile = window.innerWidth <= 768;
   }
 }

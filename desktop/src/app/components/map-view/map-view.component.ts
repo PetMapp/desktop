@@ -80,6 +80,31 @@ export class MapViewComponent implements AfterViewInit {
     setTimeout(() => this.map.invalidateSize(), 200);
   }
 
+  async searchLocation(query: string) {
+    if (!query) return;
+
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.length === 0) {
+        alert('Local não encontrado!');
+        return;
+      }
+
+      const lat = parseFloat(data[0].lat);
+      const lon = parseFloat(data[0].lon);
+
+      this.map.setView([lat, lon], 13);
+
+    } catch (error) {
+      console.error('Erro na busca:', error);
+      alert('Erro ao buscar o local.');
+    }
+  }
+
   private setupLocationHandlers() {
     this.map.locate({ setView: false, maxZoom: 16 });
     this.map.on('locationfound', (e: L.LocationEvent) => {
@@ -142,10 +167,10 @@ export class MapViewComponent implements AfterViewInit {
         // Executa dentro do NgZone para garantir que o Angular detecte as mudanças
         this.ngZone.run(() => {
           this.petDetail = petDetail;
-          
+
           // Força detecção de mudanças imediata
           this.cdr.detectChanges();
-          
+
           // Tentativa 1: Abrir diretamente
           setTimeout(() => {
             if (this.sheet) {
@@ -190,7 +215,7 @@ export class MapViewComponent implements AfterViewInit {
     console.log('Debug: Tentando abrir sheet manualmente');
     console.log('Sheet exists:', !!this.sheet);
     console.log('PetDetail exists:', !!this.petDetail);
-    
+
     if (this.sheet) {
       this.sheet.open();
     } else {

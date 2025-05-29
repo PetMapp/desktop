@@ -1,14 +1,16 @@
 <div class="w-full flex justify-between items-center p-4" id="header">
-    <!-- Botão de menu: visível apenas em telas médias para cima -->
-    <spartan-button-icon 
-        [iconName]="'lucideMenu'" 
-        class="hidden md:block">
-    </spartan-button-icon>
+    <spartan-button-icon [iconName]="'lucideMenu'" class="hidden md:block"></spartan-button-icon>
 
-    <!-- Input de pesquisa: ocupa a largura total em mobile -->
-    <input class="w-full md:w-[500px] bg-white" hlmInput placeholder='Pesquisar...' />
+    <div class="flex w-full md:w-[500px] bg-white gap-2 jutify-content-center items-center rounded-md border">
+        <input
+          [(ngModel)]="searchQuery"
+          class="w-full bg-transparent border-none"
+          hlmInput
+          placeholder="Pesquisar local..." />
 
-    <!-- Botão "Entrar": visível apenas em telas médias para cima -->
+        <spartan-button-icon [iconName]="'lucideSearch'" class="hidden md:block" [variant]="'ghost'" (click)="onSearch()"></spartan-button-icon>
+    </div>
+
     <div class="hidden md:flex items-center gap-4">
         <spartan-button text="Entrar"></spartan-button>
     </div>

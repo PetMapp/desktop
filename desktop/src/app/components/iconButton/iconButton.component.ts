@@ -8,7 +8,11 @@ import {
   lucideMenu,
   lucideCircleUserRound,
   lucideHouse,
-  lucideDog
+  lucideDog,
+  lucideSearch,
+  lucideLocate,
+  lucideCamera,
+  lucideLocateFixed
 } from '@ng-icons/lucide';
 import { NgIcon } from '@ng-icons/core';
 
@@ -22,7 +26,7 @@ import { NgIcon } from '@ng-icons/core';
     NgIcon,
   ],
   providers: [
-    provideIcons({ lucideChevronRight, lucideMenu, lucideCircleUserRound, lucideHouse, lucideDog }),
+    provideIcons({ lucideChevronRight, lucideMenu, lucideCircleUserRound, lucideHouse, lucideDog, lucideSearch, lucideLocateFixed, lucideCamera }),
   ],
   template: `
     <button
@@ -30,6 +34,7 @@ import { NgIcon } from '@ng-icons/core';
       [size]="buttonSize"
       [variant]="buttonVariant"
       [class.bg-gray-200]="isActive"
+      [class]="customClass"
     >
       <ng-icon hlm [size]="iconSize" [name]="iconName"></ng-icon>
     </button>
@@ -50,6 +55,9 @@ export class ButtonIconComponent {
 
   /** Tamanho do ícone interno (padrão: sm) */
   @Input() iconSize: 'sm' | 'md' | 'lg' | string = 'sm';
+
+  /** Classe extra para estilização (ex.: posicionamento) */
+  @Input() customClass = '';
 
   get buttonSize(): 'default' | 'sm' | 'lg' | 'icon' {
     return this.size ?? 'sm';

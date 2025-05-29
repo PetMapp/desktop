@@ -6,7 +6,7 @@ import { ButtonIconComponent } from '../iconButton/iconButton.component';
   standalone: true,
   imports: [ButtonIconComponent],
   templateUrl: './mobile-footer.component.html',
-  styleUrls: ['./mobile-footer.component.scss']  // <-- plural
+  styleUrls: ['./mobile-footer.component.scss']
 })
 export class MobileFooterComponent {
 

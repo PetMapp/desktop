@@ -1,1 +1,43 @@
-<p>login works!</p>
+<div class="w-full h-screen flex justify-center items-center absolute">
+    <section hlmCard class="w-96 h-auto flex flex-col p-5">
+        <div hlmCardHeader class="flex flex-row items-center justify-between p-0">
+            <h3 hlmCardTitle>Login</h3>
+            <app-mapets-icon></app-mapets-icon>
+        </div>
+        <div class="flex flex-col">
+            <label hlmLabel>Email</label>
+            <input class="w-full my-2" hlmInput placeholder='Email' type='email' />
+            <label hlmLabel>Senha</label>
+            <input class="w-full mt-2" hlmInput placeholder='Senha' type='password' />
+        </div>
+        <div hlmCardFooter class="flex flex-col p-0 space-x-0">
+            <button hlmBtn class="w-full bg-[#159A9C] hover:bg-[#158283] my-2">Entrar</button>
+            <button hlmBtn class="w-full bg-white hover:bg-slate-300 text-black border">
+                <app-google-icon></app-google-icon>
+                <span class="ml-2">Entrar com o Google</span>
+            </button>
+            <div class="w-full flex flex-row justify-between items-center">
+                <button hlmBtn variant='link' class="p-1 text-[#159A9C]" (click)="goToRegister()">Criar conta</button>
+                <button hlmBtn variant='link' class="p-1 text-[#159A9C]">Esqueci minha senha</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="w-full h-screen flex items-center">
+    <div class="sm:w-1/2 w-full h-screen bg-gray-100 flex justify-center items-center">
+        <div class="sm:flex hidden flex-col items-center space-y-4">
+            <h1 class="font-poppins text-6xl font-bold text-[#159A9C]">
+                Ache
+                seu pet.
+            </h1>
+            <p class="font-poppins font-bold text-gray-600 text-lg">
+                Registre animais em situação de rua e <br /> ajude outros a encontrá-los ou a adotá-los.
+        </div>
+    </div>
+    <div class="sm:w-1/2 w-0 h-screen border-l">
+        <div class="w-full h-screen">
+            <img src="assets/images/map.png" alt="" class="w-full h-full object-cover">
+        </div>
+    </div>
+</div>

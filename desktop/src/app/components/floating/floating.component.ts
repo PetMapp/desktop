@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { ButtonIconComponent } from '../iconButton/iconButton.component';
 
 @Component({
@@ -8,5 +8,9 @@ import { ButtonIconComponent } from '../iconButton/iconButton.component';
   styleUrl: './floating.component.scss'
 })
 export class FloatingComponent {
+  @Output() locateUser = new EventEmitter<void>();
 
+  onLocateUser() {
+    this.locateUser.emit();
+  }
 }

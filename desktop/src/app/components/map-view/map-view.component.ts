@@ -51,6 +51,7 @@ export class MapViewComponent implements AfterViewInit {
   public petDetail: PetdetailDTORes | null = null;
   private map!: L.Map;
   public isMobile = false;
+  private userLocationMarker?: L.Marker;
 
   constructor(
     private api: ApiServiceService,
@@ -240,5 +241,14 @@ export class MapViewComponent implements AfterViewInit {
 
   checkScreenSize() {
     this.isMobile = window.innerWidth <= 768;
+  }
+
+  public locateUser() {
+    if (!this.map) {
+      console.warn('Mapa não inicializado');
+      return;
+    }
+
+    this.setupLocationHandlers();
   }
 }

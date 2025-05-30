@@ -18,4 +18,9 @@ export class MapComponent {
     console.log('Evento search recebido no MapComponent:', query);
     this.mapView?.searchLocation(query);
   }
+
+  locateUser() {
+    console.log('Localizando usuário...');
+    this.mapView?.locateUser();
+  }
 }

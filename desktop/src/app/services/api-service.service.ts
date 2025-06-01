@@ -20,7 +20,7 @@ export class ApiServiceService {
     });
   }
 
-  private registerHeader(token: string) {
+  public registerHeader(token: string) {
     this.axiosClient.defaults.headers.common['authorization'] = `Bearer ${token}`;
   }
 

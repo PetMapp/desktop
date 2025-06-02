@@ -12,7 +12,8 @@ import {
   lucideSearch,
   lucideLocate,
   lucideCamera,
-  lucideLocateFixed
+  lucideLocateFixed,
+  lucideBell
 } from '@ng-icons/lucide';
 import { NgIcon } from '@ng-icons/core';
 
@@ -26,7 +27,7 @@ import { NgIcon } from '@ng-icons/core';
     NgIcon,
   ],
   providers: [
-    provideIcons({ lucideChevronRight, lucideMenu, lucideCircleUserRound, lucideHouse, lucideDog, lucideSearch, lucideLocateFixed, lucideCamera }),
+    provideIcons({ lucideChevronRight, lucideMenu, lucideCircleUserRound, lucideHouse, lucideDog, lucideSearch, lucideLocateFixed, lucideCamera, lucideBell }),
   ],
   template: `
     <button

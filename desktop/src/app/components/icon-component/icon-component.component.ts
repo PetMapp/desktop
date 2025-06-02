@@ -13,6 +13,7 @@ import {
   lucideMap,
   lucideCheck,
   lucideX,
+  lucideSettings,
 } from '@ng-icons/lucide';
 
 @Component({
@@ -31,7 +32,8 @@ import {
       lucideScrollText,
       lucideMap,
       lucideCheck,
-      lucideX
+      lucideX,
+      lucideSettings
     }),
   ],
   template: `

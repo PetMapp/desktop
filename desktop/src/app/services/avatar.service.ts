@@ -1,30 +1,31 @@
 import { Injectable } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { Observable } from 'rxjs';
+import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AvatarService {
+  private storage = getStorage();
   private avatars$: Observable<string>[] = [];
-  
-  constructor(private storage: AngularFireStorage) {
+
+  constructor() {
     this.loadAvatars();
   }
 
   private loadAvatars() {
     const avatarPaths = [
-      'gs://petmap-6d5f7.appspot.com/imagens/avatar/avatar1.png', // Caminhos dos avatares
-      'gs://petmap-6d5f7.appspot.com/imagens/avatar/avatar2.png',
-      'gs://petmap-6d5f7.appspot.com/imagens/avatar/avatar3.png',
-      'gs://petmap-6d5f7.appspot.com/imagens/avatar/avatar4.png',
-      'gs://petmap-6d5f7.appspot.com/imagens/avatar/avatar5.png'
+      'imagens/avatar/avatar1.png',
+      'imagens/avatar/avatar2.png',
+      'imagens/avatar/avatar3.png',
+      'imagens/avatar/avatar4.png',
+      'imagens/avatar/avatar5.png'
     ];
 
     avatarPaths.forEach(path => {
-      // Use refFromURL para criar a referência a partir da URL
-      const imageRef = this.storage.refFromURL(path);
-      this.avatars$.push(imageRef.getDownloadURL());
+      const imageRef = ref(this.storage, path);
+      const url$ = from(getDownloadURL(imageRef));
+      this.avatars$.push(url$);
     });
   }
 
@@ -34,6 +35,6 @@ export class AvatarService {
 
   public getRandomAvatar(): Observable<string> {
     const randomIndex = Math.floor(Math.random() * this.avatars$.length);
-    return this.avatars$[randomIndex]; // Retorna um Observable da URL aleatória
+    return this.avatars$[randomIndex];
   }
 }

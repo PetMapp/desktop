@@ -39,6 +39,9 @@
       ],
       "@spartan-ng/ui-label-helm": [
         ".\\libs/ui/ui-label-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-menu-helm": [
+        ".\\libs/ui/ui-menu-helm/src/index.ts"
       ]
     }
   },

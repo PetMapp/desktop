@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { AvatarService } from '../../services/avatar.service';
 
 import {
   HlmCardContentDirective,
@@ -30,12 +31,20 @@ export class RegisterComponent {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
+  photoUrl: string = '';
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private avatarService: AvatarService
   ) { }
 
+  ngOnInit() {
+    this.avatarService.getRandomAvatar().subscribe(url => {
+      this.photoUrl = url;
+      console.log('Avatar selecionado:', url);
+    });
+  }
   goToLogin() {
     this.router.navigate(['/login']);
   }
@@ -51,7 +60,7 @@ export class RegisterComponent {
         this.email,
         this.password,
         this.name,
-        'https://i.pravatar.cc/150?u=' + this.email // foto de perfil genérica
+        this.photoUrl
       );
       alert('Conta criada com sucesso!');
       this.router.navigate(['/']); // ou para a tela desejada

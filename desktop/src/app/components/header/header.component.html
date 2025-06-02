@@ -1,17 +1,14 @@
 <div class="w-full flex justify-between items-center p-4" id="header">
     <spartan-button-icon [iconName]="'lucideMenu'" class="hidden md:block"></spartan-button-icon>
 
-    <div class="flex w-full md:w-[500px] bg-white gap-2 jutify-content-center items-center rounded-md border">
-        <input
-          [(ngModel)]="searchQuery"
-          class="w-full bg-transparent border-none"
-          hlmInput
-          placeholder="Pesquisar local..." />
-
-        <spartan-button-icon [iconName]="'lucideSearch'" class="hidden md:block" [variant]="'ghost'" (click)="onSearch()"></spartan-button-icon>
+    <div class="flex w-full md:w-[500px] bg-white gap-2 items-center rounded-md border">
+        <input [(ngModel)]="searchQuery" class="w-full bg-transparent border-none" hlmInput
+            placeholder="Pesquisar local..." />
+        <spartan-button-icon [iconName]="'lucideSearch'" class="hidden md:block" [variant]="'ghost'"
+            (click)="onSearch()"></spartan-button-icon>
     </div>
 
     <div class="hidden md:flex items-center gap-4">
-        <spartan-button text="Entrar"></spartan-button>
+        <app-user-menu [usuarioLogado]="usuarioLogado"></app-user-menu>
     </div>
 </div>

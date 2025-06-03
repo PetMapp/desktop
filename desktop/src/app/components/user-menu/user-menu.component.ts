@@ -33,6 +33,10 @@ export class UserMenuComponent {
 
   constructor(private router: Router) {}
 
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
+
   async logout() {
     localStorage.clear();
     await this.router.navigate(['/login']);

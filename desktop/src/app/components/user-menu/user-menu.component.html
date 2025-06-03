@@ -1,30 +1,28 @@
-<ng-container *ngIf="usuarioLogado as user; else entrar">
-  <app-notifications></app-notifications>
+<div class="hidden md:flex items-center gap-4">
+  <ng-container *ngIf="usuarioLogado as user; else entrar">
+    <app-notifications></app-notifications>
 
-  <div class="flex items-center gap-2">
-    <img
-      [src]="user?.photoURL || '' + (user.displayName || 'User')"
-      alt="Foto de perfil"
-      class="w-10 h-10 rounded-full"
-      [brnMenuTriggerFor]="menu"
-    />
-  </div>
+    <div class="flex items-center gap-2">
+      <img [src]="user?.photoURL || '' + (user.displayName || 'User')" alt="Foto de perfil"
+        class="w-10 h-10 rounded-full" [brnMenuTriggerFor]="menu" />
+    </div>
 
-  <ng-template #menu>
-    <hlm-menu>
-      <hlm-menu-group>
-        <button hlmMenuItem>Perfil</button>
-        <button hlmMenuItem>Meus pets</button>
-        <button hlmMenuItem>Configurações</button>
-        <hlm-menu-separator />
-      </hlm-menu-group>
-      <hlm-menu-group>
-        <button hlmMenuItem (click)="logout()">Sair</button>
-      </hlm-menu-group>
-    </hlm-menu>
+    <ng-template #menu>
+      <hlm-menu>
+        <hlm-menu-group>
+          <button hlmMenuItem>Perfil</button>
+          <button hlmMenuItem>Meus pets</button>
+          <button hlmMenuItem>Configurações</button>
+          <hlm-menu-separator />
+        </hlm-menu-group>
+        <hlm-menu-group>
+          <button hlmMenuItem (click)="logout()">Sair</button>
+        </hlm-menu-group>
+      </hlm-menu>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #entrar>
+    <button class="border px-4 py-1 rounded" (click)="goToLogin()">Entrar</button>
   </ng-template>
-</ng-container>
-
-<ng-template #entrar>
-  <button class="border px-4 py-1 rounded" (click)="router.navigate(['/login'])">Entrar</button>
-</ng-template>
+</div>

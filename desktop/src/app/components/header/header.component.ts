@@ -17,11 +17,13 @@ import { NotificationsComponent } from '../notifications/notifications.component
 import { UserMenuComponent } from '../user-menu/user-menu.component';
 
 import { IconComponent } from '../icon-component/icon-component.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
+    SidebarComponent,
     UserMenuComponent,
     NotificationsComponent,
     IconComponent,

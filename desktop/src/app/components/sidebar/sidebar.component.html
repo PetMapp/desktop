@@ -1,0 +1,61 @@
+<hlm-sheet side="left">
+  <button brnSheetTrigger hlmBtn size="icon" variant="secondary">
+    <ng-icon hlm size="sm" name="lucideMenu" />
+  </button>
+
+  <hlm-sheet-content *brnSheetContent="let ctx" class="w-56">
+    <hlm-sheet-header>
+      <div class="flex flex-col">
+
+        <!-- 🗺️ Mapa -->
+        <button hlmBtn class="flex items-center justify-start mb-2"
+          variant="ghost" size="sm"
+          [ngClass]="{ 'text-[#159A9C]': isActive('/map'), 'text-muted-foreground': !isActive('/map') }"
+          (click)="navigateTo('/map')">
+          <ng-icon hlm size="sm" class="mr-2" name="lucideMap"
+            [ngClass]="{ 'stroke-[#159A9C]': isActive('/map'), 'stroke-muted-foreground': !isActive('/map') }" />
+          Mapa
+        </button>
+
+        <!-- 🐾 Meus Pets -->
+        <button hlmBtn class="flex items-center justify-start mb-2"
+          variant="ghost" size="sm"
+          [ngClass]="{ 'text-[#159A9C]': isActive('/pets'), 'text-muted-foreground': !isActive('/pets') }"
+          (click)="navigateTo('/pets')">
+          <ng-icon hlm size="sm" class="mr-2" name="lucidePawPrint"
+            [ngClass]="{ 'stroke-[#159A9C]': isActive('/pets'), 'stroke-muted-foreground': !isActive('/pets') }" />
+          Meus pets
+        </button>
+
+        <!-- 🔔 Notificações -->
+        <button hlmBtn class="flex items-center justify-start mb-2"
+          variant="ghost" size="sm"
+          [ngClass]="{ 'text-[#159A9C]': isActive('/notifications'), 'text-muted-foreground': !isActive('/notifications') }"
+          (click)="navigateTo('/notifications')">
+          <ng-icon hlm size="sm" class="mr-2" name="lucideBell"
+            [ngClass]="{ 'stroke-[#159A9C]': isActive('/notifications'), 'stroke-muted-foreground': !isActive('/notifications') }" />
+          Notificações
+        </button>
+
+        <!-- ⚙️ Configurações -->
+        <button hlmBtn class="flex items-center justify-start mb-2"
+          variant="ghost" size="sm"
+          [ngClass]="{ 'text-[#159A9C]': isActive('/settings'), 'text-muted-foreground': !isActive('/settings') }"
+          (click)="navigateTo('/settings')">
+          <ng-icon hlm size="sm" class="mr-2" name="lucideSettings"
+            [ngClass]="{ 'stroke-[#159A9C]': isActive('/settings'), 'stroke-muted-foreground': !isActive('/settings') }" />
+          Configurações
+        </button>
+
+        <button hlmBtn class="flex items-center justify-start mb-2" variant="ghost" size="sm"
+          [ngClass]="{ 'text-[#159A9C]': isActive('/donate'), 'text-muted-foreground': !isActive('/donate') }"
+          (click)="navigateTo('/donate')">
+          <ng-icon hlm size="sm" class="mr-2" name="lucidePiggyBank"
+            [ngClass]="{ 'stroke-[#159A9C]': isActive('/donate'), 'stroke-muted-foreground': !isActive('/donate') }" />
+          Doar para o Mapets
+        </button>
+
+      </div>
+    </hlm-sheet-header>
+  </hlm-sheet-content>
+</hlm-sheet>

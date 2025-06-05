@@ -1,6 +1,20 @@
 <div id="floating">
     <div class="flex flex-col justify-around items-center bg-transparent rounded-xl">
-        <spartan-button-icon [size]="'icon'" [class]="'mb-2 shadow'" [variant]="'secondary'" [iconName]="'lucideLocateFixed'" [iconSize]="'lg'" (click)="onLocateUser()"></spartan-button-icon>
-        <spartan-button-icon [size]="'icon'" [class]="'shadow'" [variant]="'secondary'" [iconName]="'lucideCamera'" [iconSize]="'lg'"></spartan-button-icon>
+        <spartan-button-icon [size]="'icon'" [class]="'mb-2 shadow'" [variant]="'secondary'"
+            [iconName]="'lucideLocateFixed'" [iconSize]="'lg'" (click)="onLocateUser()"></spartan-button-icon>
+
+        <hlm-dialog>
+            <spartan-button-icon [size]="'icon'" [variant]="'secondary'" [iconName]="'lucideCamera'" [iconSize]="'lg'"
+                brnDialogTrigger></spartan-button-icon>
+            <hlm-dialog-content *brnDialogContent="let ctx">
+                <hlm-dialog-header>
+                    <h3 brnDialogTitle hlm>Edit profile</h3>
+                    <p brnDialogDescription hlm>Make changes to your profile here. Click save when you're done.</p>
+                </hlm-dialog-header>
+                <hlm-dialog-footer>
+                    <button hlmBtn type="submit">Save changes</button>
+                </hlm-dialog-footer>
+            </hlm-dialog-content>
+        </hlm-dialog>
     </div>
 </div>

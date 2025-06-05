@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, AfterViewInit, ViewChild, NgZone, ChangeDetectorRef, ElementRef, HostListener, OnInit } from '@angular/core';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import * as L from 'leaflet';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { IconComponent } from '../icon-component/icon-component.component';
@@ -28,7 +27,6 @@ import { PetdetailDTORes } from '../../interfaces/DTOs/petdetail-dto-res';
   standalone: true,
   imports: [
     CommonModule,
-    LeafletModule,
     BrnSheetComponent,
     BrnSheetContentDirective,
     BrnSheetTriggerDirective,

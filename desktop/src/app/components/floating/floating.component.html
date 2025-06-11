@@ -6,49 +6,64 @@
         <hlm-dialog>
             <spartan-button-icon [size]="'icon'" [variant]="'secondary'" [iconName]="'lucideCamera'" [iconSize]="'lg'"
                 brnDialogTrigger></spartan-button-icon>
-            <hlm-dialog-content *brnDialogContent="let ctx" class="w-auto" 
-                    (opened)="onDialogOpened()"
-                    (mouseenter)="onDialogOpened()">
-                <hlm-dialog-header>
-                    <h3 brnDialogTitle hlm class="font-bold">Registrar Pet</h3>
-                </hlm-dialog-header>
-                <div class="w-[600px] h-[400px] flex justify-start items-center">
-                    <div class="w-3/6 h-full mr-2">
-                        <label hlmLabel>
-                            Nome
-                            <input class="w-full" hlmInput type="text" placeholder="Nome" [(ngModel)]="apelido" />
-                        </label>
+            <hlm-dialog-content *brnDialogContent="let ctx" class="w-auto" (opened)="onDialogOpened()"
+                >
 
-                        <label hlmLabel>
-                            Descrição
-                            <textarea hlmInput placeholder="" class="min-h-[80px] w-full" [(ngModel)]="descricao"></textarea>
-                        </label>
 
-                        <label hlmLabel>
-                            Localização
-                            <input class="w-full" hlmInput type="text" placeholder="Localização" #locationInput
-                                (blur)="searchLocation(locationInput.value)" [(ngModel)]="localizacaoTexto" />
-                        </label>
-
-                        <label hlmLabel>
-                            Foto
-                            <input class="w-full" hlmInput type="file" (change)="onFileSelected($event)" />
-                        </label>
-
-                        <div class="flex items-center mt-2">
-                            <hlm-switch class="mr-2" (checkedChange)="onToggleColeira($event)" />
+                <ng-container *ngIf="usuarioAutenticado; else naoLogado">
+                    <hlm-dialog-header>
+                        <h3 brnDialogTitle hlm class="font-bold">Registrar Pet</h3>
+                    </hlm-dialog-header>
+                    <div class="w-[600px] h-[400px] flex justify-start items-center">
+                        <div class="w-3/6 h-full mr-2">
                             <label hlmLabel>
-                                Possui coleira?
+                                Nome
+                                <input class="w-full" hlmInput type="text" placeholder="Nome" [(ngModel)]="apelido" />
                             </label>
+
+                            <label hlmLabel>
+                                Descrição
+                                <textarea hlmInput placeholder="" class="min-h-[80px] w-full"
+                                    [(ngModel)]="descricao"></textarea>
+                            </label>
+
+                            <label hlmLabel>
+                                Localização
+                                <input class="w-full" hlmInput type="text" placeholder="Localização" #locationInput
+                                    (blur)="searchLocation(locationInput.value)" [(ngModel)]="localizacaoTexto" />
+                            </label>
+
+                            <label hlmLabel>
+                                Foto
+                                <input class="w-full" hlmInput type="file" (change)="onFileSelected($event)" />
+                            </label>
+
+                            <div class="flex items-center mt-2">
+                                <hlm-switch class="mr-2" (checkedChange)="onToggleColeira($event)" />
+                                <label hlmLabel>
+                                    Possui coleira?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="w-5/6 h-full rounded-sm">
+                            <div id="map-dialog" class="w-full h-full rounded border"></div>
                         </div>
                     </div>
-                    <div class="w-5/6 h-full rounded-sm">
-                        <div id="map-dialog" class="w-full h-full rounded border"></div>
+                    <hlm-dialog-footer>
+                        <button hlmBtn class="mt-2 bg-[#159A9C]" (click)="onSubmitPet()">Salvar</button>
+                    </hlm-dialog-footer>
+                </ng-container>
+
+                <ng-template #naoLogado>
+                    <div class="p-4 flex flex-col items-center justify-center">
+                        <p>Você precisa entrar na sua conta para registrar um pet.</p>
+                        <p>
+                            <span class="decoration-[#159A9C] underline text-[#159A9C] cursor-pointer" (click)="goToLogin()">Entre</span> 
+                            ou 
+                            <span class="decoration-[#159A9C] underline text-[#159A9C] cursor-pointer" (click)="goToRegister()">crie uma conta</span> 
+                            para continuar.</p>
                     </div>
-                </div>
-                <hlm-dialog-footer>
-                    <button hlmBtn class="mt-2 bg-[#159A9C]" (click)="onSubmitPet()">Salvar</button>
-                </hlm-dialog-footer>
+                </ng-template>
             </hlm-dialog-content>
         </hlm-dialog>
     </div>

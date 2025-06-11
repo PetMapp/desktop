@@ -17,13 +17,17 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 
 import { HlmSwitchComponent } from '@spartan-ng/helm/switch';
 import { PetsService } from '../../services/pets.service';
+import { AuthService } from '../../services/auth.service';
 
 import * as L from 'leaflet';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-floating',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     HlmSwitchComponent,
     ButtonIconComponent,
@@ -37,7 +41,7 @@ import * as L from 'leaflet';
   styleUrl: './floating.component.scss'
 })
 export class FloatingComponent implements AfterViewInit, OnDestroy {
-  
+
   private mapDialog!: L.Map;
   private isMapInitialized = false;
   private mapObserver!: MutationObserver;
@@ -47,6 +51,8 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
 
   private currentMarker: L.Marker | null = null;
 
+  usuarioAutenticado = false;
+  mensagemErro = '';
   // Variáveis para formulário
   apelido = '';
   descricao = '';
@@ -56,7 +62,11 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
   status = 'Encontrado';
   imagem?: File;
 
-  constructor(private petsService: PetsService) {}
+  constructor(
+    private petsService: PetsService,
+    private authService: AuthService,
+    private router: Router,
+  ) { }
 
   ngAfterViewInit() {
     this.setupMapObserver();
@@ -97,7 +107,15 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  onDialogOpened() {
+  async onDialogOpened() {
+    const user = await this.authService.validateAuth();
+
+    if (!user) {
+      this.usuarioAutenticado = false;
+      this.mensagemErro = 'Você precisa estar logado para registrar um pet.';
+      return;
+    }
+
     if (this.isMapInitialized && this.mapDialog) {
       setTimeout(() => {
         this.mapDialog.invalidateSize();
@@ -122,17 +140,16 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
     this.isMapInitialized = true;
   }
 
-  // CORREÇÃO: Função para buscar o nome do local baseado nas coordenadas
   private async reverseGeocode(lat: number, lng: number): Promise<string> {
     try {
       const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`;
       const response = await fetch(url);
       const data = await response.json();
-      
+
       if (data && data.display_name) {
         return data.display_name;
       }
-      
+
       // Se não conseguir o nome, retorna as coordenadas como fallback
       return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
     } catch (error) {
@@ -235,7 +252,14 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
     this.imagem = event.target.files[0];
   }
 
-  onSubmitPet() {
+  async onSubmitPet() {
+    const user = await this.authService.validateAuth();
+
+    if (!user) {
+      alert('Você precisa estar logado para registrar um pet.');
+      return;
+    }
+
     if (!this.apelido || !this.descricao || !this.localizacaoTexto || !this.imagem) {
       alert('Preencha todos os campos e selecione uma imagem.');
       return;
@@ -264,5 +288,13 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
     if (this.mapDialog) {
       this.mapDialog.remove();
     }
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
+
+  goToRegister() {
+    this.router.navigate(['/register']);
   }
 }

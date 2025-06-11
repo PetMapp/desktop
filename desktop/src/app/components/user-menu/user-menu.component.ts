@@ -10,6 +10,7 @@ import {
   HlmMenuItemDirective,
   HlmMenuSeparatorComponent,
 } from '@spartan-ng/ui-menu-helm';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 
 import { NotificationsComponent } from '../notifications/notifications.component';
 
@@ -17,6 +18,7 @@ import { NotificationsComponent } from '../notifications/notifications.component
   selector: 'app-user-menu',
   standalone: true,
   imports: [
+    HlmButtonDirective,
     CommonModule,
     NotificationsComponent,
     BrnMenuTriggerDirective,

@@ -19,8 +19,7 @@ export class MapComponent {
     this.mapView?.searchLocation(query);
   }
 
-  locateUser() {
-    console.log('Localizando usuário...');
+  recenterMap() {
     this.mapView?.locateUser();
   }
 }

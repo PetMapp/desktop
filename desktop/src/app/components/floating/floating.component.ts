@@ -2,6 +2,8 @@ import {
   Component,
   AfterViewInit,
   OnDestroy,
+  viewChild,
+  Input
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonIconComponent } from '../iconButton/iconButton.component';
@@ -35,11 +37,13 @@ import * as L from 'leaflet';
   styleUrl: './floating.component.scss'
 })
 export class FloatingComponent implements AfterViewInit, OnDestroy {
+  
   private mapDialog!: L.Map;
   private isMapInitialized = false;
   private mapObserver!: MutationObserver;
   private dialogVisible = false;
   private openCount = 0;
+
 
   private currentMarker: L.Marker | null = null;
 
@@ -215,8 +219,12 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  onLocateUser() {
-    this.locateUserOnMap();
+  @Input() recenterFn!: () => void;
+
+  recenter() {
+    if (this.recenterFn) {
+      this.recenterFn();
+    }
   }
 
   onToggleColeira(value: boolean) {

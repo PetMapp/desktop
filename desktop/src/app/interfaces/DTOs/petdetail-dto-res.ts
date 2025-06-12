@@ -6,5 +6,6 @@ export interface PetdetailDTORes {
     localizacao: string,
     userId: string
     petImage: string
-    coleira: boolean
+    coleira: boolean,
+    createdAt: string,
 }

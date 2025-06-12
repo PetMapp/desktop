@@ -107,8 +107,21 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  handleDialogClick() {
+    setTimeout(() => {
+      this.onDialogOpened();
+    }, 50);
+  }
+
+  private destroyed = false;
+
   async onDialogOpened() {
     const user = await this.authService.validateAuth();
+
+    // Evita continuar se o componente foi destruído
+    if (this.destroyed) return;
+
+    console.log('Usuário autenticado:', user);
 
     if (!user) {
       this.usuarioAutenticado = false;
@@ -116,9 +129,13 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
+    this.usuarioAutenticado = true;
+
     if (this.isMapInitialized && this.mapDialog) {
       setTimeout(() => {
-        this.mapDialog.invalidateSize();
+        if (!this.destroyed) {
+          this.mapDialog.invalidateSize();
+        }
       }, 300);
     }
   }
@@ -288,6 +305,8 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
     if (this.mapDialog) {
       this.mapDialog.remove();
     }
+
+    this.destroyed = true;
   }
 
   goToLogin() {

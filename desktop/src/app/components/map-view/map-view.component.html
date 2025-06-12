@@ -37,7 +37,12 @@
             </p>
           </div>
 
-          
+          <div class="flex justify-start items-center">
+            <img [src]="petDetail.user?.photoURL" alt="Foto de perfil"
+              class="w-6 h-6 rounded-full border" />
+            <p hlmSheetDescription class="ml-2">Enviado por {{ petDetail.user?.displayName || 'Usuário desconhecido' }}</p>
+          </div>
+
         </div>
 
         <hlm-sheet-footer>

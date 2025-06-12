@@ -5,11 +5,8 @@
 
         <hlm-dialog>
             <spartan-button-icon [size]="'icon'" [variant]="'secondary'" [iconName]="'lucideCamera'" [iconSize]="'lg'"
-                brnDialogTrigger></spartan-button-icon>
-            <hlm-dialog-content *brnDialogContent="let ctx" class="w-auto" (opened)="onDialogOpened()"
-                >
-
-
+                brnDialogTrigger (click)="handleDialogClick()"></spartan-button-icon>
+            <hlm-dialog-content *brnDialogContent="let ctx" class="w-auto" BrnDialogState="onDialogOpened()">
                 <ng-container *ngIf="usuarioAutenticado; else naoLogado">
                     <hlm-dialog-header>
                         <h3 brnDialogTitle hlm class="font-bold">Registrar Pet</h3>

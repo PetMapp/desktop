@@ -141,6 +141,10 @@ export class AuthService {
     }
   }
 
+  getUserById(id: string): Promise<any> {
+    return this.api.get(`/auth/user/${id}`);
+  }
+
   // ✔️ Obter usuário atual diretamente
   getUsuarioLogado(): User | null {
     return this.auth.currentUser;

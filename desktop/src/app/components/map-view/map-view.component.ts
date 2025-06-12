@@ -19,8 +19,10 @@ import {
 } from '@spartan-ng/ui-sheet-helm';
 
 import { ApiServiceService } from '../../services/api-service.service';
+import { AuthService } from '../../services/auth.service';
 import { PetLocationModel } from '../../models/pet-location-model';
 import { PetdetailDTORes } from '../../interfaces/DTOs/petdetail-dto-res';
+import { PetDetailUser } from '../../interfaces/DTOs/petuser-dto-res';
 
 @Component({
   selector: 'app-map-view',
@@ -46,7 +48,7 @@ export class MapViewComponent implements AfterViewInit {
   @ViewChild('sheet', { static: true }) sheet!: BrnSheetComponent;
   @ViewChild('hiddenTrigger', { static: false }) hiddenTrigger!: ElementRef;
 
-  public petDetail: PetdetailDTORes | null = null;
+  public petDetail: PetDetailUser | null = null;
   private map!: L.Map;
   public isMobile = false;
   private userLocationMarker?: L.Marker;
@@ -54,7 +56,8 @@ export class MapViewComponent implements AfterViewInit {
   constructor(
     private api: ApiServiceService,
     private ngZone: NgZone,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private auth: AuthService
   ) { }
 
   async ngAfterViewInit() {
@@ -154,7 +157,6 @@ export class MapViewComponent implements AfterViewInit {
     try {
       console.log('Clique no marker, petId:', petId);
 
-      // Busca os detalhes do pet
       const petDetail = await this.api.get<PetdetailDTORes>(
         `/pet/find/get/${petId}`,
         true
@@ -163,36 +165,20 @@ export class MapViewComponent implements AfterViewInit {
       if (petDetail) {
         console.log('Detalhes do pet carregados:', petDetail);
 
-        // Executa dentro do NgZone para garantir que o Angular detecte as mudanças
-        this.ngZone.run(() => {
-          this.petDetail = petDetail;
+        const usuario = await this.auth.getUserById(petDetail.userId);
+        console.log('Usuário dono do pet:', usuario);
 
-          // Força detecção de mudanças imediata
+        this.ngZone.run(() => {
+          this.petDetail = {
+            ...petDetail,
+            user: usuario
+          };
+
           this.cdr.detectChanges();
 
-          // Tentativa 1: Abrir diretamente
-          setTimeout(() => {
-            if (this.sheet) {
-              console.log('Tentativa 1: Abrindo sheet diretamente...');
-              this.sheet.open();
-            }
-          }, 50);
-
-          // Tentativa 2: Usar o trigger escondido
-          setTimeout(() => {
-            if (this.hiddenTrigger && this.hiddenTrigger.nativeElement) {
-              console.log('Tentativa 2: Clicando no trigger escondido...');
-              this.hiddenTrigger.nativeElement.click();
-            }
-          }, 100);
-
-          // Tentativa 3: Abrir após mais tempo
-          setTimeout(() => {
-            if (this.sheet) {
-              console.log('Tentativa 3: Abrindo sheet após delay maior...');
-              this.sheet.open();
-            }
-          }, 200);
+          setTimeout(() => this.sheet?.open(), 50);
+          setTimeout(() => this.hiddenTrigger?.nativeElement?.click(), 100);
+          setTimeout(() => this.sheet?.open(), 200);
         });
       } else {
         console.warn('Detalhes do pet retornaram null para petId:', petId);

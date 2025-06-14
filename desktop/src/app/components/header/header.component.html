@@ -1,5 +1,7 @@
 <div class="w-full flex justify-between items-center p-4" id="header">
-    <app-sidebar></app-sidebar>
+    <div class="flex items-center gap-4">
+        <app-sidebar></app-sidebar>
+    </div>
 
     <div class="flex w-full md:w-[500px] bg-white gap-2 items-center rounded-md border">
         <input [(ngModel)]="searchQuery" class="w-full bg-transparent border-none" hlmInput

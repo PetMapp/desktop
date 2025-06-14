@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { MapComponent } from './map/map.component';
+import { PetsComponent } from './pets/pets.component';
 
 // Exportando a constante routes
 export const routes: Routes = [
@@ -10,6 +11,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'map', component: MapComponent },
+  { path: 'pets', component: PetsComponent },
 ];
 
 @NgModule({

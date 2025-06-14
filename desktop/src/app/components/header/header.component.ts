@@ -19,10 +19,13 @@ import { UserMenuComponent } from '../user-menu/user-menu.component';
 import { IconComponent } from '../icon-component/icon-component.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 
+import { MapetsIconComponent } from '../mapets-icon/mapets-icon.component';
+
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
+    MapetsIconComponent,
     SidebarComponent,
     UserMenuComponent,
     NotificationsComponent,
@@ -57,7 +60,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onSearch() {
-    this.search.emit(this.searchQuery);
+    const query = this.searchQuery.trim();
+
+    if (!query) return;
+
+    if (this.router.url.startsWith('/map')) {
+      this.search.emit(query);
+    } else {
+      this.router.navigate(['/map'], { queryParams: { search: query } });
+    }
   }
 
   async logout() {

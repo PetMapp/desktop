@@ -8,8 +8,7 @@
       <div class="flex flex-col">
 
         <!-- 🗺️ Mapa -->
-        <button hlmBtn class="flex items-center justify-start mb-2"
-          variant="ghost" size="sm"
+        <button hlmBtn class="flex items-center justify-start mb-2" variant="ghost" size="sm"
           [ngClass]="{ 'text-[#159A9C]': isActive('/map'), 'text-muted-foreground': !isActive('/map') }"
           (click)="navigateTo('/map')">
           <ng-icon hlm size="sm" class="mr-2" name="lucideMap"
@@ -18,8 +17,7 @@
         </button>
 
         <!-- 🐾 Meus Pets -->
-        <button hlmBtn class="flex items-center justify-start mb-2"
-          variant="ghost" size="sm"
+        <button hlmBtn class="flex items-center justify-start mb-2" variant="ghost" size="sm"
           [ngClass]="{ 'text-[#159A9C]': isActive('/pets'), 'text-muted-foreground': !isActive('/pets') }"
           (click)="navigateTo('/pets')">
           <ng-icon hlm size="sm" class="mr-2" name="lucidePawPrint"
@@ -28,8 +26,7 @@
         </button>
 
         <!-- 🔔 Notificações -->
-        <button hlmBtn class="flex items-center justify-start mb-2"
-          variant="ghost" size="sm"
+        <button hlmBtn class="flex items-center justify-start mb-2" variant="ghost" size="sm"
           [ngClass]="{ 'text-[#159A9C]': isActive('/notifications'), 'text-muted-foreground': !isActive('/notifications') }"
           (click)="navigateTo('/notifications')">
           <ng-icon hlm size="sm" class="mr-2" name="lucideBell"
@@ -38,8 +35,7 @@
         </button>
 
         <!-- ⚙️ Configurações -->
-        <button hlmBtn class="flex items-center justify-start mb-2"
-          variant="ghost" size="sm"
+        <button hlmBtn class="flex items-center justify-start mb-2" variant="ghost" size="sm"
           [ngClass]="{ 'text-[#159A9C]': isActive('/settings'), 'text-muted-foreground': !isActive('/settings') }"
           (click)="navigateTo('/settings')">
           <ng-icon hlm size="sm" class="mr-2" name="lucideSettings"
@@ -52,7 +48,7 @@
           (click)="navigateTo('/donate')">
           <ng-icon hlm size="sm" class="mr-2" name="lucidePiggyBank"
             [ngClass]="{ 'stroke-[#159A9C]': isActive('/donate'), 'stroke-muted-foreground': !isActive('/donate') }" />
-          Doar para o Mapets
+          <span class="no-wrap">Doar para o Mapets</span>
         </button>
 
       </div>

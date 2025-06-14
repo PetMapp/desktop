@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Auth, 
-         signInWithEmailAndPassword, 
-         createUserWithEmailAndPassword, 
-         signOut, 
-         GoogleAuthProvider, 
-         signInWithPopup, 
-         fetchSignInMethodsForEmail, 
-         updateProfile, 
-         User } from '@angular/fire/auth';
+import {
+  Auth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+  fetchSignInMethodsForEmail,
+  updateProfile,
+  User
+} from '@angular/fire/auth';
 
 import { from, Observable, of, switchMap, firstValueFrom } from 'rxjs';
 import { ApiServiceService } from './api-service.service';
@@ -22,7 +24,7 @@ export class AuthService {
     private auth: Auth,
     private api: ApiServiceService,
     private router: Router
-  ) {}
+  ) { }
 
   // 🔥 Login com Google
   async googleLogin(): Promise<string | null> {
@@ -137,6 +139,22 @@ export class AuthService {
       }
     } catch (error) {
       console.error('Erro ao validar auth:', error);
+      return null;
+    }
+  }
+
+  async checkAuthWithoutRedirect(): Promise<User | null> {
+    try {
+      const user = await firstValueFrom(this.getUserLogged());
+      if (user) {
+        const token = await user.getIdToken();
+        this.api.registerHeader(token);
+        return user;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error('Erro ao validar auth (sem redirect):', error);
       return null;
     }
   }

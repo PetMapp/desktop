@@ -116,7 +116,7 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
   private destroyed = false;
 
   async onDialogOpened() {
-    const user = await this.authService.validateAuth();
+    const user = await this.authService.checkAuthWithoutRedirect();
 
     // Evita continuar se o componente foi destruído
     if (this.destroyed) return;

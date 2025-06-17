@@ -1,7 +1,86 @@
 <app-header></app-header>
 
-<div class="flex w-full h-screen pt-20 pl-2">
-    <div class="flex flex-col items-center justify-start h-full">
-        <h1 class="text-2xl font-bold mb-4">Meus pets</h1>
+<div class="flex w-full h-screen pt-14 pl-2">
+    <!-- LISTA DE PETS -->
+    <div class="w-1/2 flex flex-col justify-start items-start h-full border-r p-4 gap-4">
+        <h1 class="text-2xl font-bold">Meus pets</h1>
+
+        <!-- Se o usuário NÃO tiver pets -->
+        <ng-container *ngIf="pets.length === 0; else petList">
+            <p class="text-gray-500">Você ainda não cadastrou nenhum pet.</p>
+        </ng-container>
+
+        <!-- Lista de pets -->
+        <ng-template #petList>
+            <ng-container *ngFor="let pet of pets">
+                <section hlmCard class="w-full cursor-pointer" (click)="selectPet(pet)">
+                    <div hlmCardHeader>
+                        <div class="flex items-center gap-2">
+                            <img *ngIf="pet.photoUrl" [src]="pet.photoUrl" class="w-16 h-16 rounded-full object-cover">
+                            <div *ngIf="!pet.photoUrl" class="w-16 h-16 rounded-full bg-gray-300"></div>
+                            <h3 hlmCardTitle>{{ pet.apelido }}</h3>
+                        </div>
+                    </div>
+                </section>
+            </ng-container>
+        </ng-template>
+    </div>
+
+    <!-- DETALHES DO PET SELECIONADO -->
+    <div class="w-1/2 flex items-center justify-start h-full p-4">
+        <section hlmCard class="w-full h-full flex flex-col justify-between">
+            <div hlmCardHeader>
+                <div class="flex items-center gap-2">
+                    <h3 hlmCardTitle>Pet</h3>
+                </div>
+            </div>
+
+            <div hlmCardContent class="w-full h-full justify-start items-start flex">
+                <ng-container *ngIf="selectedPet; else noPetSelected">
+                    <div class="flex w-full h-full">
+                        <!-- Imagem -->
+                        <div class="w-1/2 h-full flex justify-center">
+                            <img [src]="selectedPet.photoUrl" class="w-96 h-96 rounded-sm border object-cover"
+                                *ngIf="selectedPet.photoUrl">
+                            <div *ngIf="!selectedPet.photoUrl"
+                                class="w-96 h-96 rounded-sm border bg-gray-200 flex items-center justify-center">
+                                Sem imagem
+                            </div>
+                        </div>
+
+                        <!-- Dados -->
+                        <div class="w-1/2 h-full flex flex-col gap-2 justify-start items-start">
+                            <h1 hlmSheetTitle class="text-2xl">{{ selectedPet.apelido }}</h1>
+
+                            <div class="flex items-center">
+                                <spartan-icon iconName="lucideMapPin" iconSize="sm"></spartan-icon>
+                                <p hlmSheetDescription class="ml-2 truncate max-w-[400px]" [title]="selectedPet.localizacao">{{ selectedPet.localizacao }}</p>
+                            </div>
+
+                            <div class="flex items-start">
+                                <spartan-icon iconName="lucideScrollText" iconSize="sm"></spartan-icon>
+                                <p hlmSheetDescription class="ml-2">{{ selectedPet.descricao }}</p>
+                            </div> 
+
+                            <div class="flex items-center">
+                                <spartan-icon iconName="lucideCheck" iconSize="sm"
+                                    *ngIf="selectedPet.coleira"></spartan-icon>
+                                <spartan-icon iconName="lucideX" iconSize="sm"
+                                    *ngIf="!selectedPet.coleira"></spartan-icon>
+                                <p hlmSheetDescription class="ml-2">
+                                    {{ selectedPet.coleira ? 'Possui coleira' : 'Sem coleira' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- Caso nenhum pet esteja selecionado -->
+                <ng-template #noPetSelected>
+                    <p class="text-center text-gray-500">Nenhum pet selecionado.</p>
+                </ng-template>
+            </div>
+
+        </section>
     </div>
 </div>

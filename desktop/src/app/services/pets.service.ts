@@ -32,6 +32,7 @@ export class PetsService {
           Promise.all(
             response.data.list.map(async (pet: any) => {
               pet.photoUrl = await this.getPetPhotoUrl(pet.id);
+              console.log('Pet', pet);
               return pet;
             })
           )

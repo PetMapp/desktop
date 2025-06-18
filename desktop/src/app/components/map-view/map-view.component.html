@@ -15,7 +15,7 @@
           </div>
           <div class="flex justify-start items-center">
             <spartan-icon iconName="lucideMapPin" iconSize="sm"></spartan-icon>
-            <p hlmSheetDescription class="ml-2 truncate max-w-[350px]" [title]="petDetail.localizacao">{{
+            <p hlmSheetDescription class="ml-2 truncate max-w-[300px]" [title]="petDetail.localizacao">{{
               petDetail.localizacao }}</p>
           </div>
           <div class="flex justify-start items-start">
@@ -38,11 +38,36 @@
           </div>
 
           <div class="flex justify-start items-center">
-            <img [src]="petDetail.user?.photoURL" alt="Foto de perfil"
-              class="w-6 h-6 rounded-full border" />
-            <p hlmSheetDescription class="ml-2">Enviado por {{ petDetail.user?.displayName || 'Usuário desconhecido' }}</p>
+            <img [src]="petDetail.user?.photoURL" alt="Foto de perfil" class="w-6 h-6 rounded-full border" />
+            <p hlmSheetDescription class="ml-2">Enviado por {{ petDetail.user?.displayName || 'Usuário desconhecido' }}
+            </p>
           </div>
 
+          <!-- Comentários -->
+          <div class="w-full flex flex-col items-end">
+            <textarea hlmInput placeholder="Deixe seu comentário..."
+              class="min-h-[80px] w-full border mt-4 p-2 rounded-sm"></textarea>
+
+            <button hlmBtn class="mt-2 bg-[#159A9C]">Enviar</button>
+          </div>
+
+          <div class="w-full flex flex-col items-start">
+            <h1 class="font-bold mb-2">Discussão</h1>
+
+            <div class="flex border rounded-sm p-2 w-full gap-2">
+              <div class="w-10 h-10 rounded-full bg-slate-300"></div>
+
+              <div class="flex flex-col justify-start items-start">
+                <p class="font-bold">Nome do usuário</p>
+                <p class="text-sm text-gray-500">Comentário sobre o pet...</p>
+
+                <button hlmBtn class="flex justify-center items-center border p-2 rounded-sm" variant='outline'>
+                  <spartan-icon iconName="lucideHeart" iconSize="sm" class="mr-2 flex justify-center items-center"></spartan-icon>
+                  <span class="text-gray-500 text-sm">1</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <hlm-sheet-footer>

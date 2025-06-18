@@ -3,7 +3,7 @@ import { Component, AfterViewInit, ViewChild, NgZone, ChangeDetectorRef, Element
 import * as L from 'leaflet';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { IconComponent } from '../icon-component/icon-component.component';
-
+import { ButtonIconComponent } from '../iconButton/iconButton.component';
 import {
   BrnSheetComponent,
   BrnSheetContentDirective,
@@ -24,10 +24,13 @@ import { PetLocationModel } from '../../models/pet-location-model';
 import { PetdetailDTORes } from '../../interfaces/DTOs/petdetail-dto-res';
 import { PetDetailUser } from '../../interfaces/DTOs/petuser-dto-res';
 
+import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
+
 @Component({
   selector: 'app-map-view',
   standalone: true,
   imports: [
+    ButtonIconComponent,
     CommonModule,
     BrnSheetComponent,
     BrnSheetContentDirective,

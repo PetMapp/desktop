@@ -14,6 +14,7 @@ import {
   lucideCheck,
   lucideX,
   lucideSettings,
+  lucideHeart,
 } from '@ng-icons/lucide';
 
 @Component({
@@ -33,7 +34,8 @@ import {
       lucideMap,
       lucideCheck,
       lucideX,
-      lucideSettings
+      lucideSettings,
+      lucideHeart
     }),
   ],
   template: `

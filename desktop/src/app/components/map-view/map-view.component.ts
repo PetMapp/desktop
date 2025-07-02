@@ -26,11 +26,18 @@ import { PetDetailUser } from '../../interfaces/DTOs/petuser-dto-res';
 
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 
+import { CommentaryService } from '../../services/commentary.service';
+import { CommentaryListDTO_Res } from '../../interfaces/DTOs/res/CommentaryListDTO_Res';
+import { CreateCommentaryDTO_Req } from '../../interfaces/DTOs/res/CreateCommentaryDTO_Req';
+
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-map-view',
   standalone: true,
   imports: [
     ButtonIconComponent,
+    FormsModule,
     CommonModule,
     BrnSheetComponent,
     BrnSheetContentDirective,
@@ -60,8 +67,12 @@ export class MapViewComponent implements AfterViewInit {
     private api: ApiServiceService,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef,
-    private auth: AuthService
+    private auth: AuthService,
+    private commentaryService: CommentaryService
   ) { }
+
+  public comments: CommentaryListDTO_Res[] = [];
+  public newCommentText: string = '';
 
   async ngAfterViewInit() {
     // Aguarda um tick para garantir que a view foi inicializada
@@ -156,8 +167,49 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
+  public submitComment() {
+    console.log('Submitting comment:', this.newCommentText);
+    const text = this.newCommentText.trim();
+    const petId = this.petDetail?.petId?.toString();
+
+    if (!text || !petId) return;
+
+    const data: CreateCommentaryDTO_Req = {
+      petId,
+      text
+    };
+
+    this.commentaryService.createComment(data).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.newCommentText = '';
+          this.loadComments(petId);
+        } else {
+          alert('Error submitting comment: ' + res.errorMessage);
+        }
+      },
+      error: (err) => {
+        console.error('Error submitting comment:', err);
+      }
+    });
+  }
+
+  private loadComments(petId: string) {
+    this.commentaryService.listComments(petId).subscribe({
+      next: (res) => {
+        this.comments = res.data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading comments:', err);
+      }
+    });
+  }
+
   private async handleMarkerClick(petId: string | number) {
     try {
+      this.loadComments(petId.toString());
+
       console.log('Clique no marker, petId:', petId);
 
       const petDetail = await this.api.get<PetdetailDTORes>(

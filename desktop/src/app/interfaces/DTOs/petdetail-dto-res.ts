@@ -1,4 +1,5 @@
 export interface PetdetailDTORes {
+    petId: string;
     apelido: string,
     descricao: string,
     lat: number,

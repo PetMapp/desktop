@@ -55,20 +55,23 @@ export class ApiServiceService {
     }
   }
 
-  public async post<T>(endpoint: string, data: any, anonymous = false): Promise<T | null> {
+  public async post<T>(endpoint: string, data: any, anonymous = false): Promise<ApiResponse<T>> {
     try {
       if (!anonymous && !(await this.applicationAuthorization())) {
-        return null;
+        throw new Error('Não autorizado');
       }
+
       const response = await this.axiosClient.post<ApiResponse<T>>(endpoint, data);
+
       if (!response.data.success) {
-        throw new Error(response.data.errorMessage || '');
+        throw new Error(response.data.errorMessage || 'Erro ao processar requisição');
       }
-      return response.data.data;
+
+      return response.data;
     } catch (error) {
       const axiosErr = error as AxiosError<ApiResponse<T>>;
       console.error(axiosErr.response?.data.errorMessage ?? axiosErr.message);
-      return null;
+      throw error;
     }
   }
 

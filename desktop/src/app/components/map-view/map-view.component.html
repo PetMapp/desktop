@@ -54,20 +54,41 @@
           <div class="w-full flex flex-col items-start">
             <h1 class="font-bold mb-2">Discussão</h1>
 
-            <div *ngFor="let comment of comments" class="flex border rounded-sm p-2 w-full gap-2 mb-2">
-              <div class="w-10 h-10 rounded-full bg-slate-300 overflow-hidden">
-                <img *ngIf="comment.user?.photoURL" [src]="comment.user.photoURL" />
+            <div *ngFor="let comment of comments"
+              class="flex flex-col rounded-sm p-2 w-full gap-2 mb-2 justify-between">
+              <div class="flex justify-between items-center gap-2">
+
+                <div class="flex items-start gap-2">
+                  <div class="w-10 h-10 rounded-full bg-slate-300 overflow-hidden">
+                    <img *ngIf="comment.user?.photoURL" [src]="comment.user.photoURL" />
+                  </div>
+
+                  <div class="flex flex-col justify-start items-start">
+                    <div class="flex items-center gap-2">
+                      <p class="text-sm font-bold">{{ comment.user?.displayName || 'Usuário desconhecido' }}</p>
+                      <span class="text-xs text-gray-400">{{ getTimeSinceCreation(comment.createdAt) }}</span>
+                    </div>
+                    <p class="text-sm text-gray-500">{{ comment.text }}</p>
+                  </div>
+                </div>
+
+                <div class="flex justify-end items-center gap-2">
+                  <button *ngIf="comment.userId === currentUserId" hlmBtn
+                    class="flex justify-center items-center border p-2 rounded-sm" variant="outline">
+                    <spartan-icon iconName="lucidePencil" iconSize="sm"
+                      class="flex items-center justify-center"></spartan-icon>
+                  </button>
+                  <button hlmBtn class="flex justify-center items-center border p-2 rounded-sm" variant="outline">
+                    <spartan-icon iconName="lucideReply" iconSize="sm"
+                      class="flex items-center justify-center"></spartan-icon>
+                  </button>
+                </div>
               </div>
 
-              <div class="flex flex-col justify-start items-start">
-                <p class="text-sm font-bold">{{ comment.user?.displayName || 'Usuário desconhecido' }}</p>
-                <p class="text-sm text-gray-500">{{ comment.text }}</p>
-
-                <button hlmBtn class="flex justify-center items-center border p-2 rounded-sm" variant="outline">
-                  <spartan-icon iconName="lucideHeart" iconSize="sm"
-                    class="flex items-center justify-center mr-1"></spartan-icon>
-                  <span class="text-gray-500 text-sm">1</span>
-                </button>
+              <div class="flex items-center gap-4 cursor-pointer">
+                <div class="flex-1 border-t border-gray-300"></div>
+                <span class="text-sm text-gray-500 whitespace-nowrap">Exibir 1 resposta</span>
+                <div class="flex-1 border-t border-gray-300"></div>
               </div>
             </div>
           </div>

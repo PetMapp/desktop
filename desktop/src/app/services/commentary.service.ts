@@ -1,39 +1,41 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { ApiServiceService } from './api-service.service';
 import { CreateCommentaryDTO_Req } from '../interfaces/DTOs/res/CreateCommentaryDTO_Req';
 import { CommentaryListDTO_Res } from '../interfaces/DTOs/res/CommentaryListDTO_Res';
 import { CommentaryDeleteDTO_Req } from '../interfaces/DTOs/req/CommentaryDeleteDTO_Req';
 import { CommentaryEditDTO_Req } from '../interfaces/DTOs/req/CommentaryEditDTO_Req';
 
-interface ApiResponse<T> {
-  data: T;
-  errorMessage: string | null;
-  success: boolean;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class CommentaryService {
-  private baseUrl = 'http://localhost:3000/api/commentary';
+  private baseUrl = 'commentary';
 
-  constructor(private http: HttpClient) {}
+  constructor(private apiService: ApiServiceService) { }
 
-  createComment(data: CreateCommentaryDTO_Req): Observable<ApiResponse<null>> {
-    return this.http.post<ApiResponse<null>>(`${this.baseUrl}/create`, data);
+  async createComment(data: CreateCommentaryDTO_Req): Promise<{ success: boolean, error?: string }> {
+    try {
+      const result = await this.apiService.post<null>(`${this.baseUrl}/create`, data);
+      return { success: result.success };
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error?.message || 'Erro desconhecido'
+      };
+    }
   }
 
-  listComments(petId: string): Observable<ApiResponse<CommentaryListDTO_Res[]>> {
-    return this.http.get<ApiResponse<CommentaryListDTO_Res[]>>(`${this.baseUrl}/list/${petId}`);
+  async listComments(petId: string): Promise<CommentaryListDTO_Res[] | null> {
+    return await this.apiService.get<CommentaryListDTO_Res[]>(`${this.baseUrl}/list/${petId}`);
   }
 
-  editComment(data: CommentaryEditDTO_Req): Observable<ApiResponse<null>> {
-    return this.http.put<ApiResponse<null>>(`${this.baseUrl}/edit`, data);
+  async editComment(data: CommentaryEditDTO_Req): Promise<boolean> {
+    const result = await this.apiService.put<null>(`${this.baseUrl}/edit`, data);
+    return result !== null;
   }
 
-  removeComment(data: CommentaryDeleteDTO_Req): Observable<ApiResponse<null>> {
-    return this.http.request<ApiResponse<null>>('delete', `${this.baseUrl}/remove`, { body: data });
+  async removeComment(data: CommentaryDeleteDTO_Req): Promise<boolean> {
+    const result = await this.apiService.delete<null>(`${this.baseUrl}/remove`, data);
+    return result !== null;
   }
 }

@@ -59,6 +59,8 @@ export class MapViewComponent implements AfterViewInit {
   @ViewChild('hiddenTrigger', { static: false }) hiddenTrigger!: ElementRef;
 
   public petDetail: PetDetailUser | null = null;
+  public activePetId: string | null = null;
+  public currentUserId: string | null = null;
   private map!: L.Map;
   public isMobile = false;
   private userLocationMarker?: L.Marker;
@@ -75,6 +77,9 @@ export class MapViewComponent implements AfterViewInit {
   public newCommentText: string = '';
 
   async ngAfterViewInit() {
+    this.auth.getUserLogged().subscribe(user => {
+      this.currentUserId = user?.uid ?? null;
+    });
     // Aguarda um tick para garantir que a view foi inicializada
     setTimeout(async () => {
       this.initMap();
@@ -167,47 +172,45 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  public submitComment() {
+  public async submitComment() {
     console.log('Submitting comment:', this.newCommentText);
     const text = this.newCommentText.trim();
-    const petId = this.petDetail?.petId?.toString();
+    const petId = this.activePetId;
 
-    if (!text || !petId) return;
+    if (!text || !petId) {
+      console.warn('Comentário ou petId ausente. text:', text, 'petId:', petId);
+      return;
+    }
 
     const data: CreateCommentaryDTO_Req = {
       petId,
       text
     };
 
-    this.commentaryService.createComment(data).subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.newCommentText = '';
-          this.loadComments(petId);
-        } else {
-          alert('Error submitting comment: ' + res.errorMessage);
-        }
-      },
-      error: (err) => {
-        console.error('Error submitting comment:', err);
-      }
-    });
+    const result = await this.commentaryService.createComment(data);
+
+    if (result.success) {
+      this.newCommentText = '';
+      await this.loadComments(petId);
+    } else {
+      console.log(`Erro ao enviar comentário: ${result.error ?? 'Erro desconhecido'}`);
+      console.error('Erro ao enviar comentário:', result.error);
+    }
   }
 
-  private loadComments(petId: string) {
-    this.commentaryService.listComments(petId).subscribe({
-      next: (res) => {
-        this.comments = res.data;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Error loading comments:', err);
-      }
-    });
+  private async loadComments(petId: string) {
+    try {
+      const res = await this.commentaryService.listComments(petId);
+      this.comments = res ?? [];
+      this.cdr.detectChanges();
+    } catch (err) {
+      console.error('Error loading comments:', err);
+    }
   }
 
   private async handleMarkerClick(petId: string | number) {
     try {
+      this.activePetId = petId.toString();
       this.loadComments(petId.toString());
 
       console.log('Clique no marker, petId:', petId);
@@ -289,5 +292,26 @@ export class MapViewComponent implements AfterViewInit {
     }
 
     this.setupLocationHandlers();
+  }
+
+  public getTimeSinceCreation(dateString: string): string {
+    const createdAt = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - createdAt.getTime();
+
+    const seconds = Math.floor(diffMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) {
+      return `${days}d`;
+    } else if (hours > 0) {
+      return `${hours}h`;
+    } else if (minutes > 0) {
+      return `${minutes}m`;
+    } else {
+      return `Agora`;
+    }
   }
 }

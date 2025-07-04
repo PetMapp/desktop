@@ -7,4 +7,6 @@ export interface CommentaryListDTO_Res {
     displayName: string;
     photoURL: string;
   };
+  parentId?: string | null;
+  repliedToName?: string | null;
 }

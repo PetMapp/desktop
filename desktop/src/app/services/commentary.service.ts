@@ -29,6 +29,15 @@ export class CommentaryService {
     return await this.apiService.get<CommentaryListDTO_Res[]>(`${this.baseUrl}/list/${petId}`);
   }
 
+  async getReplies(commentId: string): Promise<CommentaryListDTO_Res[] | null> {
+    return await this.apiService.get<CommentaryListDTO_Res[]>(`${this.baseUrl}/replies/${commentId}`);
+  }
+
+  async countReplies(commentId: string): Promise<number> {
+    const response = await this.apiService.get<{ data: number }>(`${this.baseUrl}/count-replies/${commentId}`);
+    return response?.data ?? 0;
+  }
+
   async editComment(data: CommentaryEditDTO_Req): Promise<boolean> {
     const result = await this.apiService.put<null>(`${this.baseUrl}/edit`, data);
     return result !== null;

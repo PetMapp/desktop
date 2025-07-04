@@ -44,13 +44,6 @@
           </div>
 
           <!-- Comentários -->
-          <div class="w-full flex flex-col items-end">
-            <textarea hlmInput placeholder="Deixe seu comentário..."
-              class="min-h-[80px] w-full border mt-4 p-2 rounded-sm" [(ngModel)]="newCommentText"></textarea>
-
-            <button hlmBtn class="mt-2 bg-[#159A9C]" (click)="submitComment()">Enviar</button>
-          </div>
-
           <div class="w-full flex flex-col items-start">
             <h1 class="font-bold mb-2">Discussão</h1>
 
@@ -74,28 +67,89 @@
 
                 <div class="flex justify-end items-center gap-2">
                   <button *ngIf="comment.userId === currentUserId" hlmBtn
-                    class="flex justify-center items-center border p-2 rounded-sm" variant="outline">
+                    class="w-6 h-6 flex justify-center items-center border p-2 rounded-sm" variant="outline">
                     <spartan-icon iconName="lucidePencil" iconSize="sm"
                       class="flex items-center justify-center"></spartan-icon>
                   </button>
-                  <button hlmBtn class="flex justify-center items-center border p-2 rounded-sm" variant="outline">
+                  <button hlmBtn class="w-6 h-6 flex justify-center items-center border p-2 rounded-sm"
+                    variant="outline">
                     <spartan-icon iconName="lucideReply" iconSize="sm"
-                      class="flex items-center justify-center"></spartan-icon>
+                      class="flex items-center justify-center" (click)="replyTo(comment)"></spartan-icon>
                   </button>
                 </div>
               </div>
 
-              <div class="flex items-center gap-4 cursor-pointer">
+              <!-- Contagem de respostas -->
+              <div *ngIf="replyCounts[comment.id] > 0" (click)="toggleReplies(comment.id)"
+                class="flex items-center gap-4 cursor-pointer hover:opacity-80 transition">
                 <div class="flex-1 border-t border-gray-300"></div>
-                <span class="text-sm text-gray-500 whitespace-nowrap">Exibir 1 resposta</span>
+                <span class="text-sm text-gray-500 whitespace-nowrap">
+                  {{ showReplies[comment.id] ? 'Ocultar' : 'Exibir' }} {{ replyCounts[comment.id] }} resposta{{
+                  replyCounts[comment.id] > 1 ? 's' : '' }}
+                </span>
                 <div class="flex-1 border-t border-gray-300"></div>
+              </div>
+
+              <!-- Respostas -->
+
+              <div *ngIf="showReplies[comment.id]">
+                <div *ngFor="let reply of replies[comment.id]" class="flex items-start gap-2 ml-12 mb-2">
+                  <div class="w-6 h-6 rounded-full bg-slate-300 overflow-hidden">
+                    <img *ngIf="reply.user?.photoURL" [src]="reply.user.photoURL" />
+                  </div>
+
+                  <div class="w-full flex flex-col justify-start items-start">
+                    <div class="flex justify-start items-start gap-1">
+                      <p class="text-xs font-bold">
+                        {{ reply.user?.displayName || 'Usuário desconhecido' }}
+                      </p>
+                      <span *ngIf="reply.parentId && reply.parentId !== comment.id"
+                        class="text-xs text-gray-400 flex justify-start items-start gap-1">
+                        <spartan-icon iconName="lucideReply" iconSize="xs"
+                          class="flex items-center justify-center" (click)="replyTo(comment)"></spartan-icon>
+                        {{ reply.repliedToName }}
+                      </span>
+                    </div>
+                    <p class="text-sm text-gray-500">{{ reply.text }}</p>
+
+                    <!-- Ações da resposta -->
+                    <div class="flex justify-start items-center w-full mt-1">
+                      <span class="text-xs text-gray-400">{{ getTimeSinceCreation(reply.createdAt) }}</span>
+
+                      <div class="flex justify-end items-center gap-2 ml-2">
+                        <button *ngIf="comment.userId === currentUserId" hlmBtn
+                          class="w-2 h-2 flex justify-center items-center border p-2 rounded-sm" variant="outline">
+                          <spartan-icon iconName="lucidePencil" iconSize="xs"
+                            class="flex items-center justify-center"></spartan-icon>
+                        </button>
+                        <button hlmBtn class="w-2 h-2 flex justify-center items-center border p-2 rounded-sm"
+                          variant="outline">
+                          <spartan-icon iconName="lucideReply" iconSize="xs"
+                            class="flex items-center justify-center" (click)="replyTo(comment)"></spartan-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <hlm-sheet-footer>
+        <hlm-sheet-footer class="fixed bottom-0 w-96 p-2 bg-white border-t">
+          <div class="w-full flex flex-col items-end">
+            <textarea hlmInput placeholder="Deixe seu comentário..." class="min-h-[40px] w-full border p-2 rounded-sm"
+              [(ngModel)]="newCommentText"></textarea>
 
+            <div class="flex justify-between items-center w-full mt-2">
+              <span class="text-sm text-gray-500" *ngIf="replyingToName">
+                Em resposta a <strong>{{ replyingToName }}</strong>
+                <button class="ml-2 text-xs text-red-500 underline" (click)="cancelReply()">Cancelar</button>
+              </span>
+              <button hlmBtn class="mt-2 bg-[#159A9C]" (click)="submitComment()"
+                [disabled]="!newCommentText.trim()">Enviar</button>
+            </div>
+          </div>
         </hlm-sheet-footer>
       </hlm-sheet-content>
     </hlm-sheet>

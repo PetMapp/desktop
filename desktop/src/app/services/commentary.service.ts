@@ -34,8 +34,8 @@ export class CommentaryService {
   }
 
   async countReplies(commentId: string): Promise<number> {
-    const response = await this.apiService.get<{ data: number }>(`${this.baseUrl}/count-replies/${commentId}`);
-    return response?.data ?? 0;
+    const count = await this.apiService.get<number>(`${this.baseUrl}/count-replies/${commentId}`);
+    return count ?? 0;
   }
 
   async editComment(data: CommentaryEditDTO_Req): Promise<boolean> {

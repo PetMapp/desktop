@@ -61,6 +61,11 @@ export class MapViewComponent implements AfterViewInit {
   public petDetail: PetDetailUser | null = null;
   public activePetId: string | null = null;
   public currentUserId: string | null = null;
+  replyCounts: { [commentId: string]: number } = {};
+  showReplies: { [commentId: string]: boolean } = {};
+  replies: { [commentId: string]: CommentaryListDTO_Res[] } = {};
+  public replyingToId: string | null = null;
+  public replyingToName: string | null = null;
   private map!: L.Map;
   public isMobile = false;
   private userLocationMarker?: L.Marker;
@@ -173,39 +178,69 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   public async submitComment() {
-    console.log('Submitting comment:', this.newCommentText);
     const text = this.newCommentText.trim();
     const petId = this.activePetId;
 
-    if (!text || !petId) {
-      console.warn('Comentário ou petId ausente. text:', text, 'petId:', petId);
-      return;
-    }
+    if (!text || !petId) return;
 
     const data: CreateCommentaryDTO_Req = {
       petId,
-      text
+      text,
+      parentId: this.replyingToId ?? null
     };
 
     const result = await this.commentaryService.createComment(data);
 
     if (result.success) {
       this.newCommentText = '';
+      this.replyingToId = null;
+      this.replyingToName = null;
       await this.loadComments(petId);
     } else {
-      console.log(`Erro ao enviar comentário: ${result.error ?? 'Erro desconhecido'}`);
       console.error('Erro ao enviar comentário:', result.error);
     }
   }
+
 
   private async loadComments(petId: string) {
     try {
       const res = await this.commentaryService.listComments(petId);
       this.comments = res ?? [];
+
+      this.replyCounts = {};
+
+      for (const comment of this.comments) {
+        const count = await this.commentaryService.countReplies(comment.id);
+
+        if (count > 0) {
+          this.replyCounts[comment.id] = count;
+        }
+      }
       this.cdr.detectChanges();
     } catch (err) {
       console.error('Error loading comments:', err);
     }
+  }
+
+  public async toggleReplies(commentId: string) {
+    this.showReplies[commentId] = !this.showReplies[commentId];
+
+    // Se for para exibir e ainda não buscou, então busca
+    if (this.showReplies[commentId] && !this.replies[commentId]) {
+      const fetchedReplies = await this.commentaryService.getReplies(commentId);
+      this.replies[commentId] = fetchedReplies ?? [];
+      this.cdr.detectChanges();
+    }
+  }
+
+  public replyTo(comment: CommentaryListDTO_Res) {
+    this.replyingToId = comment.id;
+    this.replyingToName = comment.user?.displayName ?? 'Usuário';
+  }
+
+  public cancelReply() {
+    this.replyingToId = null;
+    this.replyingToName = null;
   }
 
   private async handleMarkerClick(petId: string | number) {
@@ -313,5 +348,10 @@ export class MapViewComponent implements AfterViewInit {
     } else {
       return `Agora`;
     }
+  }
+
+  public async countReplies(commentId: string): Promise<number> {
+    const count = await this.commentaryService.countReplies(commentId);
+    return count;
   }
 }

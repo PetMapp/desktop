@@ -66,6 +66,8 @@ export class MapViewComponent implements AfterViewInit {
   replies: { [commentId: string]: CommentaryListDTO_Res[] } = {};
   public replyingToId: string | null = null;
   public replyingToName: string | null = null;
+  public isEditing: boolean = false;
+  public editingCommentId: string | null = null;
   private map!: L.Map;
   public isMobile = false;
   private userLocationMarker?: L.Marker;
@@ -183,6 +185,26 @@ export class MapViewComponent implements AfterViewInit {
 
     if (!text || !petId) return;
 
+    if (this.isEditing && this.editingCommentId) {
+      const success = await this.commentaryService.editComment({
+        commentaryId: this.editingCommentId,
+        newText: text,
+      });
+
+      if (success) {
+        this.isEditing = false;
+        this.editingCommentId = null;
+        this.newCommentText = '';
+        await this.loadComments(petId);
+        this.cdr.detectChanges();
+      } else {
+        console.error('Erro ao editar comentário');
+      }
+
+      return;
+    }
+
+    // Criação normal (já existente)
     const data: CreateCommentaryDTO_Req = {
       petId,
       text,
@@ -193,12 +215,38 @@ export class MapViewComponent implements AfterViewInit {
 
     if (result.success) {
       this.newCommentText = '';
+      const wasReply = !!this.replyingToId;
+      const parentId = this.replyingToId;
       this.replyingToId = null;
       this.replyingToName = null;
-      await this.loadComments(petId);
+
+      if (wasReply && parentId) {
+        const fetchedReplies = await this.commentaryService.getReplies(parentId);
+        this.replies[parentId] = fetchedReplies ?? [];
+        this.replyCounts[parentId] = this.replies[parentId].length;
+        this.showReplies[parentId] = true;
+      } else {
+        await this.loadComments(petId);
+      }
+
+      this.cdr.detectChanges();
     } else {
       console.error('Erro ao enviar comentário:', result.error);
     }
+  }
+
+  public edit(comment: CommentaryListDTO_Res) {
+    this.newCommentText = comment.text;
+    this.editingCommentId = comment.id;
+    this.isEditing = true;
+    this.replyingToId = null;
+    this.replyingToName = null;
+  }
+
+  public cancelEdit() {
+    this.isEditing = false;
+    this.editingCommentId = null;
+    this.newCommentText = '';
   }
 
 

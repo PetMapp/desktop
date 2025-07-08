@@ -47,4 +47,13 @@ export class CommentaryService {
     const result = await this.apiService.delete<null>(`${this.baseUrl}/remove`, data);
     return result !== null;
   }
+
+  async getCommentById(id: string): Promise<CommentaryListDTO_Res | null> {
+    try {
+      return await this.apiService.get<CommentaryListDTO_Res>(`/commentary/${id}`, true);
+    } catch (err) {
+      console.error('Erro ao buscar comentário por ID:', err);
+      return null;
+    }
+  }
 }

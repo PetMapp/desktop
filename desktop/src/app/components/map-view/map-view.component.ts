@@ -32,6 +32,30 @@ import { CreateCommentaryDTO_Req } from '../../interfaces/DTOs/res/CreateComment
 
 import { FormsModule } from '@angular/forms';
 
+import { BrnMenuTriggerDirective } from '@spartan-ng/brain/menu';
+
+import {
+  HlmMenuComponent,
+  HlmMenuGroupComponent,
+  HlmMenuItemDirective,
+  HlmMenuItemIconDirective,
+  HlmMenuItemSubIndicatorComponent,
+  HlmMenuLabelComponent,
+  HlmMenuSeparatorComponent,
+  HlmMenuShortcutComponent,
+  HlmSubMenuComponent,
+} from '@spartan-ng/ui-menu-helm';
+
+import { BrnDialogContentDirective, BrnDialogTriggerDirective } from '@spartan-ng/brain/dialog';
+import {
+  HlmDialogComponent,
+  HlmDialogContentComponent,
+  HlmDialogDescriptionDirective,
+  HlmDialogFooterComponent,
+  HlmDialogHeaderComponent,
+  HlmDialogTitleDirective,
+} from '@spartan-ng/helm/dialog';
+
 @Component({
   selector: 'app-map-view',
   standalone: true,
@@ -49,7 +73,25 @@ import { FormsModule } from '@angular/forms';
     HlmSheetDescriptionDirective,
     HlmSheetFooterComponent,
     HlmButtonDirective,
-    IconComponent
+    IconComponent,
+    HlmMenuComponent,
+    HlmMenuGroupComponent,
+    HlmMenuItemDirective,
+    HlmMenuItemIconDirective,
+    HlmMenuItemSubIndicatorComponent,
+    HlmMenuLabelComponent,
+    HlmMenuSeparatorComponent,
+    HlmMenuShortcutComponent,
+    HlmSubMenuComponent,
+    BrnMenuTriggerDirective,
+    HlmDialogComponent,
+    HlmDialogContentComponent,
+    HlmDialogDescriptionDirective,
+    HlmDialogFooterComponent,
+    HlmDialogHeaderComponent,
+    HlmDialogTitleDirective,
+    BrnDialogContentDirective,
+    BrnDialogTriggerDirective
   ],
   templateUrl: './map-view.component.html',
   styleUrls: ['./map-view.component.scss'],
@@ -68,6 +110,7 @@ export class MapViewComponent implements AfterViewInit {
   public replyingToName: string | null = null;
   public isEditing: boolean = false;
   public editingCommentId: string | null = null;
+  public commentToDelete: CommentaryListDTO_Res | null = null;
   private map!: L.Map;
   public isMobile = false;
   private userLocationMarker?: L.Marker;
@@ -197,18 +240,14 @@ export class MapViewComponent implements AfterViewInit {
         this.newCommentText = '';
         await this.loadComments(petId);
         this.cdr.detectChanges();
-      } else {
-        console.error('Erro ao editar comentário');
       }
-
       return;
     }
 
-    // Criação normal (já existente)
     const data: CreateCommentaryDTO_Req = {
       petId,
       text,
-      parentId: this.replyingToId ?? null
+      parentId: this.replyingToId ?? null,
     };
 
     const result = await this.commentaryService.createComment(data);
@@ -221,10 +260,12 @@ export class MapViewComponent implements AfterViewInit {
       this.replyingToName = null;
 
       if (wasReply && parentId) {
-        const fetchedReplies = await this.commentaryService.getReplies(parentId);
-        this.replies[parentId] = fetchedReplies ?? [];
-        this.replyCounts[parentId] = this.replies[parentId].length;
-        this.showReplies[parentId] = true;
+        // Encontre o pai raiz (caso esteja respondendo uma resposta)
+        const rootParentId = await this.findRootCommentId(parentId);
+        const fetchedReplies = await this.commentaryService.getReplies(rootParentId);
+        this.replies[rootParentId] = [...(fetchedReplies ?? [])]; // força reatividade
+        this.replyCounts[rootParentId] = this.replies[rootParentId].length;
+        this.showReplies[rootParentId] = true;
       } else {
         await this.loadComments(petId);
       }
@@ -249,6 +290,50 @@ export class MapViewComponent implements AfterViewInit {
     this.newCommentText = '';
   }
 
+  private async findRootCommentId(commentId: string): Promise<string> {
+    let current = await this.commentaryService.getCommentById(commentId);
+    let safetyCounter = 10;
+
+    while (current?.parentId && safetyCounter-- > 0) {
+      const parent = await this.commentaryService.getCommentById(current.parentId);
+      if (!parent) break;
+      current = parent;
+    }
+
+    return current?.id ?? commentId;
+  }
+
+  public async confirmDelete() {
+    if (!this.commentToDelete) return;
+
+    const success = await this.commentaryService.removeComment({
+      commentaryId: this.commentToDelete.id,
+    });
+
+    if (!success || !this.activePetId) {
+      console.error('Erro ao deletar comentário');
+      return;
+    }
+
+    const parentId = this.commentToDelete.parentId;
+
+    if (parentId) {
+      // Encontre o comentário pai raiz
+      const rootParentId = await this.findRootCommentId(parentId);
+      const updatedReplies = await this.commentaryService.getReplies(rootParentId);
+      this.replies[rootParentId] = updatedReplies ?? [];
+      this.replyCounts[rootParentId] = this.replies[rootParentId].length;
+
+      if (this.replyCounts[rootParentId] === 0) {
+        this.showReplies[rootParentId] = false;
+      }
+    } else {
+      await this.loadComments(this.activePetId);
+    }
+
+    this.commentToDelete = null;
+    this.cdr.detectChanges();
+  }
 
   private async loadComments(petId: string) {
     try {

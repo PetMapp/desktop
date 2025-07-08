@@ -4,6 +4,7 @@ export interface CommentaryListDTO_Res {
   text: string;
   createdAt: string;
   editedAt?: string | null;
+  deletedAt?: string | null;
   user: {
     displayName: string;
     photoURL: string;

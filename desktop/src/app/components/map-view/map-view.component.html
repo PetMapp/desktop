@@ -68,7 +68,6 @@
                       <p class="text-sm text-gray-500 break-words text-left"
                         [ngClass]="{ 'line-clamp-3': !expandedComments[comment.id] }" [innerText]="comment.text"></p>
 
-                      <!-- Mostrar botão só se o texto for longo -->
                       <button class="text-xs text-[#159A9C] mt-1"
                         (click)="expandedComments[comment.id] = !expandedComments[comment.id]"
                         *ngIf="comment.text.length > 150">
@@ -192,7 +191,16 @@
                         {{ reply.repliedToName }}
                       </span>
                     </div>
-                    <p class="text-sm text-gray-500">{{ reply.text }}</p>
+                    <div class="max-w-72 text-left">
+                      <p class="text-sm text-gray-500 break-words text-left"
+                        [ngClass]="{ 'line-clamp-3': !expandedReplies[reply.id] }" [innerText]="reply.text"></p>
+
+                      <button class="text-xs text-[#159A9C] mt-1"
+                        (click)="expandedReplies[reply.id] = !expandedReplies[reply.id]"
+                        *ngIf="reply.text.length > 150">
+                        {{ expandedReplies[reply.id] ? 'Mostrar menos' : 'Mostrar mais' }}
+                      </button>
+                    </div>
 
                     <!-- Ações da resposta -->
                     <div class="flex justify-start items-center w-full mt-1">

@@ -113,6 +113,7 @@ export class MapViewComponent implements AfterViewInit {
   public editingCommentId: string | null = null;
   public commentToDelete: CommentaryListDTO_Res | null = null;
   expandedComments: Record<string, boolean> = {};
+  expandedReplies: Record<string, boolean> = {};
   private map!: L.Map;
   public isMobile = false;
   private userLocationMarker?: L.Marker;

@@ -107,6 +107,7 @@ export class MapViewComponent implements AfterViewInit {
   showReplies: { [commentId: string]: boolean } = {};
   replies: { [commentId: string]: CommentaryListDTO_Res[] } = {};
   public replyingToId: string | null = null;
+  public replyingToRootId: string | null = null;
   public replyingToName: string | null = null;
   public isEditing: boolean = false;
   public editingCommentId: string | null = null;
@@ -255,22 +256,29 @@ export class MapViewComponent implements AfterViewInit {
     if (result.success) {
       this.newCommentText = '';
       const wasReply = !!this.replyingToId;
-      const parentId = this.replyingToId;
-      this.replyingToId = null;
-      this.replyingToName = null;
 
-      if (wasReply && parentId) {
-        // Encontre o pai raiz (caso esteja respondendo uma resposta)
-        const rootParentId = await this.findRootCommentId(parentId);
-        const fetchedReplies = await this.commentaryService.getReplies(rootParentId);
-        this.replies[rootParentId] = [...(fetchedReplies ?? [])]; // força reatividade
-        this.replyCounts[rootParentId] = this.replies[rootParentId].length;
-        this.showReplies[rootParentId] = true;
+      if (wasReply && this.replyingToId) {
+        try {
+          const rootCommentId = this.replyingToRootId || await this.findRootCommentId(this.replyingToId);
+
+          await this.refreshReplies(rootCommentId);
+
+          this.cdr.markForCheck();
+          this.cdr.detectChanges();
+        } catch (err) {
+          console.error('Erro ao carregar respostas:', err);
+          // Fallback: reload all comments if there's an error
+          await this.loadComments(petId);
+        }
       } else {
+        // If it's a root comment, reload all comments
         await this.loadComments(petId);
       }
 
-      this.cdr.detectChanges();
+      // Reset reply state
+      this.replyingToId = null;
+      this.replyingToName = null;
+      this.replyingToRootId = null;
     } else {
       console.error('Erro ao enviar comentário:', result.error);
     }
@@ -291,16 +299,36 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   private async findRootCommentId(commentId: string): Promise<string> {
-    let current = await this.commentaryService.getCommentById(commentId);
-    let safetyCounter = 10;
+    try {
+      let currentId = commentId;
+      let parentId: string | null = null;
+      let safetyCounter = 10;
 
-    while (current?.parentId && safetyCounter-- > 0) {
-      const parent = await this.commentaryService.getCommentById(current.parentId);
-      if (!parent) break;
-      current = parent;
+      do {
+        const current = await this.commentaryService.getCommentById(currentId);
+
+        if (!current) {
+          console.warn('Comentário não encontrado:', currentId);
+          break;
+        }
+
+        if (safetyCounter-- <= 0) {
+          console.warn('Limite de segurança atingido em findRootCommentId');
+          break;
+        }
+
+        parentId = current.parentId ?? null;
+
+        if (parentId) {
+          currentId = parentId;
+        }
+      } while (parentId);
+
+      return currentId;
+    } catch (err) {
+      console.error('Erro dentro de findRootCommentId:', err);
+      throw err;
     }
-
-    return current?.id ?? commentId;
   }
 
   public async confirmDelete() {
@@ -320,19 +348,12 @@ export class MapViewComponent implements AfterViewInit {
     if (parentId) {
       // Encontre o comentário pai raiz
       const rootParentId = await this.findRootCommentId(parentId);
-      const updatedReplies = await this.commentaryService.getReplies(rootParentId);
-      this.replies[rootParentId] = updatedReplies ?? [];
-      this.replyCounts[rootParentId] = this.replies[rootParentId].length;
-
-      if (this.replyCounts[rootParentId] === 0) {
-        this.showReplies[rootParentId] = false;
-      }
+      await this.refreshReplies(rootParentId);
     } else {
       await this.loadComments(this.activePetId);
     }
 
     this.commentToDelete = null;
-    this.cdr.detectChanges();
   }
 
   private async loadComments(petId: string) {
@@ -366,9 +387,33 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  public replyTo(comment: CommentaryListDTO_Res) {
+  public async replyTo(comment: CommentaryListDTO_Res) {
     this.replyingToId = comment.id;
     this.replyingToName = comment.user?.displayName ?? 'Usuário';
+
+    // Descobrir o comentário raiz dessa resposta
+    this.replyingToRootId = await this.findRootCommentId(comment.id);
+
+    this.isEditing = false;
+    this.editingCommentId = null;
+
+    setTimeout(() => {
+      const textarea = document.querySelector('textarea[placeholder="Deixe seu comentário..."]') as HTMLTextAreaElement;
+      if (textarea) textarea.focus();
+    }, 100);
+  }
+
+  private async refreshReplies(commentId: string) {
+    const fetchedReplies = await this.commentaryService.getReplies(commentId);
+    this.replies[commentId] = [...(fetchedReplies ?? [])];
+    this.replyCounts[commentId] = this.replies[commentId].length;
+
+    if (this.replyCounts[commentId] === 0) {
+      this.showReplies[commentId] = false;
+    }
+
+    this.cdr.markForCheck();
+    this.cdr.detectChanges();
   }
 
   public cancelReply() {
@@ -381,18 +426,13 @@ export class MapViewComponent implements AfterViewInit {
       this.activePetId = petId.toString();
       this.loadComments(petId.toString());
 
-      console.log('Clique no marker, petId:', petId);
-
       const petDetail = await this.api.get<PetdetailDTORes>(
         `/pet/find/get/${petId}`,
         true
       );
 
       if (petDetail) {
-        console.log('Detalhes do pet carregados:', petDetail);
-
         const usuario = await this.auth.getUserById(petDetail.userId);
-        console.log('Usuário dono do pet:', usuario);
 
         this.ngZone.run(() => {
           this.petDetail = {

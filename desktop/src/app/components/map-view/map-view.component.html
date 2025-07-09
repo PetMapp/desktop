@@ -172,8 +172,8 @@
                       </p>
                       <span *ngIf="reply.parentId && reply.parentId !== comment.id"
                         class="text-xs text-gray-400 flex justify-start items-start gap-1">
-                        <spartan-icon iconName="lucideReply" iconSize="xs" class="flex items-center justify-center"
-                          (click)="replyTo(comment)"></spartan-icon>
+                        <spartan-icon iconName="lucideReply" iconSize="xs"
+                          class="flex items-center justify-center"></spartan-icon>
                         {{ reply.repliedToName }}
                       </span>
                     </div>
@@ -187,31 +187,33 @@
                       </span>
 
                       <div class="flex justify-end items-center gap-2 ml-2">
-                        <button *ngIf="comment.userId === currentUserId" hlmBtn
+                        <!-- Correção: verificar reply.userId em vez de comment.userId -->
+                        <button *ngIf="reply.userId === currentUserId" hlmBtn
                           class="w-2 h-2 flex justify-center items-center border p-2 rounded-sm" variant="outline"
-                          (click)="edit(comment)">
+                          (click)="edit(reply)">
                           <spartan-icon iconName="lucidePencil" iconSize="xs"
                             class="flex items-center justify-center"></spartan-icon>
                         </button>
                         <button hlmBtn class="w-2 h-2 flex justify-center items-center border p-2 rounded-sm"
                           variant="outline">
+                          <!-- Correção: passar reply em vez de comment -->
                           <spartan-icon iconName="lucideReply" iconSize="xs" class="flex items-center justify-center"
                             (click)="replyTo(reply)"></spartan-icon>
                         </button>
                         <button hlmBtn class="w-2 h-2 flex justify-center items-center border p-2 rounded-sm"
-                          variant="outline" [brnMenuTriggerFor]="menu">
+                          variant="outline" [brnMenuTriggerFor]="replyMenu">
                           <spartan-icon iconName="lucideEllipsis" iconSize="sm"
                             class="flex items-center justify-center"></spartan-icon>
                         </button>
 
-                        <!-- Menu -->
-                        <ng-template #menu>
+                        <!-- Menu para respostas (com ID único) -->
+                        <ng-template #replyMenu>
                           <hlm-menu>
                             <hlm-menu-group>
                               <!-- Abertura do dialog de deletar -->
                               <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
-                                [brnDialogTriggerFor]="deleteDialog" (click)="commentToDelete = reply"
-                                *ngIf="comment.userId === currentUserId">
+                                [brnDialogTriggerFor]="deleteReplyDialog" (click)="commentToDelete = reply"
+                                *ngIf="reply.userId === currentUserId">
                                 <spartan-icon iconName="lucideTrash" iconSize="sm"
                                   class="mr-2 flex items-center"></spartan-icon>
                                 <span>Deletar</span>
@@ -221,7 +223,7 @@
 
                               <!-- Abertura do dialog de denúncia -->
                               <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
-                                [brnDialogTriggerFor]="reportDialog">
+                                [brnDialogTriggerFor]="reportReplyDialog">
                                 <spartan-icon iconName="lucideShield" iconSize="sm"
                                   class="mr-2 flex items-center"></spartan-icon>
                                 <span>Denunciar</span>
@@ -230,12 +232,12 @@
                           </hlm-menu>
                         </ng-template>
 
-                        <!-- Dialog de deletar -->
-                        <hlm-dialog #deleteDialog>
+                        <!-- Dialog de deletar resposta (com ID único) -->
+                        <hlm-dialog #deleteReplyDialog>
                           <hlm-dialog-content *brnDialogContent="let ctx">
                             <hlm-dialog-header>
                               <h3 brnDialogTitle hlm>Confirmar exclusão</h3>
-                              <p brnDialogDescription hlm>Você tem certeza que deseja excluir este comentário?</p>
+                              <p brnDialogDescription hlm>Você tem certeza que deseja excluir esta resposta?</p>
                             </hlm-dialog-header>
                             <hlm-dialog-footer>
                               <button hlmBtn variant="ghost" (click)="ctx.close()">Cancelar</button>
@@ -245,11 +247,11 @@
                           </hlm-dialog-content>
                         </hlm-dialog>
 
-                        <!-- Dialog de denúncia -->
-                        <hlm-dialog #reportDialog>
+                        <!-- Dialog de denúncia resposta (com ID único) -->
+                        <hlm-dialog #reportReplyDialog>
                           <hlm-dialog-content *brnDialogContent="let ctx">
                             <hlm-dialog-header>
-                              <h3 brnDialogTitle hlm>Denunciar comentário</h3>
+                              <h3 brnDialogTitle hlm>Denunciar resposta</h3>
                               <p brnDialogDescription hlm>Descreva o motivo da denúncia.</p>
                             </hlm-dialog-header>
                             <textarea hlmInput class="w-full mt-2"></textarea>
@@ -259,8 +261,6 @@
                             </hlm-dialog-footer>
                           </hlm-dialog-content>
                         </hlm-dialog>
-
-
                       </div>
                     </div>
                   </div>

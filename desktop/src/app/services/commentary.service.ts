@@ -13,10 +13,13 @@ export class CommentaryService {
 
   constructor(private apiService: ApiServiceService) { }
 
-  async createComment(data: CreateCommentaryDTO_Req): Promise<{ success: boolean, error?: string }> {
+  async createComment(data: CreateCommentaryDTO_Req): Promise<{ success: boolean, error?: string, data?: { id: string } }> {
     try {
-      const result = await this.apiService.post<null>(`${this.baseUrl}/create`, data);
-      return { success: result.success };
+      const result = await this.apiService.post<{ id: string }>(`${this.baseUrl}/create`, data);
+      return {
+        success: result.success,
+        data: result.data,
+      };
     } catch (error: any) {
       return {
         success: false,

@@ -52,7 +52,7 @@
               <div class="flex justify-between items-center gap-2">
 
                 <div class="flex items-start gap-2">
-                  <div class="w-10 h-10 rounded-full bg-slate-300 overflow-hidden">
+                  <div class="w-10 h-10 rounded-full bg-slate-300 overflow-hidden flex justify-center">
                     <img *ngIf="comment.user?.photoURL" [src]="comment.user.photoURL" />
                   </div>
 
@@ -64,86 +64,101 @@
                         <span *ngIf="comment.editedAt">(editado)</span>
                       </span>
                     </div>
-                    <p class="text-sm text-gray-500">{{ comment.text }}</p>
+                    <div class="max-w-72 text-left">
+                      <p class="text-sm text-gray-500 break-words text-left"
+                        [ngClass]="{ 'line-clamp-3': !expandedComments[comment.id] }" [innerText]="comment.text"></p>
+
+                      <!-- Mostrar botão só se o texto for longo -->
+                      <button class="text-xs text-[#159A9C] mt-1"
+                        (click)="expandedComments[comment.id] = !expandedComments[comment.id]"
+                        *ngIf="comment.text.length > 150">
+                        {{ expandedComments[comment.id] ? 'Mostrar menos' : 'Mostrar mais' }}
+                      </button>
+                    </div>
+
+                    <!-- Ações -->
+
+                    <div class="flex justify-end items-center mt-2">
+                      <button *ngIf="comment.userId === currentUserId" hlmBtn
+                        class="w-4 h-4 flex justify-center items-center border p-2 mr-2 rounded-sm" variant="outline"
+                        (click)="edit(comment)">
+                        <spartan-icon iconName="lucidePencil" iconSize="xs"
+                          class="flex items-center justify-center"></spartan-icon>
+                      </button>
+                      <button hlmBtn class="w-4 h-4 flex justify-center items-center border p-2 mr-2 rounded-sm"
+                        variant="outline">
+                        <spartan-icon iconName="lucideReply" iconSize="xs" class="flex items-center justify-center"
+                          (click)="replyTo(comment)"></spartan-icon>
+                      </button>
+                      <button hlmBtn class="w-4 h-4 flex justify-center items-center border p-2 rounded-sm mr-2"
+                        variant="outline" [brnMenuTriggerFor]="menu">
+                        <spartan-icon iconName="lucideEllipsis" iconSize="xs"
+                          class="flex items-center justify-center"></spartan-icon>
+                      </button>
+                      <span class="text-xs text-gray-400 flex items-center gap-1"
+                        *ngIf="petDetail.userId === currentUserId">
+                        Autor
+                      </span>
+                      <!-- Menu -->
+                      <ng-template #menu>
+                        <hlm-menu>
+                          <hlm-menu-group>
+                            <!-- Abertura do dialog de deletar -->
+                            <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
+                              [brnDialogTriggerFor]="deleteDialog" (click)="commentToDelete = comment"
+                              *ngIf="comment.userId === currentUserId">
+                              <spartan-icon iconName="lucideTrash" iconSize="sm"
+                                class="mr-2 flex items-center"></spartan-icon>
+                              <span>Deletar</span>
+                            </button>
+
+                            <hlm-menu-separator />
+
+                            <!-- Abertura do dialog de denúncia -->
+                            <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
+                              [brnDialogTriggerFor]="reportDialog">
+                              <spartan-icon iconName="lucideShield" iconSize="sm"
+                                class="mr-2 flex items-center"></spartan-icon>
+                              <span>Denunciar</span>
+                            </button>
+                          </hlm-menu-group>
+                        </hlm-menu>
+                      </ng-template>
+
+                      <!-- Dialog de deletar -->
+                      <hlm-dialog #deleteDialog>
+                        <hlm-dialog-content *brnDialogContent="let ctx">
+                          <hlm-dialog-header>
+                            <h3 brnDialogTitle hlm>Confirmar exclusão</h3>
+                            <p brnDialogDescription hlm>Você tem certeza que deseja excluir este comentário?</p>
+                          </hlm-dialog-header>
+                          <hlm-dialog-footer>
+                            <button hlmBtn variant="ghost" (click)="ctx.close()">Cancelar</button>
+                            <button hlmBtn class="bg-red-500 text-white"
+                              (click)="confirmDelete(); ctx.close()">Excluir</button>
+                          </hlm-dialog-footer>
+                        </hlm-dialog-content>
+                      </hlm-dialog>
+
+                      <!-- Dialog de denúncia -->
+                      <hlm-dialog #reportDialog>
+                        <hlm-dialog-content *brnDialogContent="let ctx">
+                          <hlm-dialog-header>
+                            <h3 brnDialogTitle hlm>Denunciar comentário</h3>
+                            <p brnDialogDescription hlm>Descreva o motivo da denúncia.</p>
+                          </hlm-dialog-header>
+                          <textarea hlmInput class="w-full mt-2"></textarea>
+                          <hlm-dialog-footer class="mt-4">
+                            <button hlmBtn variant="ghost" (click)="ctx.close()">Cancelar</button>
+                            <button hlmBtn class="bg-yellow-500 text-white">Enviar denúncia</button>
+                          </hlm-dialog-footer>
+                        </hlm-dialog-content>
+                      </hlm-dialog>
+                    </div>
                   </div>
                 </div>
 
-                <!-- Ações -->
 
-                <div class="flex justify-end items-center">
-                  <button *ngIf="comment.userId === currentUserId" hlmBtn
-                    class="w-6 h-6 flex justify-center items-center border p-2 mr-2 rounded-sm" variant="outline"
-                    (click)="edit(comment)">
-                    <spartan-icon iconName="lucidePencil" iconSize="sm"
-                      class="flex items-center justify-center"></spartan-icon>
-                  </button>
-                  <button hlmBtn class="w-6 h-6 flex justify-center items-center border p-2 mr-2 rounded-sm"
-                    variant="outline">
-                    <spartan-icon iconName="lucideReply" iconSize="sm" class="flex items-center justify-center"
-                      (click)="replyTo(comment)"></spartan-icon>
-                  </button>
-                  <button hlmBtn class="w-6 h-6 flex justify-center items-center border p-2 rounded-sm"
-                    variant="outline" [brnMenuTriggerFor]="menu">
-                    <spartan-icon iconName="lucideEllipsis" iconSize="sm"
-                      class="flex items-center justify-center"></spartan-icon>
-                  </button>
-
-                  <!-- Menu -->
-                  <ng-template #menu>
-                    <hlm-menu>
-                      <hlm-menu-group>
-                        <!-- Abertura do dialog de deletar -->
-                        <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
-                          [brnDialogTriggerFor]="deleteDialog" (click)="commentToDelete = comment"
-                          *ngIf="comment.userId === currentUserId">
-                          <spartan-icon iconName="lucideTrash" iconSize="sm"
-                            class="mr-2 flex items-center"></spartan-icon>
-                          <span>Deletar</span>
-                        </button>
-
-                        <hlm-menu-separator />
-
-                        <!-- Abertura do dialog de denúncia -->
-                        <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
-                          [brnDialogTriggerFor]="reportDialog">
-                          <spartan-icon iconName="lucideShield" iconSize="sm"
-                            class="mr-2 flex items-center"></spartan-icon>
-                          <span>Denunciar</span>
-                        </button>
-                      </hlm-menu-group>
-                    </hlm-menu>
-                  </ng-template>
-
-                  <!-- Dialog de deletar -->
-                  <hlm-dialog #deleteDialog>
-                    <hlm-dialog-content *brnDialogContent="let ctx">
-                      <hlm-dialog-header>
-                        <h3 brnDialogTitle hlm>Confirmar exclusão</h3>
-                        <p brnDialogDescription hlm>Você tem certeza que deseja excluir este comentário?</p>
-                      </hlm-dialog-header>
-                      <hlm-dialog-footer>
-                        <button hlmBtn variant="ghost" (click)="ctx.close()">Cancelar</button>
-                        <button hlmBtn class="bg-red-500 text-white"
-                          (click)="confirmDelete(); ctx.close()">Excluir</button>
-                      </hlm-dialog-footer>
-                    </hlm-dialog-content>
-                  </hlm-dialog>
-
-                  <!-- Dialog de denúncia -->
-                  <hlm-dialog #reportDialog>
-                    <hlm-dialog-content *brnDialogContent="let ctx">
-                      <hlm-dialog-header>
-                        <h3 brnDialogTitle hlm>Denunciar comentário</h3>
-                        <p brnDialogDescription hlm>Descreva o motivo da denúncia.</p>
-                      </hlm-dialog-header>
-                      <textarea hlmInput class="w-full mt-2"></textarea>
-                      <hlm-dialog-footer class="mt-4">
-                        <button hlmBtn variant="ghost" (click)="ctx.close()">Cancelar</button>
-                        <button hlmBtn class="bg-yellow-500 text-white">Enviar denúncia</button>
-                      </hlm-dialog-footer>
-                    </hlm-dialog-content>
-                  </hlm-dialog>
-                </div>
               </div>
 
               <!-- Contagem de respostas -->
@@ -161,7 +176,7 @@
 
               <div *ngIf="showReplies[comment.id]">
                 <div *ngFor="let reply of replies[comment.id]" class="flex items-start gap-2 ml-12 mb-2">
-                  <div class="w-6 h-6 rounded-full bg-slate-300 overflow-hidden">
+                  <div class="flex justify-center w-6 h-6 rounded-full bg-slate-300 overflow-hidden">
                     <img *ngIf="reply.user?.photoURL" [src]="reply.user.photoURL" />
                   </div>
 
@@ -205,7 +220,10 @@
                           <spartan-icon iconName="lucideEllipsis" iconSize="sm"
                             class="flex items-center justify-center"></spartan-icon>
                         </button>
-
+                        <span class="text-xs text-gray-400 flex items-center gap-1"
+                          *ngIf="petDetail.userId === currentUserId">
+                          Autor
+                        </span>
                         <!-- Menu para respostas (com ID único) -->
                         <ng-template #replyMenu>
                           <hlm-menu>

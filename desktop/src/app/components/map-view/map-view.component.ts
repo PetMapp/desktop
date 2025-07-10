@@ -269,11 +269,9 @@ export class MapViewComponent implements AfterViewInit {
           this.cdr.detectChanges();
         } catch (err) {
           console.error('Erro ao carregar respostas:', err);
-          // Fallback: reload all comments if there's an error
           await this.loadComments(petId);
         }
       } else {
-        // If it's a root comment, reload all comments
         await this.loadComments(petId);
       }
 
@@ -428,10 +426,13 @@ export class MapViewComponent implements AfterViewInit {
       this.activePetId = petId.toString();
       this.loadComments(petId.toString());
 
+      console.log(this.activePetId, 'Pet ID ativo');
+
       const petDetail = await this.api.get<PetdetailDTORes>(
         `/pet/find/get/${petId}`,
         true
       );
+      console.log('Pet detail:', petDetail);
 
       if (petDetail) {
         const usuario = await this.auth.getUserById(petDetail.userId);
@@ -515,13 +516,13 @@ export class MapViewComponent implements AfterViewInit {
     const days = Math.floor(hours / 24);
 
     if (days > 0) {
-      return `${days}d`;
+      return `há ${days} dia${days > 1 ? 's' : ''}`;
     } else if (hours > 0) {
-      return `${hours}h`;
+      return `há ${hours} hr${hours > 1 ? 's' : ''}`;
     } else if (minutes > 0) {
-      return `${minutes}m`;
+      return `há ${minutes} min`;
     } else {
-      return `Agora`;
+      return `agora mesmo`;
     }
   }
 

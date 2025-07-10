@@ -5,7 +5,8 @@
 
       <!-- Conteúdo do sheet -->
       <hlm-sheet-content *brnSheetContent="let ctx" class="p-0">
-        <hlm-sheet-header class="w-full">
+        <hlm-sheet-header class="w-full h-96">
+          
           <img *ngIf="petDetail.petImage" [src]="petDetail.petImage" class="w-full h-full mx-auto object-cover" />
         </hlm-sheet-header>
 
@@ -43,203 +44,83 @@
             </p>
           </div>
 
+          <div class="flex justify-start items-center" *ngIf="petDetail.createdAt">
+            <p hlmSheetDescription class="text-sm text-gray-500">
+              {{ getTimeSinceCreation(petDetail.createdAt) }}
+            </p>
+          </div>
+
           <!-- Comentários -->
-          <div class="w-full flex flex-col items-start pt-2">
+          <div class="w-full h-full flex flex-col items-start pt-2">
             <h1 class="font-bold mb-2">Discussão</h1>
 
-            <div *ngFor="let comment of comments"
-              class="flex flex-col rounded-sm p-2 pl-0 pr-0 w-full gap-2 mb-2 justify-between">
-              <div class="flex justify-between items-center gap-2">
+            <div class="w-full h-full flex flex-col justify-center items-center p-2" *ngIf="comments.length === 0">
+              <img src="assets/images/thread.png" alt="Sem comentários" class="w-56 h-56 object-fill"
+                title="designed by Freepik" />
+              <span class="'text-sm text-gray-400 font-bold mt-4">Parece que está meio quieto por aqui.</span>
 
-                <div class="flex items-start gap-2">
-                  <div class="w-10 h-10 rounded-full bg-slate-300 overflow-hidden flex justify-center">
-                    <img *ngIf="comment.user?.photoURL" [src]="comment.user.photoURL" />
-                  </div>
+            </div>
 
-                  <div class="flex flex-col justify-start items-start">
-                    <div class="flex items-center gap-2">
-                      <p class="text-xs font-bold">{{ comment.user?.displayName || 'Usuário desconhecido' }}</p>
-                      <span class="text-xs text-gray-400 flex items-center gap-1">
-                        {{ getTimeSinceCreation(comment.createdAt) }}
-                        <span *ngIf="comment.editedAt">(editado)</span>
-                      </span>
-                    </div>
-                    <div class="max-w-72 text-left">
-                      <p class="text-sm text-gray-500 break-words text-left"
-                        [ngClass]="{ 'line-clamp-3': !expandedComments[comment.id] }" [innerText]="comment.text"></p>
+            <div *ngIf="comments.length > 0">
+              <div *ngFor="let comment of comments"
+                class="flex flex-col rounded-sm p-2 pl-0 pr-0 w-full gap-2 mb-2 justify-between">
+                <div class="flex justify-between items-center gap-2">
 
-                      <button class="text-xs text-[#159A9C] mt-1"
-                        (click)="expandedComments[comment.id] = !expandedComments[comment.id]"
-                        *ngIf="comment.text.length > 150">
-                        {{ expandedComments[comment.id] ? 'Mostrar menos' : 'Mostrar mais' }}
-                      </button>
+                  <div class="flex items-start gap-2">
+                    <div class="w-10 h-10 rounded-full bg-slate-300 overflow-hidden flex justify-center">
+                      <img *ngIf="comment.user?.photoURL" [src]="comment.user.photoURL" />
                     </div>
 
-                    <!-- Ações -->
+                    <div class="flex flex-col justify-start items-start">
+                      <div class="flex items-center gap-2">
+                        <p class="text-xs font-bold">{{ comment.user?.displayName || 'Usuário desconhecido' }}</p>
+                        <span class="text-xs text-gray-400 flex items-center gap-1">
+                          {{ getTimeSinceCreation(comment.createdAt) }}
+                          <span *ngIf="comment.editedAt">(editado)</span>
+                        </span>
+                      </div>
+                      <div class="max-w-72 text-left">
+                        <p class="text-sm text-gray-500 break-words text-left"
+                          [ngClass]="{ 'line-clamp-3': !expandedComments[comment.id] }" [innerText]="comment.text"></p>
 
-                    <div class="flex justify-end items-center mt-2">
-                      <button *ngIf="comment.userId === currentUserId" hlmBtn
-                        class="w-4 h-4 flex justify-center items-center border p-2 mr-2 rounded-sm" variant="outline"
-                        (click)="edit(comment)">
-                        <spartan-icon iconName="lucidePencil" iconSize="xs"
-                          class="flex items-center justify-center"></spartan-icon>
-                      </button>
-                      <button hlmBtn class="w-4 h-4 flex justify-center items-center border p-2 mr-2 rounded-sm"
-                        variant="outline">
-                        <spartan-icon iconName="lucideReply" iconSize="xs" class="flex items-center justify-center"
-                          (click)="replyTo(comment)"></spartan-icon>
-                      </button>
-                      <button hlmBtn class="w-4 h-4 flex justify-center items-center border p-2 rounded-sm mr-2"
-                        variant="outline" [brnMenuTriggerFor]="menu">
-                        <spartan-icon iconName="lucideEllipsis" iconSize="xs"
-                          class="flex items-center justify-center"></spartan-icon>
-                      </button>
-                      <span class="text-xs text-gray-400 flex items-center gap-1"
-                        *ngIf="petDetail.userId === currentUserId">
-                        Autor
-                      </span>
-                      <!-- Menu -->
-                      <ng-template #menu>
-                        <hlm-menu>
-                          <hlm-menu-group>
-                            <!-- Abertura do dialog de deletar -->
-                            <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
-                              [brnDialogTriggerFor]="deleteDialog" (click)="commentToDelete = comment"
-                              *ngIf="comment.userId === currentUserId">
-                              <spartan-icon iconName="lucideTrash" iconSize="sm"
-                                class="mr-2 flex items-center"></spartan-icon>
-                              <span>Deletar</span>
-                            </button>
+                        <button class="text-xs text-[#159A9C] mt-1"
+                          (click)="expandedComments[comment.id] = !expandedComments[comment.id]"
+                          *ngIf="comment.text.length > 150">
+                          {{ expandedComments[comment.id] ? 'Mostrar menos' : 'Mostrar mais' }}
+                        </button>
+                      </div>
 
-                            <hlm-menu-separator />
+                      <!-- Ações -->
 
-                            <!-- Abertura do dialog de denúncia -->
-                            <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
-                              [brnDialogTriggerFor]="reportDialog">
-                              <spartan-icon iconName="lucideShield" iconSize="sm"
-                                class="mr-2 flex items-center"></spartan-icon>
-                              <span>Denunciar</span>
-                            </button>
-                          </hlm-menu-group>
-                        </hlm-menu>
-                      </ng-template>
-
-                      <!-- Dialog de deletar -->
-                      <hlm-dialog #deleteDialog>
-                        <hlm-dialog-content *brnDialogContent="let ctx">
-                          <hlm-dialog-header>
-                            <h3 brnDialogTitle hlm>Confirmar exclusão</h3>
-                            <p brnDialogDescription hlm>Você tem certeza que deseja excluir este comentário?</p>
-                          </hlm-dialog-header>
-                          <hlm-dialog-footer>
-                            <button hlmBtn variant="ghost" (click)="ctx.close()">Cancelar</button>
-                            <button hlmBtn class="bg-red-500 text-white"
-                              (click)="confirmDelete(); ctx.close()">Excluir</button>
-                          </hlm-dialog-footer>
-                        </hlm-dialog-content>
-                      </hlm-dialog>
-
-                      <!-- Dialog de denúncia -->
-                      <hlm-dialog #reportDialog>
-                        <hlm-dialog-content *brnDialogContent="let ctx">
-                          <hlm-dialog-header>
-                            <h3 brnDialogTitle hlm>Denunciar comentário</h3>
-                            <p brnDialogDescription hlm>Descreva o motivo da denúncia.</p>
-                          </hlm-dialog-header>
-                          <textarea hlmInput class="w-full mt-2"></textarea>
-                          <hlm-dialog-footer class="mt-4">
-                            <button hlmBtn variant="ghost" (click)="ctx.close()">Cancelar</button>
-                            <button hlmBtn class="bg-yellow-500 text-white">Enviar denúncia</button>
-                          </hlm-dialog-footer>
-                        </hlm-dialog-content>
-                      </hlm-dialog>
-                    </div>
-                  </div>
-                </div>
-
-
-              </div>
-
-              <!-- Contagem de respostas -->
-              <div *ngIf="replyCounts[comment.id] > 0" (click)="toggleReplies(comment.id)"
-                class="flex items-center gap-4 cursor-pointer hover:opacity-80 transition">
-                <div class="flex-1 border-t border-gray-300"></div>
-                <span class="text-sm text-gray-500 whitespace-nowrap">
-                  {{ showReplies[comment.id] ? 'Ocultar' : 'Exibir' }} {{ replyCounts[comment.id] }} resposta{{
-                  replyCounts[comment.id] > 1 ? 's' : '' }}
-                </span>
-                <div class="flex-1 border-t border-gray-300"></div>
-              </div>
-
-              <!-- Respostas -->
-
-              <div *ngIf="showReplies[comment.id]">
-                <div *ngFor="let reply of replies[comment.id]" class="flex items-start gap-2 ml-12 mb-2">
-                  <div class="flex justify-center w-6 h-6 rounded-full bg-slate-300 overflow-hidden">
-                    <img *ngIf="reply.user?.photoURL" [src]="reply.user.photoURL" />
-                  </div>
-
-                  <div class="w-full flex flex-col justify-start items-start">
-                    <div class="flex justify-start items-start gap-1">
-                      <p class="text-xs font-bold">
-                        {{ reply.user?.displayName || 'Usuário desconhecido' }}
-                      </p>
-                      <span *ngIf="reply.parentId && reply.parentId !== comment.id"
-                        class="text-xs text-gray-400 flex justify-start items-start gap-1">
-                        <spartan-icon iconName="lucideReply" iconSize="xs"
-                          class="flex items-center justify-center"></spartan-icon>
-                        {{ reply.repliedToName }}
-                      </span>
-                    </div>
-                    <div class="max-w-72 text-left">
-                      <p class="text-sm text-gray-500 break-words text-left"
-                        [ngClass]="{ 'line-clamp-3': !expandedReplies[reply.id] }" [innerText]="reply.text"></p>
-
-                      <button class="text-xs text-[#159A9C] mt-1"
-                        (click)="expandedReplies[reply.id] = !expandedReplies[reply.id]"
-                        *ngIf="reply.text.length > 150">
-                        {{ expandedReplies[reply.id] ? 'Mostrar menos' : 'Mostrar mais' }}
-                      </button>
-                    </div>
-
-                    <!-- Ações da resposta -->
-                    <div class="flex justify-start items-center w-full mt-1">
-                      <span class="text-xs text-gray-400 flex items-center gap-1">
-                        {{ getTimeSinceCreation(reply.createdAt) }}
-                        <span *ngIf="reply.editedAt">(editado)</span>
-                      </span>
-
-                      <div class="flex justify-end items-center gap-2 ml-2">
-                        <!-- Correção: verificar reply.userId em vez de comment.userId -->
-                        <button *ngIf="reply.userId === currentUserId" hlmBtn
-                          class="w-2 h-2 flex justify-center items-center border p-2 rounded-sm" variant="outline"
-                          (click)="edit(reply)">
+                      <div class="flex justify-end items-center mt-2">
+                        <button *ngIf="comment.userId === currentUserId" hlmBtn
+                          class="w-4 h-4 flex justify-center items-center border p-2 mr-2 rounded-sm" variant="outline"
+                          (click)="edit(comment)">
                           <spartan-icon iconName="lucidePencil" iconSize="xs"
                             class="flex items-center justify-center"></spartan-icon>
                         </button>
-                        <button hlmBtn class="w-2 h-2 flex justify-center items-center border p-2 rounded-sm"
+                        <button hlmBtn class="w-4 h-4 flex justify-center items-center border p-2 mr-2 rounded-sm"
                           variant="outline">
-                          <!-- Correção: passar reply em vez de comment -->
                           <spartan-icon iconName="lucideReply" iconSize="xs" class="flex items-center justify-center"
-                            (click)="replyTo(reply)"></spartan-icon>
+                            (click)="replyTo(comment)"></spartan-icon>
                         </button>
-                        <button hlmBtn class="w-2 h-2 flex justify-center items-center border p-2 rounded-sm"
-                          variant="outline" [brnMenuTriggerFor]="replyMenu">
-                          <spartan-icon iconName="lucideEllipsis" iconSize="sm"
+                        <button hlmBtn class="w-4 h-4 flex justify-center items-center border p-2 rounded-sm mr-2"
+                          variant="outline" [brnMenuTriggerFor]="menu">
+                          <spartan-icon iconName="lucideEllipsis" iconSize="xs"
                             class="flex items-center justify-center"></spartan-icon>
                         </button>
                         <span class="text-xs text-gray-400 flex items-center gap-1"
                           *ngIf="petDetail.userId === currentUserId">
                           Autor
                         </span>
-                        <!-- Menu para respostas (com ID único) -->
-                        <ng-template #replyMenu>
+                        <!-- Menu -->
+                        <ng-template #menu>
                           <hlm-menu>
                             <hlm-menu-group>
                               <!-- Abertura do dialog de deletar -->
                               <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
-                                [brnDialogTriggerFor]="deleteReplyDialog" (click)="commentToDelete = reply"
-                                *ngIf="reply.userId === currentUserId">
+                                [brnDialogTriggerFor]="deleteDialog" (click)="commentToDelete = comment"
+                                *ngIf="comment.userId === currentUserId">
                                 <spartan-icon iconName="lucideTrash" iconSize="sm"
                                   class="mr-2 flex items-center"></spartan-icon>
                                 <span>Deletar</span>
@@ -249,7 +130,7 @@
 
                               <!-- Abertura do dialog de denúncia -->
                               <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
-                                [brnDialogTriggerFor]="reportReplyDialog">
+                                [brnDialogTriggerFor]="reportDialog">
                                 <spartan-icon iconName="lucideShield" iconSize="sm"
                                   class="mr-2 flex items-center"></spartan-icon>
                                 <span>Denunciar</span>
@@ -258,12 +139,12 @@
                           </hlm-menu>
                         </ng-template>
 
-                        <!-- Dialog de deletar resposta (com ID único) -->
-                        <hlm-dialog #deleteReplyDialog>
+                        <!-- Dialog de deletar -->
+                        <hlm-dialog #deleteDialog>
                           <hlm-dialog-content *brnDialogContent="let ctx">
                             <hlm-dialog-header>
                               <h3 brnDialogTitle hlm>Confirmar exclusão</h3>
-                              <p brnDialogDescription hlm>Você tem certeza que deseja excluir esta resposta?</p>
+                              <p brnDialogDescription hlm>Você tem certeza que deseja excluir este comentário?</p>
                             </hlm-dialog-header>
                             <hlm-dialog-footer>
                               <button hlmBtn variant="ghost" (click)="ctx.close()">Cancelar</button>
@@ -273,11 +154,11 @@
                           </hlm-dialog-content>
                         </hlm-dialog>
 
-                        <!-- Dialog de denúncia resposta (com ID único) -->
-                        <hlm-dialog #reportReplyDialog>
+                        <!-- Dialog de denúncia -->
+                        <hlm-dialog #reportDialog>
                           <hlm-dialog-content *brnDialogContent="let ctx">
                             <hlm-dialog-header>
-                              <h3 brnDialogTitle hlm>Denunciar resposta</h3>
+                              <h3 brnDialogTitle hlm>Denunciar comentário</h3>
                               <p brnDialogDescription hlm>Descreva o motivo da denúncia.</p>
                             </hlm-dialog-header>
                             <textarea hlmInput class="w-full mt-2"></textarea>
@@ -287,6 +168,141 @@
                             </hlm-dialog-footer>
                           </hlm-dialog-content>
                         </hlm-dialog>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+
+                <!-- Contagem de respostas -->
+                <div *ngIf="replyCounts[comment.id] > 0" (click)="toggleReplies(comment.id)"
+                  class="flex items-center gap-4 cursor-pointer hover:opacity-80 transition">
+                  <div class="flex-1 border-t border-gray-300"></div>
+                  <span class="text-sm text-gray-500 whitespace-nowrap">
+                    {{ showReplies[comment.id] ? 'Ocultar' : 'Exibir' }} {{ replyCounts[comment.id] }} resposta{{
+                    replyCounts[comment.id] > 1 ? 's' : '' }}
+                  </span>
+                  <div class="flex-1 border-t border-gray-300"></div>
+                </div>
+
+                <!-- Respostas -->
+
+                <div *ngIf="showReplies[comment.id]">
+                  <div *ngFor="let reply of replies[comment.id]" class="flex items-start gap-2 ml-12 mb-2">
+                    <div class="flex justify-center w-6 h-6 rounded-full bg-slate-300 overflow-hidden">
+                      <img *ngIf="reply.user?.photoURL" [src]="reply.user.photoURL" />
+                    </div>
+
+                    <div class="w-full flex flex-col justify-start items-start">
+                      <div class="flex justify-start items-start gap-1">
+                        <p class="text-xs font-bold">
+                          {{ reply.user?.displayName || 'Usuário desconhecido' }}
+                        </p>
+                        <span *ngIf="reply.parentId && reply.parentId !== comment.id"
+                          class="text-xs text-gray-400 flex justify-start items-start gap-1">
+                          <spartan-icon iconName="lucideReply" iconSize="xs"
+                            class="flex items-center justify-center"></spartan-icon>
+                          {{ reply.repliedToName }}
+                        </span>
+                      </div>
+                      <div class="max-w-72 text-left">
+                        <p class="text-sm text-gray-500 break-words text-left"
+                          [ngClass]="{ 'line-clamp-3': !expandedReplies[reply.id] }" [innerText]="reply.text"></p>
+
+                        <button class="text-xs text-[#159A9C] mt-1"
+                          (click)="expandedReplies[reply.id] = !expandedReplies[reply.id]"
+                          *ngIf="reply.text.length > 150">
+                          {{ expandedReplies[reply.id] ? 'Mostrar menos' : 'Mostrar mais' }}
+                        </button>
+                      </div>
+
+                      <!-- Ações da resposta -->
+                      <div class="flex justify-start items-center w-full mt-1">
+                        <span class="text-xs text-gray-400 flex items-center gap-1">
+                          {{ getTimeSinceCreation(reply.createdAt) }}
+                          <span *ngIf="reply.editedAt">(editado)</span>
+                        </span>
+
+                        <div class="flex justify-end items-center gap-2 ml-2">
+                          <!-- Correção: verificar reply.userId em vez de comment.userId -->
+                          <button *ngIf="reply.userId === currentUserId" hlmBtn
+                            class="w-2 h-2 flex justify-center items-center border p-2 rounded-sm" variant="outline"
+                            (click)="edit(reply)">
+                            <spartan-icon iconName="lucidePencil" iconSize="xs"
+                              class="flex items-center justify-center"></spartan-icon>
+                          </button>
+                          <button hlmBtn class="w-2 h-2 flex justify-center items-center border p-2 rounded-sm"
+                            variant="outline">
+                            <!-- Correção: passar reply em vez de comment -->
+                            <spartan-icon iconName="lucideReply" iconSize="xs" class="flex items-center justify-center"
+                              (click)="replyTo(reply)"></spartan-icon>
+                          </button>
+                          <button hlmBtn class="w-2 h-2 flex justify-center items-center border p-2 rounded-sm"
+                            variant="outline" [brnMenuTriggerFor]="replyMenu">
+                            <spartan-icon iconName="lucideEllipsis" iconSize="sm"
+                              class="flex items-center justify-center"></spartan-icon>
+                          </button>
+                          <span class="text-xs text-gray-400 flex items-center gap-1"
+                            *ngIf="petDetail.userId === currentUserId">
+                            Autor
+                          </span>
+                          <!-- Menu para respostas (com ID único) -->
+                          <ng-template #replyMenu>
+                            <hlm-menu>
+                              <hlm-menu-group>
+                                <!-- Abertura do dialog de deletar -->
+                                <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
+                                  [brnDialogTriggerFor]="deleteReplyDialog" (click)="commentToDelete = reply"
+                                  *ngIf="reply.userId === currentUserId">
+                                  <spartan-icon iconName="lucideTrash" iconSize="sm"
+                                    class="mr-2 flex items-center"></spartan-icon>
+                                  <span>Deletar</span>
+                                </button>
+
+                                <hlm-menu-separator />
+
+                                <!-- Abertura do dialog de denúncia -->
+                                <button class="flex items-center px-2 py-1 w-full text-left hover:bg-muted"
+                                  [brnDialogTriggerFor]="reportReplyDialog">
+                                  <spartan-icon iconName="lucideShield" iconSize="sm"
+                                    class="mr-2 flex items-center"></spartan-icon>
+                                  <span>Denunciar</span>
+                                </button>
+                              </hlm-menu-group>
+                            </hlm-menu>
+                          </ng-template>
+
+                          <!-- Dialog de deletar resposta (com ID único) -->
+                          <hlm-dialog #deleteReplyDialog>
+                            <hlm-dialog-content *brnDialogContent="let ctx">
+                              <hlm-dialog-header>
+                                <h3 brnDialogTitle hlm>Confirmar exclusão</h3>
+                                <p brnDialogDescription hlm>Você tem certeza que deseja excluir esta resposta?</p>
+                              </hlm-dialog-header>
+                              <hlm-dialog-footer>
+                                <button hlmBtn variant="ghost" (click)="ctx.close()">Cancelar</button>
+                                <button hlmBtn class="bg-red-500 text-white"
+                                  (click)="confirmDelete(); ctx.close()">Excluir</button>
+                              </hlm-dialog-footer>
+                            </hlm-dialog-content>
+                          </hlm-dialog>
+
+                          <!-- Dialog de denúncia resposta (com ID único) -->
+                          <hlm-dialog #reportReplyDialog>
+                            <hlm-dialog-content *brnDialogContent="let ctx">
+                              <hlm-dialog-header>
+                                <h3 brnDialogTitle hlm>Denunciar resposta</h3>
+                                <p brnDialogDescription hlm>Descreva o motivo da denúncia.</p>
+                              </hlm-dialog-header>
+                              <textarea hlmInput class="w-full mt-2"></textarea>
+                              <hlm-dialog-footer class="mt-4">
+                                <button hlmBtn variant="ghost" (click)="ctx.close()">Cancelar</button>
+                                <button hlmBtn class="bg-yellow-500 text-white">Enviar denúncia</button>
+                              </hlm-dialog-footer>
+                            </hlm-dialog-content>
+                          </hlm-dialog>
+                        </div>
                       </div>
                     </div>
                   </div>

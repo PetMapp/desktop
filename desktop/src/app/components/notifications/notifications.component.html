@@ -1,9 +1,48 @@
-<spartan-button-icon [iconName]="'lucideBell'" [brnMenuTriggerFor]="notifications"></spartan-button-icon>
+<div class="flex justify-center items-center">
+    <div *ngIf="hasUnread" class="w-3 h-3 bg-[#159A9C] rounded-full absolute mb-3 ml-2 border-2"></div>
+    <spartan-button-icon [iconName]="'lucideBell'" [brnMenuTriggerFor]="notificationsMenu"></spartan-button-icon>
+</div>
 
-<ng-template #notifications>
-    <hlm-menu>
+<ng-template #notificationsMenu>
+    <hlm-menu class="w-80 h-96">
         <hlm-menu-group>
-            <hlm-menu-label>Notificações</hlm-menu-label>
+            <div class="flex justify-between items-center w-full h-10 px-2">
+                <hlm-menu-label>Notificações</hlm-menu-label>
+                <button hlmBtn variant="link" class="text-[#159A9C] text-xs hover:underline"
+                    (click)="markAllAsRead()">Marcar tudo como lido</button>
+            </div>
+
+            <div *ngIf="notifications.length === 0" class="text-center text-gray-400 text-sm mt-4">
+                Nenhuma notificação encontrada.
+            </div>
+
+            <div class="flex flex-col w-full h-full p-2 gap-2 overflow-y-auto">
+                <div *ngFor="let notification of notifications" class="w-full flex border rounded-sm p-2 bg-white">
+                    <div class="flex justify-start items-center gap-2">
+                        <ng-template #defaultAvatar>
+                            <div
+                                class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-sm text-white font-bold">
+                                {{ notification.fromUser?.displayName?.[0] ?? '?' }}
+                            </div>
+                        </ng-template>
+                        <img *ngIf="notification.fromUser?.photoURL; else defaultAvatar"
+                            [src]="notification.fromUser?.photoURL" class="w-10 h-10 rounded-full object-cover" />
+                    </div>
+
+                    <div class="flex flex-col justify-center items-start ml-2">
+                        <div class="flex justify-start items-center gap-2">
+                            <div class="text-sm font-semibold">
+                                {{ notification.fromUser?.displayName ?? 'Usuário desconhecido' }}
+                            </div>
+                            <div class="text-xs text-gray-400">{{ getTimeSinceCreation(notification.createdAt) }}</div>
+                        </div>
+                        <span class="text-xs text-gray-400">{{ notification.statusMessage }}</span>
+                        <button hlmBtn variant="link" class="text-[#159A9C] text-xs hover:underline self-start">
+                            Ver mais
+                        </button>
+                    </div>
+                </div>
+            </div>
         </hlm-menu-group>
     </hlm-menu>
 </ng-template>

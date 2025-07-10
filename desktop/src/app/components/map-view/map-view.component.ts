@@ -518,9 +518,9 @@ export class MapViewComponent implements AfterViewInit {
     if (days > 0) {
       return `há ${days} dia${days > 1 ? 's' : ''}`;
     } else if (hours > 0) {
-      return `há ${hours} hr${hours > 1 ? 's' : ''}`;
+      return `há ${hours} hora${hours > 1 ? 's' : ''}`;
     } else if (minutes > 0) {
-      return `há ${minutes} min`;
+      return `há ${minutes} minuto${minutes > 1 ? 's' : ''}`;
     } else {
       return `agora mesmo`;
     }

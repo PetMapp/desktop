@@ -15,23 +15,23 @@
             <h2 hlmSheetTitle class="text-2xl">{{ petDetail.apelido }}</h2>
           </div>
           <div class="flex justify-start items-center">
-            <spartan-icon iconName="lucideMapPin" iconSize="sm"></spartan-icon>
+            <spartan-icon iconName="lucideMapPin" iconSize="sm" class="flex justify-center items-center"></spartan-icon>
             <p hlmSheetDescription class="ml-2 truncate max-w-[300px]" [title]="petDetail.localizacao">{{
               petDetail.localizacao }}</p>
           </div>
           <div class="flex justify-start items-start">
-            <spartan-icon iconName="lucideScrollText" iconSize="sm"></spartan-icon>
+            <spartan-icon iconName="lucideScrollText" iconSize="sm" class="flex justify-center items-center"></spartan-icon>
             <p hlmSheetDescription class="ml-2 break-words text-left">
               {{ petDetail.descricao }}
             </p>
           </div>
           <div class="flex justify-start items-center">
-            <spartan-icon iconName="lucideMap" iconSize="sm"></spartan-icon>
+            <spartan-icon iconName="lucideMap" iconSize="sm" class="flex justify-center items-center"></spartan-icon>
             <p hlmSheetDescription class="ml-2">{{ petDetail.lat }}, {{ petDetail.lng }}</p>
           </div>
           <div class="flex justify-start items-center">
-            <spartan-icon iconName="lucideCheck" iconSize="sm" *ngIf="petDetail.coleira"></spartan-icon>
-            <spartan-icon iconName="lucideX" iconSize="sm" *ngIf="!petDetail.coleira"></spartan-icon>
+            <spartan-icon iconName="lucideCheck" iconSize="sm" *ngIf="petDetail.coleira" class="flex justify-center items-center"></spartan-icon>
+            <spartan-icon iconName="lucideX" iconSize="sm" *ngIf="!petDetail.coleira" class="flex justify-center items-center"></spartan-icon>
             <p hlmSheetDescription class="ml-2">{{ petDetail.coleira ?
               'Possui coleira' :
               'Não possui coleira' }}
@@ -110,7 +110,7 @@
                             class="flex items-center justify-center"></spartan-icon>
                         </button>
                         <span class="text-xs text-gray-400 flex items-center gap-1"
-                          *ngIf="petDetail.userId === currentUserId">
+                          *ngIf="comment.userId === petDetail.userId">
                           Autor
                         </span>
                         <!-- Menu -->
@@ -244,7 +244,7 @@
                               class="flex items-center justify-center"></spartan-icon>
                           </button>
                           <span class="text-xs text-gray-400 flex items-center gap-1"
-                            *ngIf="petDetail.userId === currentUserId">
+                            *ngIf="reply.userId === petDetail.userId">
                             Autor
                           </span>
                           <!-- Menu para respostas (com ID único) -->

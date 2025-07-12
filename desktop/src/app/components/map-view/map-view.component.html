@@ -63,6 +63,7 @@
 
             <div *ngIf="comments.length > 0">
               <div *ngFor="let comment of comments"
+                [id]="'comment-' + comment.id"
                 class="flex flex-col rounded-sm p-2 pl-0 pr-0 w-full gap-2 mb-2 justify-between">
                 <div class="flex justify-between items-center gap-2">
 

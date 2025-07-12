@@ -56,6 +56,8 @@ import {
   HlmDialogTitleDirective,
 } from '@spartan-ng/helm/dialog';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-map-view',
   standalone: true,
@@ -123,7 +125,8 @@ export class MapViewComponent implements AfterViewInit {
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef,
     private auth: AuthService,
-    private commentaryService: CommentaryService
+    private commentaryService: CommentaryService,
+    private router: Router
   ) { }
 
   public comments: CommentaryListDTO_Res[] = [];
@@ -133,12 +136,22 @@ export class MapViewComponent implements AfterViewInit {
     this.auth.getUserLogged().subscribe(user => {
       this.currentUserId = user?.uid ?? null;
     });
-    // Aguarda um tick para garantir que a view foi inicializada
+
+    // 🔔 Escuta por eventos de notificação
+    this.listenToNotificationSheetTrigger();
+
     setTimeout(async () => {
       this.initMap();
       await this.loadPetMarkers();
       this.setupLocationHandlers();
-    }, 100); // Aumentei o timeout
+    }, 100);
+
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras?.state as { petId?: string; commentId?: string };
+
+    if (state?.petId) {
+      await this.openPetSheet(state.petId, state.commentId);
+    }
   }
 
   private initMap() {
@@ -222,6 +235,21 @@ export class MapViewComponent implements AfterViewInit {
       });
     } catch (error) {
       console.error('Erro ao carregar marcadores:', error);
+    }
+  }
+
+  private listenToNotificationSheetTrigger() {
+    window.addEventListener('openPetSheet', async (event: any) => {
+      const { petId, commentId } = event.detail;
+      await this.openPetSheet(petId, commentId);
+    });
+  }
+
+  private async openPetSheet(petId: string, commentId?: string) {
+    await this.handleMarkerClick(petId);
+
+    if (commentId) {
+      setTimeout(() => this.scrollToComment(commentId), 600);
     }
   }
 
@@ -328,6 +356,18 @@ export class MapViewComponent implements AfterViewInit {
     } catch (err) {
       console.error('Erro dentro de findRootCommentId:', err);
       throw err;
+    }
+  }
+
+  private scrollToComment(commentId: string) {
+    const el = document.getElementById(`comment-${commentId}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('bg-yellow-100');
+
+      setTimeout(() => {
+        el.classList.remove('bg-yellow-100');
+      }, 2000);
     }
   }
 

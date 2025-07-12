@@ -17,6 +17,8 @@ import {
 import { IconComponent } from '../icon-component/icon-component.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-notifications',
@@ -43,7 +45,10 @@ export class NotificationsComponent implements OnInit {
   notifications: NotificationListDTO_Res[] = [];
   loading = false;
 
-  constructor(private notificationService: NotificationService) { }
+  constructor(
+    private notificationService: NotificationService,
+    private router: Router
+  ) { }
 
   async ngOnInit() {
     await this.loadNotifications();
@@ -60,6 +65,34 @@ export class NotificationsComponent implements OnInit {
     const success = await this.notificationService.markAllAsRead();
     if (success) {
       this.notifications = this.notifications.map(n => ({ ...n, read: true }));
+    }
+  }
+
+  async onViewMore(notification: NotificationListDTO_Res) {
+    const marked = await this.notificationService.markAsRead(notification.id);
+    if (marked) {
+      notification.read = true;
+    }
+
+    const currentUrl = this.router.url;
+
+    if (currentUrl === '/map') {
+      // Já está na rota /map, então emita um evento global
+      console.log('Abrindo pet sheet via event');
+      window.dispatchEvent(new CustomEvent('openPetSheet', {
+        detail: {
+          petId: notification.relatedPetId,
+          commentId: notification.relatedCommentId ?? null
+        }
+      }));
+    } else {
+      // Se estiver em outra rota, navegue normalmente com state
+      this.router.navigate(['/map'], {
+        state: {
+          petId: notification.relatedPetId,
+          commentId: notification.relatedCommentId ?? null
+        }
+      });
     }
   }
 

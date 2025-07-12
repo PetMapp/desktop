@@ -18,6 +18,7 @@
 
             <div class="flex flex-col w-full h-full p-2 gap-2 overflow-y-auto">
                 <div *ngFor="let notification of notifications" class="w-full flex border rounded-sm p-2 bg-white">
+
                     <div class="flex justify-start items-center gap-2">
                         <ng-template #defaultAvatar>
                             <div
@@ -29,18 +30,25 @@
                             [src]="notification.fromUser?.photoURL" class="w-10 h-10 rounded-full object-cover" />
                     </div>
 
-                    <div class="flex flex-col justify-center items-start ml-2">
-                        <div class="flex justify-start items-center gap-2">
-                            <div class="text-sm font-semibold">
-                                {{ notification.fromUser?.displayName ?? 'Usuário desconhecido' }}
+                    <div class="w-full flex justify-between items-center">
+                        <div class="w-full flex flex-col justify-center items-start ml-2">
+                            <div class="flex justify-start items-center gap-2">
+                                <div class="text-sm font-semibold">
+                                    {{ notification.fromUser?.displayName ?? 'Usuário desconhecido' }}
+                                </div>
+                                <div class="text-xs text-gray-400">{{ getTimeSinceCreation(notification.createdAt) }}
+                                </div>
                             </div>
-                            <div class="text-xs text-gray-400">{{ getTimeSinceCreation(notification.createdAt) }}</div>
+                            <span class="text-xs text-gray-400">{{ notification.statusMessage }}</span>
+                            <button hlmBtn variant="link" class="text-[#159A9C] text-xs hover:underline self-start" 
+                            (click)="onViewMore(notification)">
+                                Ver mais
+                            </button>
                         </div>
-                        <span class="text-xs text-gray-400">{{ notification.statusMessage }}</span>
-                        <button hlmBtn variant="link" class="text-[#159A9C] text-xs hover:underline self-start">
-                            Ver mais
-                        </button>
+
+                        <div *ngIf="!notification.read" class="w-2 h-2 bg-[#159A9C] rounded-full mr-2"></div>
                     </div>
+
                 </div>
             </div>
         </hlm-menu-group>

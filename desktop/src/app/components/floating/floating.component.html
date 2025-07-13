@@ -11,8 +11,8 @@
                     <hlm-dialog-header>
                         <h3 brnDialogTitle hlm class="font-bold">Registrar Pet</h3>
                     </hlm-dialog-header>
-                    <div class="w-[600px] h-[400px] flex justify-start items-center">
-                        <div class="w-3/6 h-full mr-2">
+                    <div class="w-full sm:w-[600px] h-screen sm:h-[400px] flex flex-col sm:flex-row justify-start items-center">
+                        <div class="w-full sm:w-3/6 h-96 sm:h-full mr-2">
                             <label hlmLabel>
                                 Nome
                                 <input class="w-full" hlmInput type="text" placeholder="Nome" [(ngModel)]="apelido" />
@@ -42,8 +42,12 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="w-5/6 h-full rounded-sm">
+                        <div class="w-full sm:w-5/6 sm:h-full h-64 rounded-sm">
                             <div id="map-dialog" class="w-full h-full rounded border"></div>
+                        </div>
+
+                        <div class="block sm:hidden w-full">
+                            <button hlmBtn class="mt-2 w-full bg-[#159A9C]" (click)="onSubmitPet()">Salvar</button>
                         </div>
                     </div>
                     <hlm-dialog-footer>

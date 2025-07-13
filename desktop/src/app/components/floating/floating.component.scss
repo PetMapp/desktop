@@ -1,15 +1,26 @@
 #floating {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: auto;
-    height: 140px;
-    padding: 10px;
-    z-index: 1000;
-    position: fixed;
-    bottom: 0px;
-    right: 20px; 
-    background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: 140px;
+  padding: 10px;
+  z-index: 1000;
+  position: fixed;
+  bottom: 0px;
+  right: 20px;
+  background-color: transparent;
+}
+
+@media screen and (max-width: 768px) {
+  #floating {
+    right: 10px;
+    bottom: 70px;
+    flex-direction: column;
+    gap: 10px;
+    height: auto;
+    padding: 5px;
+  }
 }
 
 #map-dialog {

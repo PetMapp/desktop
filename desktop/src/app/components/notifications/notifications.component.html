@@ -26,8 +26,10 @@
                                 {{ notification.fromUser?.displayName?.[0] ?? '?' }}
                             </div>
                         </ng-template>
-                        <img *ngIf="notification.fromUser?.photoURL; else defaultAvatar"
-                            [src]="notification.fromUser?.photoURL" class="w-10 h-10 rounded-full object-cover" />
+                        <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center">
+                            <img *ngIf="notification.fromUser?.photoURL; else defaultAvatar"
+                                [src]="notification.fromUser?.photoURL" class="object-cover" />
+                        </div>
                     </div>
 
                     <div class="w-full flex justify-between items-center">
@@ -40,8 +42,8 @@
                                 </div>
                             </div>
                             <span class="text-xs text-gray-400">{{ notification.statusMessage }}</span>
-                            <button hlmBtn variant="link" class="text-[#159A9C] text-xs hover:underline self-start" 
-                            (click)="onViewMore(notification)">
+                            <button hlmBtn variant="link" class="text-[#159A9C] text-xs hover:underline self-start"
+                                (click)="onViewMore(notification)">
                                 Ver mais
                             </button>
                         </div>

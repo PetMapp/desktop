@@ -1,7 +1,35 @@
 <div class="fixed bottom-0 w-full h-16 bg-white border-t md:hidden">
     <div class="flex justify-around items-center h-full">
-        <spartan-button-icon [variant]="'ghost'" [iconName]="'lucideHouse'" [iconSize]="'lg'" [isActive]="true"></spartan-button-icon>
-        <spartan-button-icon [variant]="'ghost'" [iconName]="'lucideDog'" [iconSize]="'lg'" ></spartan-button-icon>
-        <spartan-button-icon [variant]="'ghost'" [iconName]="'lucideCircleUserRound'" [iconSize]="'lg'" ></spartan-button-icon>
+        <!-- 🗺️ Mapa -->
+        <button hlmBtn class="flex items-center justify-center" variant="ghost" size="sm"
+            [ngClass]="{ 'text-[#159A9C]': isActive('/map'), 'text-muted-foreground': !isActive('/map') }"
+            >
+            <ng-icon hlm size="lg" class="mr-2" name="lucideMap"
+                [ngClass]="{ 'stroke-[#159A9C]': isActive('/map'), 'stroke-muted-foreground': !isActive('/map') }" />
+        </button>
+
+        <!-- 🐾 Meus Pets -->
+        <button hlmBtn class="flex items-center justify-center" variant="ghost" size="sm"
+            [ngClass]="{ 'text-[#159A9C]': isActive('/pets'), 'text-muted-foreground': !isActive('/pets') }"
+            (click)="navigateTo('/pets')">
+            <ng-icon hlm size="lg" class="mr-2" name="lucidePawPrint"
+                [ngClass]="{ 'stroke-[#159A9C]': isActive('/pets'), 'stroke-muted-foreground': !isActive('/pets') }" />
+        </button>
+
+        <!-- 🔔 Notificações -->
+        <button hlmBtn class="flex items-center justify-center" variant="ghost" size="sm"
+            [ngClass]="{ 'text-[#159A9C]': isActive('/notifications'), 'text-muted-foreground': !isActive('/notifications') }"
+            (click)="navigateTo('/notifications')">
+            <ng-icon hlm size="lg" class="mr-2" name="lucideBell"
+                [ngClass]="{ 'stroke-[#159A9C]': isActive('/notifications'), 'stroke-muted-foreground': !isActive('/notifications') }" />
+        </button>
+
+        <!-- 🔔 Notificações -->
+        <button hlmBtn class="flex items-center justify-center" variant="ghost" size="sm"
+            [ngClass]="{ 'text-[#159A9C]': isActive('/notifications'), 'text-muted-foreground': !isActive('/notifications') }"
+            (click)="navigateTo('/notifications')">
+            <ng-icon hlm size="lg" class="mr-2" name="lucideCircleUserRound"
+                [ngClass]="{ 'stroke-[#159A9C]': isActive('/notifications'), 'stroke-muted-foreground': !isActive('/notifications') }" />
+        </button>
     </div>
 </div>

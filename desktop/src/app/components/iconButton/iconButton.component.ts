@@ -13,8 +13,11 @@ import {
   lucideLocateFixed,
   lucideCamera,
   lucideBell,
+  lucidePawPrint,
+  lucideMap,
 } from '@ng-icons/lucide';
 import { BrnDialogTriggerDirective } from '@spartan-ng/brain/dialog';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'spartan-button-icon',
@@ -26,7 +29,7 @@ import { BrnDialogTriggerDirective } from '@spartan-ng/brain/dialog';
       outputs: [],
     },
   ],
-  imports: [HlmButtonDirective, HlmSpinnerComponent, HlmIconDirective, NgIcon],
+  imports: [CommonModule, HlmButtonDirective, HlmSpinnerComponent, HlmIconDirective, NgIcon],
   providers: [
     provideIcons({
       lucideChevronRight,
@@ -38,6 +41,8 @@ import { BrnDialogTriggerDirective } from '@spartan-ng/brain/dialog';
       lucideLocateFixed,
       lucideCamera,
       lucideBell,
+      lucidePawPrint,
+      lucideMap
     }),
   ],
   template: `
@@ -45,10 +50,14 @@ import { BrnDialogTriggerDirective } from '@spartan-ng/brain/dialog';
       hlmBtn
       [size]="buttonSize"
       [variant]="buttonVariant"
-      [class.bg-gray-200]="isActive"
       [class]="customClass"
     >
-      <ng-icon hlm [size]="iconSize" [name]="iconName"></ng-icon>
+      <ng-icon
+        hlm
+        [size]="iconSize"
+        [name]="iconName"
+        [style.stroke]="isActive ? '#159A9C' : 'currentColor'"
+      ></ng-icon>
     </button>
   `,
 })

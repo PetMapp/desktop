@@ -1,0 +1,47 @@
+<app-header (search)="searchLocation($event)"></app-header>
+
+<div class="flex flex-col w-full h-screen pt-14 pl-2">
+    <h1 class="hidden sm:block text-2xl font-bold mt-4 self-start ml-4">Notificações</h1>
+
+    <div class="w-full h-full flex flex-col p-4 gap-2 overflow-y-auto">
+        <div *ngIf="notifications.length === 0" class="text-center text-gray-400 text-sm mt-4">
+            Nenhuma notificação encontrada.
+        </div>
+
+        <div *ngFor="let notification of notifications" class="w-full flex border rounded-sm p-2 bg-white">
+            <div class="flex justify-start items-center gap-2">
+                <ng-template #defaultAvatar>
+                    <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-sm text-white font-bold">
+                        {{ notification.fromUser?.displayName?.[0] ?? '?' }}
+                    </div>
+                </ng-template>
+                <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center">
+                    <img *ngIf="notification.fromUser?.photoURL; else defaultAvatar"
+                        [src]="notification.fromUser?.photoURL" class="object-cover" />
+                </div>
+            </div>
+
+            <div class="w-full flex justify-between items-center">
+                <div class="w-full flex flex-col justify-center items-start ml-2">
+                    <div class="flex justify-start items-center gap-2">
+                        <div class="text-sm font-semibold">
+                            {{ notification.fromUser?.displayName ?? 'Usuário desconhecido' }}
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            {{ getTimeSinceCreation(notification.createdAt) }}
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-400">{{ notification.statusMessage }}</span>
+                    <button hlmBtn variant="link" class="text-[#159A9C] text-xs hover:underline self-start"
+                        (click)="onViewMore(notification)">
+                        Ver mais
+                    </button>
+                </div>
+
+                <div *ngIf="!notification.read" class="w-2 h-2 bg-[#159A9C] rounded-full mr-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-mobile-footer></app-mobile-footer>

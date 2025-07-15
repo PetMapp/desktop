@@ -132,6 +132,18 @@ export class MapViewComponent implements AfterViewInit {
   public comments: CommentaryListDTO_Res[] = [];
   public newCommentText: string = '';
 
+  ngOnInit() {
+    const state = history.state as {
+      petId?: string;
+      commentId?: string;
+      openSheet?: boolean;
+    };
+
+    if (state?.openSheet && state.petId) {
+      this.openPetSheet(state.petId!, state.commentId ?? undefined);
+    }
+  }
+
   async ngAfterViewInit() {
     this.auth.getUserLogged().subscribe(user => {
       this.currentUserId = user?.uid ?? null;
@@ -145,13 +157,6 @@ export class MapViewComponent implements AfterViewInit {
       await this.loadPetMarkers();
       this.setupLocationHandlers();
     }, 100);
-
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras?.state as { petId?: string; commentId?: string };
-
-    if (state?.petId) {
-      await this.openPetSheet(state.petId, state.commentId);
-    }
   }
 
   private initMap() {

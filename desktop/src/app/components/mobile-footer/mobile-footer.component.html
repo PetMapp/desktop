@@ -3,7 +3,7 @@
         <!-- 🗺️ Mapa -->
         <button hlmBtn class="flex items-center justify-center" variant="ghost" size="sm"
             [ngClass]="{ 'text-[#159A9C]': isActive('/map'), 'text-muted-foreground': !isActive('/map') }"
-            >
+            (click)="navigateTo('/map')">
             <ng-icon hlm size="lg" class="mr-2" name="lucideMap"
                 [ngClass]="{ 'stroke-[#159A9C]': isActive('/map'), 'stroke-muted-foreground': !isActive('/map') }" />
         </button>

@@ -7,14 +7,20 @@
   height: 100vh; /* altura padrão */
 }
 
+#button {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(2px) saturate(180%);
+}
+
 /* Reduz altura no mobile para deixar espaço para o footer */
 @media (max-width: 767px) {
-
-  .map-container, #map {
+  .map-container,
+  #map {
     bottom: 64px; /* deixa espaço no final */
     height: auto;
   }
-    .leaflet-bottom.leaflet-left,
+  .leaflet-bottom.leaflet-left,
   .leaflet-bottom.leaflet-right {
     bottom: 80px !important; /* ou algo maior que a altura do footer */
   }

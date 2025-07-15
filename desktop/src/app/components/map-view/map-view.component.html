@@ -4,12 +4,19 @@
       <button hlmBtn brnSheetTrigger asChild style="display: none;" #hiddenTrigger></button>
 
       <!-- Conteúdo do sheet -->
-      <hlm-sheet-content *brnSheetContent="let ctx" class="p-0">
-        <hlm-sheet-header class="w-full h-96">
-          
-          <img *ngIf="petDetail.petImage" [src]="petDetail.petImage" class="w-full h-full mx-auto object-cover" />
+      <hlm-sheet-content *brnSheetContent="let ctx" class="p-0 w-full h-full">
+        <hlm-sheet-header class="w-full">
+          <div class="w-full flex justify-end items-center fixed top-0 right-0 p-4 z-10">
+            <button hlmBtn variant="ghost" (click)="ctx.close()"
+              class="w-6 h-6 flex justify-center items-center p-2 rounded-sm"
+              id="button">
+              <spartan-icon iconName="lucideX" iconSize="sm" class="text-gray-600 flex justify-center items-center"></spartan-icon>
+            </button>
+          </div>
         </hlm-sheet-header>
-
+        <div class="w-full h-96 flex justify-center items-center relative">
+          <img *ngIf="petDetail.petImage" [src]="petDetail.petImage" class="w-full h-full mx-auto object-cover mt-0" />
+        </div>
         <div class="p-4 space-y-2 flex flex-col items-start">
           <div class="flex justify-start items-center">
             <h2 hlmSheetTitle class="text-2xl">{{ petDetail.apelido }}</h2>
@@ -20,7 +27,8 @@
               petDetail.localizacao }}</p>
           </div>
           <div class="flex justify-start items-start">
-            <spartan-icon iconName="lucideScrollText" iconSize="sm" class="flex justify-center items-center"></spartan-icon>
+            <spartan-icon iconName="lucideScrollText" iconSize="sm"
+              class="flex justify-center items-center"></spartan-icon>
             <p hlmSheetDescription class="ml-2 break-words text-left">
               {{ petDetail.descricao }}
             </p>
@@ -30,8 +38,10 @@
             <p hlmSheetDescription class="ml-2">{{ petDetail.lat }}, {{ petDetail.lng }}</p>
           </div>
           <div class="flex justify-start items-center">
-            <spartan-icon iconName="lucideCheck" iconSize="sm" *ngIf="petDetail.coleira" class="flex justify-center items-center"></spartan-icon>
-            <spartan-icon iconName="lucideX" iconSize="sm" *ngIf="!petDetail.coleira" class="flex justify-center items-center"></spartan-icon>
+            <spartan-icon iconName="lucideCheck" iconSize="sm" *ngIf="petDetail.coleira"
+              class="flex justify-center items-center"></spartan-icon>
+            <spartan-icon iconName="lucideX" iconSize="sm" *ngIf="!petDetail.coleira"
+              class="flex justify-center items-center"></spartan-icon>
             <p hlmSheetDescription class="ml-2">{{ petDetail.coleira ?
               'Possui coleira' :
               'Não possui coleira' }}
@@ -62,8 +72,7 @@
             </div>
 
             <div *ngIf="comments.length > 0">
-              <div *ngFor="let comment of comments"
-                [id]="'comment-' + comment.id"
+              <div *ngFor="let comment of comments" [id]="'comment-' + comment.id"
                 class="flex flex-col rounded-sm p-2 pl-0 pr-0 w-full gap-2 mb-2 justify-between">
                 <div class="flex justify-between items-center gap-2">
 

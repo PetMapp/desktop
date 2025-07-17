@@ -5,6 +5,9 @@ import { CommonModule } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { lucideMenu, lucideMap, lucidePawPrint, lucideBell, lucideCircleUserRound, lucideSettings, lucidePiggyBank } from '@ng-icons/lucide';
+import { User } from '@angular/fire/auth';
+import { AuthService } from '../../services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-footer',
@@ -19,7 +22,22 @@ import { lucideMenu, lucideMap, lucidePawPrint, lucideBell, lucideCircleUserRoun
   styleUrls: ['./mobile-footer.component.scss']
 })
 export class MobileFooterComponent {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
+  userLogged: User | null = null;
+  private userSub!: Subscription;
+
+   ngOnInit() {
+    this.userSub = this.authService.getUserLogged().subscribe(user => {
+      this.userLogged = user;
+    });
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
+  }
 
   isActive(route: string): boolean {
     return this.router.url.startsWith(route);

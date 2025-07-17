@@ -31,7 +31,7 @@ import { NotificationsComponent } from '../notifications/notifications.component
   styleUrls: ['./user-menu.component.scss']
 })
 export class UserMenuComponent {
-  @Input() usuarioLogado!: User | null;
+  @Input() userLogged!: User | null;
 
   constructor(private router: Router) {}
 

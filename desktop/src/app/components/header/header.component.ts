@@ -43,7 +43,7 @@ import { MapetsIconComponent } from '../mapets-icon/mapets-icon.component';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   searchQuery = '';
-  usuarioLogado: User | null = null;
+  userLogged: User | null = null;
   private userSub!: Subscription;
 
   @Output() search = new EventEmitter<string>();
@@ -55,7 +55,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userSub = this.authService.getUserLogged().subscribe(user => {
-      this.usuarioLogado = user;
+      this.userLogged = user;
     });
   }
 

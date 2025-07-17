@@ -24,12 +24,20 @@
                 [ngClass]="{ 'stroke-[#159A9C]': isActive('/notifications'), 'stroke-muted-foreground': !isActive('/notifications') }" />
         </button>
 
-        <!-- 🔔 Notificações -->
+        <!-- 😁 Perfil -->
         <button hlmBtn class="flex items-center justify-center" variant="ghost" size="sm"
             [ngClass]="{ 'text-[#159A9C]': isActive('/profile'), 'text-muted-foreground': !isActive('/profile') }"
             (click)="navigateTo('/profile')">
-            <ng-icon hlm size="lg" class="mr-2" name="lucideCircleUserRound"
-                [ngClass]="{ 'stroke-[#159A9C]': isActive('/profile'), 'stroke-muted-foreground': !isActive('/profile') }" />
+            <ng-container *ngIf="userLogged as user; else login">
+                <img [src]="user?.photoURL || '' + (user.displayName || 'User')" alt="Foto de perfil"
+                    class="w-10 h-10 rounded-full"
+                    [ngClass]="{ 'border-4 border-solid border-[#159A9C]': isActive('/profile'), 'stroke-muted-foreground': !isActive('/profile') }" />
+            </ng-container>
+
+            <ng-template #login>
+                <ng-icon hlm size="lg" class="mr-2" name="lucideCircleUserRound"
+                    [ngClass]="{ 'stroke-[#159A9C]': isActive('/profile'), 'stroke-muted-foreground': !isActive('/profile') }" />
+            </ng-template>
         </button>
     </div>
 </div>

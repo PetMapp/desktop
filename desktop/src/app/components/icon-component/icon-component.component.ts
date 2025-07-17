@@ -21,6 +21,9 @@ import {
   lucideTrash,
   lucideShield,
   lucideLoaderCircle,
+  lucidePaintBucket,
+  lucidePalette,
+  lucideLogOut,
 } from '@ng-icons/lucide';
 
 @Component({
@@ -47,7 +50,9 @@ import {
       lucideEllipsis,
       lucideTrash,
       lucideShield,
-      lucideLoaderCircle
+      lucideLoaderCircle,
+      lucidePalette,
+      lucideLogOut
     }),
   ],
   template: `

@@ -1,5 +1,5 @@
 <div class="hidden md:flex items-center gap-4">
-  <ng-container *ngIf="usuarioLogado as user; else entrar">
+  <ng-container *ngIf="userLogged as user; else login">
     <app-notifications></app-notifications>
 
     <div class="flex items-center gap-2">
@@ -22,7 +22,7 @@
     </ng-template>
   </ng-container>
 
-  <ng-template #entrar>
+  <ng-template #login>
     <button hlmBtn class="border px-4 py-1 rounded" (click)="goToLogin()" class="bg-[#159A9C]">Entrar</button>
   </ng-template>
 </div>

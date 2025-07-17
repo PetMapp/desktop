@@ -20,6 +20,7 @@ import {
   lucideEllipsis,
   lucideTrash,
   lucideShield,
+  lucideLoaderCircle,
 } from '@ng-icons/lucide';
 
 @Component({
@@ -45,7 +46,8 @@ import {
       lucidePencil,
       lucideEllipsis,
       lucideTrash,
-      lucideShield
+      lucideShield,
+      lucideLoaderCircle
     }),
   ],
   template: `

@@ -113,6 +113,7 @@ export class MapViewComponent implements AfterViewInit {
   public replyingToName: string | null = null;
   public isEditing: boolean = false;
   public editingCommentId: string | null = null;
+  public isLoadingComment: boolean = false;
   public commentToDelete: CommentaryListDTO_Res | null = null;
   expandedComments: Record<string, boolean> = {};
   expandedReplies: Record<string, boolean> = {};
@@ -264,56 +265,59 @@ export class MapViewComponent implements AfterViewInit {
 
     if (!text || !petId) return;
 
-    if (this.isEditing && this.editingCommentId) {
-      const success = await this.commentaryService.editComment({
-        commentaryId: this.editingCommentId,
-        newText: text,
-      });
+    this.isLoadingComment = true;
 
-      if (success) {
-        this.isEditing = false;
-        this.editingCommentId = null;
-        this.newCommentText = '';
-        await this.loadComments(petId);
-        this.cdr.detectChanges();
-      }
-      return;
-    }
+    try {
+      if (this.isEditing && this.editingCommentId) {
+        const success = await this.commentaryService.editComment({
+          commentaryId: this.editingCommentId,
+          newText: text,
+        });
 
-    const data: CreateCommentaryDTO_Req = {
-      petId,
-      text,
-      parentId: this.replyingToId ?? null,
-    };
-
-    const result = await this.commentaryService.createComment(data);
-
-    if (result.success) {
-      this.newCommentText = '';
-      const wasReply = !!this.replyingToId;
-
-      if (wasReply && this.replyingToId) {
-        try {
-          const rootCommentId = this.replyingToRootId || await this.findRootCommentId(this.replyingToId);
-
-          await this.refreshReplies(rootCommentId);
-
-          this.cdr.markForCheck();
+        if (success) {
+          this.isEditing = false;
+          this.editingCommentId = null;
+          this.newCommentText = '';
+          await this.loadComments(petId);
           this.cdr.detectChanges();
-        } catch (err) {
-          console.error('Erro ao carregar respostas:', err);
+        }
+        return;
+      }
+
+      const data: CreateCommentaryDTO_Req = {
+        petId,
+        text,
+        parentId: this.replyingToId ?? null,
+      };
+
+      const result = await this.commentaryService.createComment(data);
+
+      if (result.success) {
+        this.newCommentText = '';
+        const wasReply = !!this.replyingToId;
+
+        if (wasReply && this.replyingToId) {
+          try {
+            const rootCommentId = this.replyingToRootId || await this.findRootCommentId(this.replyingToId);
+            await this.refreshReplies(rootCommentId);
+            this.cdr.markForCheck();
+            this.cdr.detectChanges();
+          } catch (err) {
+            console.error('Erro ao carregar respostas:', err);
+            await this.loadComments(petId);
+          }
+        } else {
           await this.loadComments(petId);
         }
-      } else {
-        await this.loadComments(petId);
-      }
 
-      // Reset reply state
-      this.replyingToId = null;
-      this.replyingToName = null;
-      this.replyingToRootId = null;
-    } else {
-      console.error('Erro ao enviar comentário:', result.error);
+        this.replyingToId = null;
+        this.replyingToName = null;
+        this.replyingToRootId = null;
+      } else {
+        console.error('Erro ao enviar comentário:', result.error);
+      }
+    } finally {
+      this.isLoadingComment = false;
     }
   }
 

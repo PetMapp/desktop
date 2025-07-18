@@ -8,19 +8,21 @@ import { Subscription } from 'rxjs';
 import { MobileFooterComponent } from '../components/mobile-footer/mobile-footer.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { IconComponent } from '../components/icon-component/icon-component.component';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'app-config',
   imports: [
     CommonModule,
     HeaderComponent,
     MobileFooterComponent,
-    IconComponent
+    IconComponent,
+    HlmButtonDirective
   ],
-  templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
+  templateUrl: './config.component.html',
+  styleUrl: './config.component.scss'
 })
-export class ProfileComponent {
+export class ConfigComponent {
   constructor(
     private router: Router,
     private authService: AuthService

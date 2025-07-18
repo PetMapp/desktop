@@ -5,7 +5,7 @@
 
     <ng-container *ngIf="userLogged as user; else login">
         <div class="w-full h-20 flex justify-start items-center gap-2 pl-4">
-            <div class="w-20 h-20 rounded-full bg-slate-500">
+            <div class="w-20 h-20 rounded-full">
                 <img [src]="user?.photoURL || '' + (user.displayName || 'User')" alt="Foto de perfil"
                     class="w-full h-full rounded-full object-cover" />
             </div>
@@ -17,23 +17,23 @@
         </div>
 
         <div class="w-full flex flex-col p-4">
-            <div class="flex jsutify-start items-center gap-2 pl-4 p-4 border-y">
+            <button hlmBtn variant="ghost" class="flex justify-start items-center gap-2 pl-4 p-6 border-y focus:bg-black/20">
                 <spartan-icon iconName="lucidePalette" iconSize="base"
                     class="text-gray-600 flex justify-center items-center"></spartan-icon>
                 Aparência
-            </div>
+            </button>
 
-            <div class="flex jsutify-start items-center gap-2 pl-4 p-4 border-b">
+            <button hlmBtn variant="ghost" class="flex justify-start items-center gap-2 pl-4 p-6 border-b focus:bg-black/20">
                 <spartan-icon iconName="lucideCircleUserRound" iconSize="base"
                     class="text-gray-600 flex justify-center items-center"></spartan-icon>
                 Infomações do Usuário
-            </div>
+            </button>
 
-            <div class="flex jsutify-start items-center gap-2 pl-4 p-4 border-b">
+            <button hlmBtn variant="ghost" class="flex justify-start items-center gap-2 pl-4 p-6 border-b focus:bg-black/20">
                 <spartan-icon iconName="lucideLogOut" iconSize="base"
                     class="text-gray-600 flex justify-center items-center"></spartan-icon>
                 Sair
-            </div>
+            </button>
 
         </div>
     </ng-container>

@@ -15,6 +15,7 @@ import {
   lucideBell,
   lucidePawPrint,
   lucideMap,
+  lucideArrowLeft,
 } from '@ng-icons/lucide';
 import { BrnDialogTriggerDirective } from '@spartan-ng/brain/dialog';
 import { CommonModule } from '@angular/common';
@@ -42,7 +43,8 @@ import { CommonModule } from '@angular/common';
       lucideCamera,
       lucideBell,
       lucidePawPrint,
-      lucideMap
+      lucideMap,
+      lucideArrowLeft
     }),
   ],
   template: `

@@ -24,6 +24,7 @@ import {
   lucidePaintBucket,
   lucidePalette,
   lucideLogOut,
+  lucideArrowLeft,
 } from '@ng-icons/lucide';
 
 @Component({
@@ -52,7 +53,8 @@ import {
       lucideShield,
       lucideLoaderCircle,
       lucidePalette,
-      lucideLogOut
+      lucideLogOut,
+      lucideArrowLeft
     }),
   ],
   template: `

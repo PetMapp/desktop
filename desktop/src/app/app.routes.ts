@@ -6,6 +6,7 @@ import { MapComponent } from './map/map.component';
 import { PetsComponent } from './pets/pets.component';
 import { NotificationComponent } from './notification/notification.component';
 import { ConfigComponent } from './config/config.component';
+import { AppearenceComponent } from './config/appearence/appearence.component';
 
 // Exportando a constante routes
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'pets', component: PetsComponent },
   { path: 'notifications', component: NotificationComponent },
   { path: 'config', component: ConfigComponent },
+  { path: 'config/appearence', component: AppearenceComponent },
 ];
 
 @NgModule({

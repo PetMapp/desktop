@@ -11,6 +11,7 @@ import { BrnMenuTriggerDirective } from '@spartan-ng/brain/menu';
 import { MobileFooterComponent } from '../mobile-footer/mobile-footer.component';
 import { ButtonIconComponent } from '../iconButton/iconButton.component';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { ButtonComponent } from '../button/button.component';
 import { NotificationsComponent } from '../notifications/notifications.component';
 

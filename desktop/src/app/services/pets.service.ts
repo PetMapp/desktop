@@ -95,6 +95,9 @@ export class PetsService {
     coleira: boolean;
     status: string;
     imagem: File;
+    isMissing?: boolean;
+    missingSince?: string | null;
+    lastSeenLocation?: string | null;
   }): Observable<any> {
     const url = 'http://localhost:3000/api/pet/find/register';
 
@@ -105,6 +108,7 @@ export class PetsService {
     formData.append('coleira', data.coleira.toString());
     formData.append('status', data.status);
     formData.append('img', data.imagem);
+    formData.append('isMissing', data.isMissing ? 'true' : 'false');
 
     return this.auth.getUserToken().pipe(
       switchMap((token) => {

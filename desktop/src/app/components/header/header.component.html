@@ -10,5 +10,27 @@
             (click)="onSearch()"></spartan-button-icon>
     </div>
 
-    <app-user-menu [userLogged]="userLogged"></app-user-menu>
+    <div class="flex justify-start items-center gap-4">
+        <div class="flex justify-center items-center gap-2">
+            <button hlmBtn variant="outline" class="w-4 h-4 rounded-full flex justify-center items-center p-2">
+                <spartan-icon iconName="lucideChevronLeft" iconSize="sm"
+                    class="flex items-center justify-center"></spartan-icon>
+            </button>
+            <div class="relative max-w-52 overflow-x-auto pr-4 scrollbar-hide">
+                <div class="min-w-max flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-full bg-blue-400 border-2 border-[#159A9C] shrink-0"></div>
+                    <div class="w-10 h-10 rounded-full bg-blue-400 border-2 border-[#159A9C] shrink-0"></div>
+                    <div class="w-10 h-10 rounded-full bg-blue-400 border-2 border-[#159A9C] shrink-0"></div>
+                    <div class="w-10 h-10 rounded-full bg-blue-400 border-2 border-gray-400 shrink-0"></div>
+                    <div class="w-10 h-10 rounded-full bg-blue-400 border-2 border-gray-400 shrink-0"></div>
+                </div>
+            </div>
+
+            <button hlmBtn variant="outline" class="w-4 h-4 rounded-full flex justify-center items-center p-2">
+                <spartan-icon iconName="lucideChevronRight" iconSize="sm"
+                    class="flex items-center justify-center"></spartan-icon>
+            </button>
+        </div>
+        <app-user-menu [userLogged]="userLogged"></app-user-menu>
+    </div>
 </div>

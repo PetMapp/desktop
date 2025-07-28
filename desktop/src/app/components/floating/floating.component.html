@@ -11,7 +11,8 @@
                     <hlm-dialog-header>
                         <h3 brnDialogTitle hlm class="font-bold">Registrar Pet</h3>
                     </hlm-dialog-header>
-                    <div class="w-full sm:w-[600px] h-screen sm:h-[400px] flex flex-col sm:flex-row justify-start items-center">
+                    <div
+                        class="w-full sm:w-[600px] h-screen sm:h-[400px] flex flex-col sm:flex-row justify-start items-center">
                         <div class="w-full sm:w-3/6 h-96 sm:h-full mr-2">
                             <label hlmLabel>
                                 Nome
@@ -41,6 +42,13 @@
                                     Possui coleira?
                                 </label>
                             </div>
+
+                            <div class="flex items-center mt-2">
+                                <hlm-switch class="mr-2" (checkedChange)="onToggleIsMissing($event)" />
+                                <label hlmLabel>
+                                    Animal perdido
+                                </label>
+                            </div>
                         </div>
                         <div class="w-full sm:w-5/6 sm:h-full h-64 rounded-sm">
                             <div id="map-dialog" class="w-full h-full rounded border"></div>
@@ -59,10 +67,13 @@
                     <div class="p-4 flex flex-col items-center justify-center">
                         <p>Você precisa entrar na sua conta para registrar um pet.</p>
                         <p>
-                            <span class="decoration-[#159A9C] underline text-[#159A9C] cursor-pointer" (click)="goToLogin()">Entre</span> 
-                            ou 
-                            <span class="decoration-[#159A9C] underline text-[#159A9C] cursor-pointer" (click)="goToRegister()">crie uma conta</span> 
-                            para continuar.</p>
+                            <span class="decoration-[#159A9C] underline text-[#159A9C] cursor-pointer"
+                                (click)="goToLogin()">Entre</span>
+                            ou
+                            <span class="decoration-[#159A9C] underline text-[#159A9C] cursor-pointer"
+                                (click)="goToRegister()">crie uma conta</span>
+                            para continuar.
+                        </p>
                     </div>
                 </ng-template>
             </hlm-dialog-content>

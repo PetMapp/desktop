@@ -4,4 +4,5 @@ export interface PetLocationModel {
     petId: string,
     petImage: string,
     userId: string,
+    isMissing?: boolean
 }

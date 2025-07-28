@@ -61,6 +61,7 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
   coleira = false;
   status = 'Encontrado';
   imagem?: File;
+  isMissing = false;
 
   constructor(
     private petsService: PetsService,
@@ -188,7 +189,6 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
 
       this.currentMarker = L.marker(e.latlng).addTo(this.mapDialog).openPopup();
 
-      // CORREÇÃO: Buscar o nome do local ao invés de usar apenas coordenadas
       this.localizacaoTexto = await this.reverseGeocode(e.latlng.lat, e.latlng.lng);
       this.localizacaoCoords.lat = e.latlng.lat;
       this.localizacaoCoords.lon = e.latlng.lng;
@@ -265,6 +265,10 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
     this.coleira = value;
   }
 
+  onToggleIsMissing(value: boolean) {
+    this.isMissing = value;
+  }
+
   onFileSelected(event: any) {
     this.imagem = event.target.files[0];
   }
@@ -288,7 +292,9 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
       localizacao: this.localizacaoTexto,
       coleira: this.coleira,
       status: this.status,
-      imagem: this.imagem
+      imagem: this.imagem,
+      isMissing: this.isMissing,
+      missingSince: this.isMissing ? new Date().toISOString() : null
     }).subscribe({
       next: () => alert('Pet registrado com sucesso!'),
       error: (err) => {

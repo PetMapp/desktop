@@ -260,18 +260,27 @@ export class MapViewComponent implements AfterViewInit {
         'pet/location/all',
         /* anonymous=*/ true,
       )) ?? [];
-
+      console.log(pets);
       pets.forEach(pet => {
         if (typeof pet.lat !== 'number' || typeof pet.lng !== 'number') {
           console.warn('Coords inválidas para pet:', pet);
           return;
         }
 
+        const borderColor = pet.isMissing ? '#159A9C' : '#ffffff';
+
         const html = `
-          <div class="pet-marker">
-            <img src="${pet.petImage}" alt="Pet ${pet.petId}" />
-          </div>
-        `;
+        <div class="pet-marker" style="
+          border: 3px solid ${borderColor};
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          overflow: hidden;
+          box-shadow: 0 0 6px rgba(0,0,0,0.3);
+        ">
+          <img src="${pet.petImage}" alt="Pet ${pet.petId}" style="width: 100%; height: 100%; object-fit: cover;" />
+        </div>
+      `;
         const icon = L.divIcon({
           className: 'custom-div-icon',
           html,

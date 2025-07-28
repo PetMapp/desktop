@@ -21,10 +21,10 @@ import {
   lucideTrash,
   lucideShield,
   lucideLoaderCircle,
-  lucidePaintBucket,
   lucidePalette,
   lucideLogOut,
   lucideArrowLeft,
+  lucideChevronLeft,
 } from '@ng-icons/lucide';
 
 @Component({
@@ -34,6 +34,7 @@ import {
   providers: [
     provideIcons({
       lucideChevronRight,
+      lucideChevronLeft,
       lucideMenu,
       lucideCircleUserRound,
       lucideHouse,

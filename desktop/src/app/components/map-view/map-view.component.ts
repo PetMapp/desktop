@@ -119,7 +119,7 @@ export class MapViewComponent implements AfterViewInit {
   expandedReplies: Record<string, boolean> = {};
   private map!: L.Map;
   public isMobile = false;
-  private userLocationMarker?: L.Marker;
+  private userLocationMarker: L.Marker | null = null;
 
   constructor(
     private api: ApiServiceService,
@@ -155,6 +155,7 @@ export class MapViewComponent implements AfterViewInit {
 
     setTimeout(async () => {
       this.initMap();
+      this.showUserLocation(this.map);
       await this.loadPetMarkers();
       this.setupLocationHandlers();
     }, 100);
@@ -206,6 +207,51 @@ export class MapViewComponent implements AfterViewInit {
     this.map.on('locationerror', err => {
       console.warn('Erro ao obter localização:', err.message);
     });
+  }
+
+  private showUserLocation(map: L.Map) {
+    map.locate({ watch: true, enableHighAccuracy: true });
+
+    const onLocation = (e: L.LocationEvent) => {
+
+      if (this.userLocationMarker) {
+        map.removeLayer(this.userLocationMarker);
+      }
+
+      const circleIcon = L.divIcon({
+        className: '',
+        html: `<div style="
+        width: 12px;
+        height: 12px;
+        background-color: #159A9C;
+        border-radius: 50%;
+        border: 2px solid white;
+        box-shadow: 0 0 4px rgba(0,0,0,0.3);
+      "></div>`,
+        iconSize: [12, 12],
+        iconAnchor: [6, 6],
+      });
+
+      this.userLocationMarker = L.marker(e.latlng, {
+        icon: circleIcon,
+        interactive: false
+      }).addTo(map);
+
+      map.stopLocate();
+
+      map.off('locationfound', onLocation);
+      map.off('locationerror', onError);
+    };
+
+    const onError = () => {
+      console.warn('Não foi possível obter sua localização.');
+      map.stopLocate();
+      map.off('locationfound', onLocation);
+      map.off('locationerror', onError);
+    };
+
+    map.on('locationfound', onLocation);
+    map.on('locationerror', onError);
   }
 
   private async loadPetMarkers() {

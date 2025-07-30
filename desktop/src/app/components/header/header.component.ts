@@ -16,7 +16,7 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { ButtonComponent } from '../button/button.component';
 import { NotificationsComponent } from '../notifications/notifications.component';
-import { BrnDialogContentDirective, BrnDialogTriggerDirective } from '@spartan-ng/brain/dialog';
+import { BrnDialogComponent, BrnDialogContentDirective, BrnDialogTriggerDirective } from '@spartan-ng/brain/dialog';
 import {
   HlmDialogComponent,
   HlmDialogContentComponent,
@@ -66,6 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userLogged: User | null = null;
   nearbyPets: any[] = [];
   private userSub!: Subscription;
+  @ViewChild(BrnDialogComponent) dialogRef!: BrnDialogComponent;
   @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
 
   @Output() search = new EventEmitter<string>();
@@ -82,6 +83,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
 
     this.loadNearbyPets();
+  }
+
+  closeDialog() {
+    this.dialogRef?.close({});
   }
 
   loadNearbyPets() {
@@ -105,6 +110,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
         console.warn('Geolocation error:', geoError);
       }
     );
+  }
+
+  openPet(petId: string) {
+    window.dispatchEvent(new CustomEvent('openPetSheet', {
+      detail: {
+        petId: petId,
+        commentId: null
+      }
+    }));
   }
 
   scrollLeft() {

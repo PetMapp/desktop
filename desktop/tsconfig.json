@@ -48,6 +48,9 @@
       ],
       "@spartan-ng/helm/switch": [
         ".\\libs/ui/ui-switch-helm/src/index.ts"
+      ],
+      "@spartan-ng/helm/alert": [
+        ".\\libs/ui/ui-alert-helm/src/index.ts"
       ]
     }
   },

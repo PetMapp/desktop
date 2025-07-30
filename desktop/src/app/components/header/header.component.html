@@ -21,12 +21,14 @@
                             class="flex items-center justify-center"></spartan-icon>
                     </button>
                 </ng-container>
-                <div class="relative w-full sm:max-w-52 overflow-x-auto scrollbar-hide" #scrollContainer>
+                <div class="relative max-w-72 sm:max-w-52 overflow-x-auto scrollbar-hide" #scrollContainer>
                     <div class="min-w-max flex justify-start items-center gap-2">
                         <ng-container *ngFor="let pet of nearbyPets">
-                            <div class="w-14 h-14 sm:w-10 sm:h-10 rounded-full border-2 border-[#159A9C] shrink-0"
+                            <div class="w-14 h-14 sm:w-10 sm:h-10 rounded-full border-2 border-[#159A9C] shrink-0
+                            cursor-pointer"
                                 [style.backgroundImage]="'url(' + pet.imageUrl + ')'"
-                                style="background-size: cover; background-position: center;">
+                                style="background-size: cover; background-position: center;"
+                                (click)="openPet(pet.petId)">
                             </div>
                         </ng-container>
                     </div>
@@ -50,6 +52,10 @@
                     <hlm-dialog-content *brnDialogContent="let ctx" class="w-screen h-screen">
                         <hlm-dialog-header>
                             <div class="flex items-center gap-2">
+                                <button hlmBtn (click)="closeDialog()">
+                                    <spartan-icon iconName="lucideArrowLeft" iconSize="base"
+                                        class="flex items-center justify-center p-2 pl-0"></spartan-icon>
+                                </button>
                                 <div class="flex w-full md:w-[500px] bg-white gap-2 items-center rounded-md border">
                                     <input [(ngModel)]="searchQuery" class="w-full bg-transparent border-none" hlmInput
                                         placeholder="Pesquisar local..." />
@@ -66,38 +72,4 @@
             <app-user-menu [userLogged]="userLogged"></app-user-menu>
         </div>
     </div>
-
-
-    <!-- 
-    <div class="w-full flex sm:hidden justify-start items-center gap-2">
-        <div class="w-full flex justify-start items-center gap-2">
-            <ng-container *ngIf="nearbyPets.length > 4">
-                <button hlmBtn variant="outline"
-                    class="hidden sm:flex w-4 h-4 rounded-full justify-center items-center p-2" (click)="scrollLeft()">
-                    <spartan-icon iconName="lucideChevronLeft" iconSize="sm"
-                        class="flex items-center justify-center"></spartan-icon>
-                </button>
-            </ng-container>
-            <div class="relative w-full sm:max-w-52 overflow-x-auto scrollbar-hide" #scrollContainer>
-                <div class="min-w-max flex justify-start items-center gap-2">
-                    <ng-container *ngFor="let pet of nearbyPets">
-                        <div class="w-14 h-14 sm:w-10 sm:h-10 rounded-full border-2 border-[#159A9C] shrink-0"
-                            [style.backgroundImage]="'url(' + pet.imageUrl + ')'"
-                            style="background-size: cover; background-position: center;">
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-
-            <ng-container *ngIf="nearbyPets.length > 4">
-                <button hlmBtn variant="outline"
-                    class="hidden sm:flex w-4 h-4 rounded-full justify-center items-center p-2" (click)="scrollRight()">
-                    <spartan-icon iconName="lucideChevronRight" iconSize="sm"
-                        class="flex items-center justify-center"></spartan-icon>
-                </button>
-            </ng-container>
-        </div>
-        <app-user-menu [userLogged]="userLogged"></app-user-menu>
-    </div>
-    -->
 </div>

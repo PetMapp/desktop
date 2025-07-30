@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { AuthService } from './auth.service';
 import { switchMap } from 'rxjs/operators';
-
+import { environment } from '../../environments/environment';
 // Firebase modular
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 
@@ -11,7 +11,7 @@ import { getStorage, ref, getDownloadURL } from 'firebase/storage';
   providedIn: 'root'
 })
 export class PetsService {
-  private apiUrl = 'http://localhost:3000/api/pet/myPets';
+  private apiUrl = `${environment.ApiBaseUrl}pet/myPets`;
   private storage = getStorage();
 
   constructor(
@@ -99,7 +99,7 @@ export class PetsService {
     missingSince?: string | null;
     lastSeenLocation?: string | null;
   }): Observable<any> {
-    const url = 'http://localhost:3000/api/pet/find/register';
+    const url = `${environment.ApiBaseUrl}pet/find/register`;
 
     const formData = new FormData();
     formData.append('apelido', data.apelido);
@@ -116,6 +116,19 @@ export class PetsService {
           Authorization: `Bearer ${token}`,
         });
         return this.http.post(url, formData, { headers });
+      })
+    );
+  }
+
+  listPetsNearby(lat: number, lng: number, radius: number = 5): Observable<any> {
+    const url = `${environment.ApiBaseUrl}pet/petFinder/list?lat=${lat}&lng=${lng}&radius=${radius}`;
+
+    return this.auth.getUserToken().pipe(
+      switchMap((token) => {
+        const headers = new HttpHeaders({
+          Authorization: `Bearer ${token}`  
+        });
+        return this.http.get(url, { headers });
       })
     );
   }

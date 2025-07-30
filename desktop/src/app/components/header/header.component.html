@@ -1,36 +1,103 @@
-<div class="w-full flex justify-between items-center p-4 sm:gap-0 gap-2" id="header">
-    <div class="flex items-center gap-4">
-        <app-sidebar></app-sidebar>
+<div class="w-full flex justify-between flex-col sm:flex-row items-center p-4 sm:gap-0 gap-2" id="header">
+    <div class="w-full flex justify-between items-center gap-2">
+        <div class="flex items-center gap-4">
+            <app-sidebar></app-sidebar>
+        </div>
+
+        <div class="hidden sm:flex w-full md:w-[500px] bg-white gap-2 items-center rounded-md border">
+            <input [(ngModel)]="searchQuery" class="w-full bg-transparent border-none" hlmInput
+                placeholder="Pesquisar local..." />
+            <spartan-button-icon [iconName]="'lucideSearch'" class="" [variant]="'ghost'"
+                (click)="onSearch()"></spartan-button-icon>
+        </div>
+
+        <div class="flex justify-start items-center gap-2">
+            <div class="flex justify-center items-center gap-2">
+                <ng-container *ngIf="nearbyPets.length > 4">
+                    <button hlmBtn variant="outline"
+                        class="hidden sm:flex w-4 h-4 rounded-full justify-center items-center p-2"
+                        (click)="scrollLeft()">
+                        <spartan-icon iconName="lucideChevronLeft" iconSize="sm"
+                            class="flex items-center justify-center"></spartan-icon>
+                    </button>
+                </ng-container>
+                <div class="relative w-full sm:max-w-52 overflow-x-auto scrollbar-hide" #scrollContainer>
+                    <div class="min-w-max flex justify-start items-center gap-2">
+                        <ng-container *ngFor="let pet of nearbyPets">
+                            <div class="w-14 h-14 sm:w-10 sm:h-10 rounded-full border-2 border-[#159A9C] shrink-0"
+                                [style.backgroundImage]="'url(' + pet.imageUrl + ')'"
+                                style="background-size: cover; background-position: center;">
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="nearbyPets.length > 4">
+                    <button hlmBtn variant="outline"
+                        class="hidden sm:flex w-4 h-4 rounded-full justify-center items-center p-2"
+                        (click)="scrollRight()">
+                        <spartan-icon iconName="lucideChevronRight" iconSize="sm"
+                            class="flex items-center justify-center"></spartan-icon>
+                    </button>
+                </ng-container>
+
+                <hlm-dialog>
+                    <button hlmBtn variant="outline" brnDialogTrigger
+                        class="flex sm:hidden w-6 h-6 rounded-md justify-center items-center p-4">
+                        <spartan-icon iconName="lucideSearch" iconSize="sm"
+                            class="flex items-center justify-center"></spartan-icon>
+                    </button>
+                    <hlm-dialog-content *brnDialogContent="let ctx" class="w-screen h-screen">
+                        <hlm-dialog-header>
+                            <div class="flex items-center gap-2">
+                                <div class="flex w-full md:w-[500px] bg-white gap-2 items-center rounded-md border">
+                                    <input [(ngModel)]="searchQuery" class="w-full bg-transparent border-none" hlmInput
+                                        placeholder="Pesquisar local..." />
+                                </div>
+                                <spartan-button-icon [iconName]="'lucideSearch'" class="" [variant]="'ghost'"
+                                    (click)="onSearch()"></spartan-button-icon>
+                            </div>
+                        </hlm-dialog-header>
+                        <hlm-dialog-footer>
+                        </hlm-dialog-footer>
+                    </hlm-dialog-content>
+                </hlm-dialog>
+            </div>
+            <app-user-menu [userLogged]="userLogged"></app-user-menu>
+        </div>
     </div>
 
-    <div class="flex w-full md:w-[500px] bg-white gap-2 items-center rounded-md border">
-        <input [(ngModel)]="searchQuery" class="w-full bg-transparent border-none" hlmInput
-            placeholder="Pesquisar local..." />
-        <spartan-button-icon [iconName]="'lucideSearch'" class="hidden md:block" [variant]="'ghost'"
-            (click)="onSearch()"></spartan-button-icon>
-    </div>
 
-    <div class="flex justify-start items-center gap-4">
-        <div class="flex justify-center items-center gap-2">
-            <button hlmBtn variant="outline" class="w-4 h-4 rounded-full flex justify-center items-center p-2">
-                <spartan-icon iconName="lucideChevronLeft" iconSize="sm"
-                    class="flex items-center justify-center"></spartan-icon>
-            </button>
-            <div class="relative max-w-52 overflow-x-auto pr-4 scrollbar-hide">
-                <div class="min-w-max flex items-center gap-2">
-                    <div class="w-10 h-10 rounded-full bg-blue-400 border-2 border-[#159A9C] shrink-0"></div>
-                    <div class="w-10 h-10 rounded-full bg-blue-400 border-2 border-[#159A9C] shrink-0"></div>
-                    <div class="w-10 h-10 rounded-full bg-blue-400 border-2 border-[#159A9C] shrink-0"></div>
-                    <div class="w-10 h-10 rounded-full bg-blue-400 border-2 border-gray-400 shrink-0"></div>
-                    <div class="w-10 h-10 rounded-full bg-blue-400 border-2 border-gray-400 shrink-0"></div>
+    <!-- 
+    <div class="w-full flex sm:hidden justify-start items-center gap-2">
+        <div class="w-full flex justify-start items-center gap-2">
+            <ng-container *ngIf="nearbyPets.length > 4">
+                <button hlmBtn variant="outline"
+                    class="hidden sm:flex w-4 h-4 rounded-full justify-center items-center p-2" (click)="scrollLeft()">
+                    <spartan-icon iconName="lucideChevronLeft" iconSize="sm"
+                        class="flex items-center justify-center"></spartan-icon>
+                </button>
+            </ng-container>
+            <div class="relative w-full sm:max-w-52 overflow-x-auto scrollbar-hide" #scrollContainer>
+                <div class="min-w-max flex justify-start items-center gap-2">
+                    <ng-container *ngFor="let pet of nearbyPets">
+                        <div class="w-14 h-14 sm:w-10 sm:h-10 rounded-full border-2 border-[#159A9C] shrink-0"
+                            [style.backgroundImage]="'url(' + pet.imageUrl + ')'"
+                            style="background-size: cover; background-position: center;">
+                        </div>
+                    </ng-container>
                 </div>
             </div>
 
-            <button hlmBtn variant="outline" class="w-4 h-4 rounded-full flex justify-center items-center p-2">
-                <spartan-icon iconName="lucideChevronRight" iconSize="sm"
-                    class="flex items-center justify-center"></spartan-icon>
-            </button>
+            <ng-container *ngIf="nearbyPets.length > 4">
+                <button hlmBtn variant="outline"
+                    class="hidden sm:flex w-4 h-4 rounded-full justify-center items-center p-2" (click)="scrollRight()">
+                    <spartan-icon iconName="lucideChevronRight" iconSize="sm"
+                        class="flex items-center justify-center"></spartan-icon>
+                </button>
+            </ng-container>
         </div>
         <app-user-menu [userLogged]="userLogged"></app-user-menu>
     </div>
+    -->
 </div>

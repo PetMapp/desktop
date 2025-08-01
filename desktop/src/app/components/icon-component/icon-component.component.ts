@@ -26,6 +26,9 @@ import {
   lucideArrowLeft,
   lucideChevronLeft,
   lucideSearch,
+  lucideBinoculars,
+  lucideInfo,
+  lucideMail,
 } from '@ng-icons/lucide';
 
 @Component({
@@ -57,7 +60,10 @@ import {
       lucidePalette,
       lucideLogOut,
       lucideArrowLeft,
-      lucideSearch
+      lucideSearch,
+      lucideBinoculars,
+      lucideInfo,
+      lucideMail
     }),
   ],
   template: `

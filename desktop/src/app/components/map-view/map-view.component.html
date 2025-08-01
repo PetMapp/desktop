@@ -60,6 +60,48 @@
             </p>
           </div>
 
+          <ng-container *ngIf="petDetail.isMissing">
+            <ng-container *ngIf="petDetail.userId != currentUserId; else petOwner">
+              <div hlmAlert class="flex justify-start items-center gap-2">
+                <spartan-icon iconName="lucideBinoculars" iconSize="base" class="flex justify-center items-center"
+                  hlmAlertIcon>
+                </spartan-icon>
+                <div class="flex flex-col ml-2">
+                  <h6 hlmAlertTitle class="text-sm">Este pet está perdido</h6>
+                  <div hlmAlertDescription>Você pode notificar o usuário caso o encontre.</div>
+                </div>
+              </div>
+              <div class="w-full flex items-center gap-2">
+                <button hlmBtn class="w-full bg-[#159A9C] hover:bg-[#117778] flex justify-center items-center gap-2">
+                  <spartan-icon iconName="lucidePawPrint" iconSize="base" class="flex justify-center items-center">
+                  </spartan-icon>
+                  Encontrei este pet
+                </button>
+                <button variant="outline" hlmBtn class="flex justify-center items-center gap-2">
+                  <spartan-icon iconName="lucideMail" iconSize="base" class="flex justify-center items-center">
+                  </spartan-icon>
+                </button>
+              </div>
+            </ng-container>
+
+            <ng-template #petOwner>
+              <div hlmAlert class="flex justify-start items-center gap-2">
+                <spartan-icon iconName="lucideInfo" iconSize="base" class="flex justify-center items-center"
+                  hlmAlertIcon>
+                </spartan-icon>
+                <div class="flex flex-col ml-2">
+                  <h6 hlmAlertTitle class="text-sm">Você marcou este pet como perdido</h6>
+                  <div hlmAlertDescription>Outros usuários poderão entrar em contato se o encontrarem.</div>
+                </div>
+              </div>
+              <button hlmBtn class="w-full bg-[#159A9C] hover:bg-[#117778] flex justify-center items-center gap-2">
+                <spartan-icon iconName="lucideCheck" iconSize="base" class="flex justify-center items-center">
+                </spartan-icon>
+                Marcar como encontrado
+              </button>
+            </ng-template>
+          </ng-container>
+
           <!-- Comentários -->
           <div class="w-full h-full flex flex-col items-start pt-2">
             <h1 class="font-bold mb-2">Discussão</h1>
@@ -352,7 +394,7 @@
                 <ng-container *ngIf="isLoadingComment; else normalText">
                   <spartan-icon iconName="LucideLoaderCircle" iconSize="xs"
                     class="flex items-center justify-center animate-spin mr-2"></spartan-icon>
-                    Enviando...
+                  Enviando...
                 </ng-container>
                 <ng-template #normalText>
                   {{ isEditing ? 'Salvar Edição' : 'Comentar' }}

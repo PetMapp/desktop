@@ -51,6 +51,9 @@
       ],
       "@spartan-ng/helm/alert": [
         ".\\libs/ui/ui-alert-helm/src/index.ts"
+      ],
+      "@spartan-ng/helm/icon": [
+        ".\\libs/ui/ui-icon-helm/src/index.ts"
       ]
     }
   },

@@ -24,8 +24,6 @@ import { PetLocationModel } from '../../models/pet-location-model';
 import { PetdetailDTORes } from '../../interfaces/DTOs/petdetail-dto-res';
 import { PetDetailUser } from '../../interfaces/DTOs/petuser-dto-res';
 
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
-
 import { CommentaryService } from '../../services/commentary.service';
 import { CommentaryListDTO_Res } from '../../interfaces/DTOs/res/CommentaryListDTO_Res';
 import { CreateCommentaryDTO_Req } from '../../interfaces/DTOs/res/CreateCommentaryDTO_Req';
@@ -55,6 +53,13 @@ import {
   HlmDialogHeaderComponent,
   HlmDialogTitleDirective,
 } from '@spartan-ng/helm/dialog';
+
+import {
+  HlmAlertDirective,
+  HlmAlertDescriptionDirective,
+  HlmAlertIconDirective,
+  HlmAlertTitleDirective
+} from '@spartan-ng/helm/alert';
 
 import { Router } from '@angular/router';
 
@@ -93,7 +98,11 @@ import { Router } from '@angular/router';
     HlmDialogHeaderComponent,
     HlmDialogTitleDirective,
     BrnDialogContentDirective,
-    BrnDialogTriggerDirective
+    BrnDialogTriggerDirective,
+    HlmAlertDirective,
+    HlmAlertDescriptionDirective,
+    HlmAlertIconDirective,
+    HlmAlertTitleDirective
   ],
   templateUrl: './map-view.component.html',
   styleUrls: ['./map-view.component.scss'],

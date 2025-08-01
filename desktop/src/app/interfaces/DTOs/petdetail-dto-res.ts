@@ -9,4 +9,5 @@ export interface PetdetailDTORes {
     petImage: string
     coleira: boolean,
     createdAt: string,
+    isMissing?: boolean
 }

@@ -7,6 +7,7 @@ import { AlternativeHeaderComponent } from '../components/alternative-header/alt
 import { IconComponent } from '../components/icon-component/icon-component.component';
 import { MobileFooterComponent } from '../components/mobile-footer/mobile-footer.component';
 import { MessageDisplayComponent } from '../components/message-display/message-display.component';
+import { ActivatedRoute } from '@angular/router';
 
 import { BrnDialogContentDirective, BrnDialogTriggerDirective } from '@spartan-ng/brain/dialog';
 import {
@@ -42,9 +43,16 @@ import {
   styleUrl: './messages.component.scss'
 })
 export class MessagesComponent {
-  showChatOnMobile = false
+  showChatOnMobile = false;
+  userId: string | null = null;
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.userId = this.route.snapshot.paramMap.get('id');
+  }
 
   toggleMobileView() {
-    this.showChatOnMobile = !this.showChatOnMobile
+    this.showChatOnMobile = !this.showChatOnMobile;
   }
 }

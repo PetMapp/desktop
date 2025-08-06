@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   apiKey: "AIzaSyDbIP8cBMs5YKb9lQIPeDSXBP7Z5AOpI_4",
   ApiBaseUrl: "https://api-bs6hj767iq-uc.a.run.app/api/",
+  wsUrl: "wss://api-bs6hj767iq-uc.a.run.app",
   firebaseConfig: {
     apiKey: "AIzaSyBqAgj1i9CeDOSLvrmzoyjQAFlomWMyX0s",
     authDomain: "petmap-6d5f7.firebaseapp.com",

@@ -643,4 +643,8 @@ export class MapViewComponent implements AfterViewInit {
     const count = await this.commentaryService.countReplies(commentId);
     return count;
   }
+
+  goToMessage(userId: string) {
+    this.router.navigate(['/messages', userId]);
+  }
 }

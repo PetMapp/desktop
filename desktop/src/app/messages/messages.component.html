@@ -23,7 +23,8 @@
                 </div>
                 <button class="sm:hidden border text-black rounded-md flex items-center p-2"
                     (click)="toggleMobileView()">
-                    <spartan-icon iconName="lucideChevronRight" iconSize="base" class="flex items-center justify-center"></spartan-icon>
+                    <spartan-icon iconName="lucideChevronRight" iconSize="base"
+                        class="flex items-center justify-center"></spartan-icon>
                 </button>
             </div>
         </div>
@@ -32,7 +33,8 @@
         'hidden': !showChatOnMobile,
         'sm:flex': true
       }">
-            <app-message-display class="flex flex-col h-full" (backToList)="toggleMobileView()"></app-message-display>
+            <app-message-display class="flex flex-col h-full" (backToList)="toggleMobileView()"
+                [userId]="userId"></app-message-display>
         </div>
 
     </div>

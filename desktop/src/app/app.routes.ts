@@ -17,6 +17,7 @@ export const routes: Routes = [
   { path: 'map', component: MapComponent },
   { path: 'pets', component: PetsComponent },
   { path: 'notifications', component: NotificationComponent },
+  { path: 'messages/:id', component: MessagesComponent },
   { path: 'messages', component: MessagesComponent },
   { path: 'config', component: ConfigComponent },
   { path: 'config/appearence', component: AppearenceComponent },

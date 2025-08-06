@@ -65,6 +65,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   searchQuery = '';
   userLogged: User | null = null;
   nearbyPets: any[] = [];
+  isMapRoute = false;
   private userSub!: Subscription;
   @ViewChild(BrnDialogComponent) dialogRef!: BrnDialogComponent;
   @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
@@ -83,6 +84,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
 
     this.loadNearbyPets();
+
+    this.isMapRoute = this.router.url.startsWith('/map');
   }
 
   closeDialog() {

@@ -4,7 +4,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { CommonModule } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
-import { lucideMenu, lucideMap, lucidePawPrint, lucideBell, lucideCircleUserRound, lucideSettings, lucidePiggyBank } from '@ng-icons/lucide';
+import { lucideMenu, lucideMap, lucidePawPrint, lucideBell, lucideCircleUserRound, lucideSettings, lucidePiggyBank, lucideMail } from '@ng-icons/lucide';
 import { User } from '@angular/fire/auth';
 import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
     HlmIconDirective,
     NgIcon
   ],
-  providers: [provideIcons({ lucideMenu, lucideMap, lucidePawPrint, lucideBell, lucideCircleUserRound, lucideSettings, lucidePiggyBank })],
+  providers: [provideIcons({ lucideMenu, lucideMap, lucidePawPrint, lucideBell, lucideCircleUserRound, lucideSettings, lucidePiggyBank, lucideMail })],
   templateUrl: './mobile-footer.component.html',
   styleUrls: ['./mobile-footer.component.scss']
 })

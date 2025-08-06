@@ -13,6 +13,7 @@ import {
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 
 import { NotificationsComponent } from '../notifications/notifications.component';
+import { ButtonIconComponent } from '../iconButton/iconButton.component';
 
 @Component({
   selector: 'app-user-menu',
@@ -26,6 +27,7 @@ import { NotificationsComponent } from '../notifications/notifications.component
     HlmMenuGroupComponent,
     HlmMenuItemDirective,
     HlmMenuSeparatorComponent,
+    ButtonIconComponent
   ],
   templateUrl: './user-menu.component.html',
   styleUrls: ['./user-menu.component.scss']
@@ -33,11 +35,16 @@ import { NotificationsComponent } from '../notifications/notifications.component
 export class UserMenuComponent {
   @Input() userLogged!: User | null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   goToLogin() {
     this.router.navigate(['/login']);
   }
+
+  goToMessages() {
+    this.router.navigate(['/messages']);
+  }
+
 
   async logout() {
     localStorage.clear();

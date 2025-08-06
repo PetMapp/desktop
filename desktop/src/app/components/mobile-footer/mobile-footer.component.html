@@ -24,6 +24,14 @@
                 [ngClass]="{ 'stroke-[#159A9C]': isActive('/notifications'), 'stroke-muted-foreground': !isActive('/notifications') }" />
         </button>
 
+        <!-- ✉ Mensagens -->
+        <button hlmBtn class="flex items-center justify-center" variant="ghost" size="sm"
+            [ngClass]="{ 'text-[#159A9C]': isActive('/messages'), 'text-muted-foreground': !isActive('/messages') }"
+            (click)="navigateTo('/messages')">
+            <ng-icon hlm size="lg" name="lucideMail"
+                [ngClass]="{ 'stroke-[#159A9C]': isActive('/messages'), 'stroke-muted-foreground': !isActive('/messages') }" />
+        </button>
+
         <!-- 😁 Perfil -->
         <button hlmBtn class="flex items-center justify-center" variant="ghost" size="sm"
             [ngClass]="{ 'text-[#159A9C]': isActive('/config'), 'text-muted-foreground': !isActive('/config') }"

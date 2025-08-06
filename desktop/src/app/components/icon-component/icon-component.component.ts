@@ -29,6 +29,10 @@ import {
   lucideBinoculars,
   lucideInfo,
   lucideMail,
+  lucideCheckCheck,
+  lucideSend,
+  lucideSendHorizontal,
+  lucideChevronsRight,
 } from '@ng-icons/lucide';
 
 @Component({
@@ -63,7 +67,9 @@ import {
       lucideSearch,
       lucideBinoculars,
       lucideInfo,
-      lucideMail
+      lucideMail,
+      lucideCheckCheck,
+      lucideSendHorizontal,
     }),
   ],
   template: `

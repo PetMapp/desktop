@@ -1,0 +1,43 @@
+<app-header [ngClass]="{
+    'hidden': showChatOnMobile,
+    'sm:block': true
+  }"></app-header>
+
+<div class="flex flex-col sm:flex-wrap w-full h-screen" [ngClass]="{ 'pt-[70px] p-2': !showChatOnMobile }">
+    <div class="flex w-full h-full sm:border rounded-sm overflow-hidden">
+
+        <div class="w-full sm:w-1/4 h-full sm:border-r flex flex-col p-2" [ngClass]="{
+        'hidden': showChatOnMobile,
+        'sm:block': true
+      }">
+            <div class="flex justify-between items-center w-full h-20 border rounded-sm p-4">
+                <div class="flex items-center">
+                    <div class="w-16 h-16 rounded-full bg-red-500"></div>
+                    <div class="flex flex-col ml-2">
+                        <h3 class="text-lg font-bold">Usuário</h3>
+                        <div class="flex items-center gap-2">
+                            <spartan-icon iconName="lucideCheckCheck" iconSize="sm" class="opacity-50"></spartan-icon>
+                            <p class="opacity-50">Mensagem</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="sm:hidden border text-black rounded-md flex items-center p-2"
+                    (click)="toggleMobileView()">
+                    <spartan-icon iconName="lucideChevronRight" iconSize="base" class="flex items-center justify-center"></spartan-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="w-full sm:w-3/4 h-full flex flex-col" [ngClass]="{
+        'hidden': !showChatOnMobile,
+        'sm:flex': true
+      }">
+            <app-message-display class="flex flex-col h-full" (backToList)="toggleMobileView()"></app-message-display>
+        </div>
+
+    </div>
+    <app-mobile-footer [ngClass]="{
+      'hidden': showChatOnMobile,
+      'sm:hidden': true
+    }"></app-mobile-footer>
+</div>

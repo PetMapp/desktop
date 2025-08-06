@@ -11,7 +11,7 @@
                 (click)="onSearch()"></spartan-button-icon>
         </div>
 
-        <div class="flex justify-start items-center gap-2">
+        <div class="flex justify-start items-center gap-2" *ngIf="isMapRoute">
             <div class="flex justify-center items-center gap-2">
                 <ng-container *ngIf="nearbyPets.length > 4">
                     <button hlmBtn variant="outline"
@@ -25,8 +25,7 @@
                     <div class="min-w-max flex justify-start items-center gap-2">
                         <ng-container *ngFor="let pet of nearbyPets">
                             <div class="w-14 h-14 sm:w-10 sm:h-10 rounded-full border-2 border-[#159A9C] shrink-0
-                            cursor-pointer"
-                                [style.backgroundImage]="'url(' + pet.imageUrl + ')'"
+                            cursor-pointer" [style.backgroundImage]="'url(' + pet.imageUrl + ')'"
                                 style="background-size: cover; background-position: center;"
                                 (click)="openPet(pet.petId)">
                             </div>
@@ -44,11 +43,6 @@
                 </ng-container>
 
                 <hlm-dialog>
-                    <button hlmBtn variant="outline" brnDialogTrigger
-                        class="flex sm:hidden w-6 h-6 rounded-md justify-center items-center p-4">
-                        <spartan-icon iconName="lucideSearch" iconSize="sm"
-                            class="flex items-center justify-center"></spartan-icon>
-                    </button>
                     <hlm-dialog-content *brnDialogContent="let ctx" class="w-screen h-screen">
                         <hlm-dialog-header>
                             <div class="flex items-center gap-2">
@@ -60,8 +54,6 @@
                                     <input [(ngModel)]="searchQuery" class="w-full bg-transparent border-none" hlmInput
                                         placeholder="Pesquisar local..." />
                                 </div>
-                                <spartan-button-icon [iconName]="'lucideSearch'" class="" [variant]="'ghost'"
-                                    (click)="onSearch()"></spartan-button-icon>
                             </div>
                         </hlm-dialog-header>
                         <hlm-dialog-footer>
@@ -69,7 +61,11 @@
                     </hlm-dialog-content>
                 </hlm-dialog>
             </div>
-            <app-user-menu [userLogged]="userLogged"></app-user-menu>
         </div>
+        <app-user-menu [userLogged]="userLogged"></app-user-menu>
+        <button hlmBtn variant="secondary" brnDialogTrigger
+            class="flex sm:hidden w-6 h-6 rounded-md justify-center items-center p-5 bg-[#f4f4f5]">
+            <spartan-icon iconName="lucideSearch" iconSize="sm" class="flex items-center justify-center"></spartan-icon>
+        </button>
     </div>
 </div>

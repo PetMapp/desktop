@@ -3,29 +3,36 @@
     'sm:block': true
   }"></app-header>
 
-<div class="flex flex-col sm:flex-wrap w-full h-screen" [ngClass]="{ 'pt-[70px] p-2': !showChatOnMobile }">
+<div class="flex flex-col sm:flex-wrap w-full h-screen sm:pt-[70px] sm:p-2" [ngClass]="{ 'pt-[70px] p-2': !showChatOnMobile }">
     <div class="flex w-full h-full sm:border rounded-sm overflow-hidden">
 
         <div class="w-full sm:w-1/4 h-full sm:border-r flex flex-col p-2" [ngClass]="{
-        'hidden': showChatOnMobile,
-        'sm:block': true
-      }">
-            <div class="flex justify-between items-center w-full h-20 border rounded-sm p-4">
+  'hidden': showChatOnMobile,
+  'sm:block': true
+}">
+            <div *ngFor="let user of usersWithMessages"
+                class="flex justify-between items-center w-full h-20 border rounded-sm p-4 cursor-pointer"
+                (click)="selectUser(user.id); toggleMobileView()">
                 <div class="flex items-center">
-                    <div class="w-16 h-16 rounded-full bg-red-500"></div>
+                    <div class="w-12 h-12 rounded-full overflow-hidden">
+                        <img *ngIf="user.photo" [src]="user.photo" alt="User photo"
+                            class="w-full h-full object-cover" />
+                    </div>
                     <div class="flex flex-col ml-2">
-                        <h3 class="text-lg font-bold">Usuário</h3>
+                        <h2 class="text-lg font-bold">{{ user.displayName }}</h2>
                         <div class="flex items-center gap-2">
-                            <spartan-icon iconName="lucideCheckCheck" iconSize="sm" class="opacity-50"></spartan-icon>
-                            <p class="opacity-50">Mensagem</p>
+                            <ng-container *ngIf="user.lastMessage?.receiverId != currentUserId">
+                                <ng-container>
+                                    <spartan-icon *ngIf="user.lastMessage?.read" iconName="lucideCheckCheck"
+                                        iconSize="sm" class="text-[#159A9C] flex items-center"></spartan-icon>
+                                    <spartan-icon *ngIf="!user.lastMessage?.read" iconName="lucideCheckCheck"
+                                        iconSize="sm" class="opacity-50 flex items-center"></spartan-icon>
+                                </ng-container>
+                            </ng-container>
+                            <p class="opacity-50">{{ user.lastMessage.text }}</p>
                         </div>
                     </div>
                 </div>
-                <button class="sm:hidden border text-black rounded-md flex items-center p-2"
-                    (click)="toggleMobileView()">
-                    <spartan-icon iconName="lucideChevronRight" iconSize="base"
-                        class="flex items-center justify-center"></spartan-icon>
-                </button>
             </div>
         </div>
 

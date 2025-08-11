@@ -30,10 +30,14 @@
         'self-start items-start bg-slate-100 text-black': msg.userId !== currentUserId
       }">
                 <p>{{ msg.text }}</p>
-                <div class="flex items-center gap-2 mt-1 text-sm opacity-50">
-                    <spartan-icon iconName="lucideCheckCheck" iconSize="sm"
-                        class="flex justify-center items-center"></spartan-icon>
-                    <p>{{ msg.createdAt | date: 'shortTime' }}</p>
+                <div class="flex items-center gap-2 mt-1 text-sm">
+                    <p class="opacity-50">{{ msg.createdAt | date: 'shortTime' }}</p>
+                    <ng-container *ngIf="msg.userId === currentUserId">
+                        <spartan-icon *ngIf="msg.read == true" iconName="lucideCheckCheck" iconSize="sm"
+                            class="text-white flex items-center"></spartan-icon>
+                        <spartan-icon *ngIf="msg.read != true" iconName="lucideCheckCheck" iconSize="sm"
+                            class="opacity-50 flex items-center"></spartan-icon>
+                    </ng-container>
                 </div>
             </div>
         </ng-container>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit, OnDestroy, Input } from '@angular/core'; 
+import { Component, EventEmitter, Output, OnInit, OnDestroy, Input } from '@angular/core';
 import { WebSocketService } from '../../services/websocket.service';
 import { IconComponent } from '../icon-component/icon-component.component';
 import { CommonModule } from '@angular/common';
@@ -16,6 +16,7 @@ interface Message {
   createdAt?: Date;
   sentAt?: Date;
   id?: string;
+  read: boolean;
 }
 
 @Component({
@@ -28,7 +29,7 @@ interface Message {
 export class MessageDisplayComponent implements OnInit, OnDestroy {
   @Input() userId: string | null = null;
   @Output() backToList = new EventEmitter<void>();
-  
+
   messages: Message[] = [];
   public currentUserId: string | null = null;
   messageText = '';
@@ -60,6 +61,11 @@ export class MessageDisplayComponent implements OnInit, OnDestroy {
       console.error('Dados insuficientes para inicializar o componente');
       return;
     }
+
+    this.messageService.markAllAsReadBetweenUsers(this.currentUserId, this.userId).subscribe({
+      next: () => console.log('Todas mensagens marcadas como lidas'),
+      error: err => console.error('Erro ao marcar mensagens como lidas', err)
+    });
 
     await this.loadUserInfo();
     await this.loadMessages();
@@ -100,17 +106,17 @@ export class MessageDisplayComponent implements OnInit, OnDestroy {
 
     const messagesSub = this.wsService.messages$.subscribe(msg => {
       console.log('Mensagem recebida:', msg);
-      
-      if ((msg.from === this.currentUserId && msg.to === this.userId) || 
-          (msg.from === this.userId && msg.to === this.currentUserId)) {
+
+      if ((msg.from === this.currentUserId && msg.to === this.userId) ||
+        (msg.from === this.userId && msg.to === this.currentUserId)) {
         const normalizedMsg = this.normalizeMessage(msg);
-        
-        const exists = this.messages.some(existingMsg => 
-          existingMsg.text === normalizedMsg.text && 
+
+        const exists = this.messages.some(existingMsg =>
+          existingMsg.text === normalizedMsg.text &&
           existingMsg.userId === normalizedMsg.userId &&
           Math.abs(new Date(existingMsg.createdAt!).getTime() - new Date(normalizedMsg.createdAt!).getTime()) < 2000
         );
-        
+
         if (!exists) {
           this.messages.push(normalizedMsg);
           this.sortMessages();
@@ -130,22 +136,23 @@ export class MessageDisplayComponent implements OnInit, OnDestroy {
       text: msg.text || msg.content || '',
       createdAt: msg.createdAt || msg.sentAt || new Date(),
       from: msg.from,
-      to: msg.to
+      to: msg.to,
+      read: msg.read || false
     };
   }
 
   private sortMessages(): void {
-    this.messages.sort((a, b) => 
+    this.messages.sort((a, b) =>
       new Date(a.createdAt!).getTime() - new Date(b.createdAt!).getTime()
     );
   }
 
   ngOnDestroy(): void {
     console.log('MessageDisplayComponent sendo destruído');
-    
+
     this.subscriptions.forEach(sub => sub.unsubscribe());
     this.subscriptions = [];
-    
+
     this.wsService.disconnect();
   }
 
@@ -174,7 +181,8 @@ export class MessageDisplayComponent implements OnInit, OnDestroy {
       id: 'temp-' + Date.now(),
       userId: this.currentUserId,
       text: this.messageText,
-      createdAt: new Date()
+      createdAt: new Date(),
+      read: false
     };
     this.messages.push(immediateMsg);
     this.sortMessages();

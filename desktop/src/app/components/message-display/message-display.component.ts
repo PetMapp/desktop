@@ -38,6 +38,7 @@ export class MessageDisplayComponent implements OnInit, OnDestroy {
   isConnected = false;
 
   private subscriptions: Subscription[] = [];
+  private viewingInterval: any;
 
   constructor(
     private wsService: WebSocketService,
@@ -62,10 +63,12 @@ export class MessageDisplayComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.messageService.markAllAsReadBetweenUsers(this.currentUserId, this.userId).subscribe({
-      next: () => console.log('Todas mensagens marcadas como lidas'),
-      error: err => console.error('Erro ao marcar mensagens como lidas', err)
-    });
+    this.viewingInterval = setInterval(() => {
+      if (this.wsService.isConnected() && this.userId) {
+        this.wsService.sendMessage({ event: 'viewing', with: this.userId });
+        console.log('Evento viewing reenviado periodicamente para:', this.userId);
+      }
+    }, 15000);
 
     await this.loadUserInfo();
     await this.loadMessages();
@@ -98,35 +101,91 @@ export class MessageDisplayComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const statusSub = this.wsService.connectionStatus$.subscribe(status => {
+    const connectionStatusSubscription = this.wsService.connectionStatus$.subscribe(status => {
       this.isConnected = status;
       console.log('Status da conexão WebSocket:', status);
+
+      if (status && this.userId && this.currentUserId) {
+        try {
+          const viewingPayload = {
+            event: 'viewing',
+            with: this.userId
+          };
+          this.wsService.sendMessage(viewingPayload);
+          console.log('Evento viewing enviado para:', this.userId);
+        } catch (err) {
+          console.error('Erro ao enviar evento viewing:', err);
+        }
+
+        this.messages = this.messages.map(message => {
+          if (message.userId === this.userId) return { ...message, read: true };
+          return message;
+        });
+        this.sortMessages();
+      }
     });
-    this.subscriptions.push(statusSub);
+    this.subscriptions.push(connectionStatusSubscription);
 
-    const messagesSub = this.wsService.messages$.subscribe(msg => {
-      console.log('Mensagem recebida:', msg);
+    const messageFramesSubscription = this.wsService.messages$.subscribe(messageFrame => {
+      console.log('Mensagem recebida via WS:', messageFrame);
 
-      if ((msg.from === this.currentUserId && msg.to === this.userId) ||
-        (msg.from === this.userId && msg.to === this.currentUserId)) {
-        const normalizedMsg = this.normalizeMessage(msg);
+      if (messageFrame.event === 'messagesRead') {
+        const messagesReadPayload = messageFrame.data;
+        const { userA, userB, readBy } = messagesReadPayload;
 
-        const exists = this.messages.some(existingMsg =>
-          existingMsg.text === normalizedMsg.text &&
-          existingMsg.userId === normalizedMsg.userId &&
-          Math.abs(new Date(existingMsg.createdAt!).getTime() - new Date(normalizedMsg.createdAt!).getTime()) < 2000
+        if (
+          (userA === this.currentUserId && userB === this.userId) ||
+          (userB === this.currentUserId && userA === this.userId)
+        ) {
+          this.messages = this.messages.map(m => ({ ...m, read: true }));
+          this.sortMessages();
+          console.log('Mensagens marcadas como lidas via WS');
+        }
+        return;
+      }
+
+      const isMessageForCurrentConversation =
+        (messageFrame.from === this.currentUserId && messageFrame.to === this.userId) ||
+        (messageFrame.from === this.userId && messageFrame.to === this.currentUserId);
+
+      if (isMessageForCurrentConversation) {
+        const normalizedMessage = this.normalizeMessage(messageFrame);
+
+        const alreadyExists = this.messages.some(existingMessage =>
+          existingMessage.text === normalizedMessage.text &&
+          existingMessage.userId === normalizedMessage.userId &&
+          Math.abs(new Date(existingMessage.createdAt!).getTime() - new Date(normalizedMessage.createdAt!).getTime()) < 2000
         );
 
-        if (!exists) {
-          this.messages.push(normalizedMsg);
+        if (!alreadyExists) {
+          this.messages.push(normalizedMessage);
           this.sortMessages();
           console.log('Nova mensagem adicionada via WebSocket');
         }
+        return;
       }
     });
-    this.subscriptions.push(messagesSub);
+    this.subscriptions.push(messageFramesSubscription);
 
     this.wsService.connect(this.currentUserId);
+  }
+
+  private sendViewingEvent(): void {
+    try {
+      this.wsService.sendMessage({
+        event: 'viewing',
+        with: this.userId
+      });
+      console.log('Evento viewing enviado para:', this.userId);
+
+      this.messages = this.messages.map(message => {
+        if (message.userId === this.userId) return { ...message, read: true };
+        return message;
+      });
+      this.sortMessages();
+    } catch (err) {
+      console.error('Erro ao enviar evento viewing:', err);
+    }
   }
 
   private normalizeMessage(msg: any): Message {
@@ -153,64 +212,45 @@ export class MessageDisplayComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe());
     this.subscriptions = [];
 
+    this.wsService.sendMessage({
+      event: 'viewing',
+      with: null
+    });
     this.wsService.disconnect();
   }
 
   onBackClick() {
+    this.wsService.sendMessage({
+      event: 'viewing',
+      with: null
+    });
     this.backToList.emit();
   }
 
   sendMessage(): void {
-    if (this.messageText.trim() === '' || !this.userId || !this.currentUserId) {
-      console.warn('Não é possível enviar mensagem: dados insuficientes');
-      return;
-    }
+    if (this.messageText.trim() === '' || !this.userId || !this.currentUserId) return;
 
-    if (!this.wsService.isConnected()) {
-      console.warn('WebSocket não está conectado');
-      return;
-    }
+    if (!this.wsService.isConnected()) return;
 
-    const messageData = {
-      to: this.userId,
-      content: this.messageText,
-      sentAt: new Date(),
-    };
+    const messageText = this.messageText;
+    this.messageText = '';
 
     const immediateMsg: Message = {
       id: 'temp-' + Date.now(),
       userId: this.currentUserId,
-      text: this.messageText,
+      text: messageText,
       createdAt: new Date(),
       read: false
     };
     this.messages.push(immediateMsg);
     this.sortMessages();
 
-    const messageText = this.messageText;
-    this.messageText = '';
-
     this.wsService.sendMessage({
-      ...messageData,
-      from: this.currentUserId
-    });
-
-    this.messageService.sendMessage({
-      receiverId: this.userId,
-      text: messageText
-    }).subscribe({
-      next: (res) => {
-        if (!res.success) {
-          console.error('Erro ao salvar a mensagem:', res.errorMessage);
-          this.removeMessageById(immediateMsg.id!);
-        } else {
-          console.log('Mensagem salva com sucesso no banco de dados');
-        }
-      },
-      error: (err) => {
-        console.error('Erro ao enviar a mensagem:', err);
-        this.removeMessageById(immediateMsg.id!);
-      }
+      event: 'sendMessage',
+      from: this.currentUserId,
+      to: this.userId,
+      content: messageText,
+      sentAt: new Date().toISOString()
     });
   }
 

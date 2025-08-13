@@ -1,6 +1,9 @@
 <div class="hidden md:flex items-center gap-2">
   <ng-container *ngIf="userLogged as user; else login">
-    <spartan-button-icon [iconName]="'lucideMail'" (click)="goToMessages()"></spartan-button-icon>
+    <div class="flex justify-center items-center">
+      <div class="w-2 h-2 rounded-full bg-[#159A9C] absolute ml-3 mb-3" *ngIf="unredMessagesCount > 0"></div>
+      <spartan-button-icon [iconName]="'lucideMail'" (click)="goToMessages()"></spartan-button-icon>
+    </div>
 
     <app-notifications></app-notifications>
 

@@ -12,6 +12,7 @@ import { MessageService } from '../services/message.service';
 import { AuthService } from '../services/auth.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { WebSocketService } from '../services/websocket.service';
 
 import { BrnDialogContentDirective, BrnDialogTriggerDirective } from '@spartan-ng/brain/dialog';
 import {
@@ -52,12 +53,14 @@ export class MessagesComponent {
   usersWithMessages: any[] = [];
   public currentUserId: string | null = null;
   private userSubscription?: Subscription;
+  private wsSubscription?: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private websocketService: WebSocketService
   ) { }
 
   ngOnInit(): void {
@@ -67,6 +70,24 @@ export class MessagesComponent {
 
     this.userSubscription = this.authService.getUserLogged().subscribe(user => {
       this.currentUserId = user?.uid ?? null;
+
+      if (this.currentUserId) {
+        this.websocketService.connect(this.currentUserId);
+
+        if (!this.wsSubscription) {
+          this.wsSubscription = this.websocketService.messages$.subscribe(event => {
+            if (event.event === 'updateUserList') {
+              this.loadUsersWithMessages();
+            }
+          });
+        }
+      }
+    });
+
+    this.wsSubscription = this.websocketService.messages$.subscribe(event => {
+      if (event.event === 'updateUserList') {
+        this.loadUsersWithMessages();
+      }
     });
   }
 

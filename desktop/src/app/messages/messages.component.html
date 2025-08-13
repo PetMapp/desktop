@@ -3,7 +3,8 @@
     'sm:block': true
   }"></app-header>
 
-<div class="flex flex-col sm:flex-wrap w-full h-screen sm:pt-[70px] sm:p-2" [ngClass]="{ 'pt-[70px] p-2': !showChatOnMobile }">
+<div class="flex flex-col sm:flex-wrap w-full h-screen sm:pt-[70px] sm:p-2"
+    [ngClass]="{ 'pt-[70px] p-2': !showChatOnMobile }">
     <div class="flex w-full h-full sm:border rounded-sm overflow-hidden">
 
         <div class="w-full sm:w-1/4 h-full sm:border-r flex flex-col p-2" [ngClass]="{
@@ -13,13 +14,15 @@
             <div *ngFor="let user of usersWithMessages"
                 class="flex justify-between items-center w-full h-20 border rounded-sm p-4 cursor-pointer"
                 (click)="selectUser(user.id); toggleMobileView()">
-                <div class="flex items-center">
-                    <div class="w-12 h-12 rounded-full overflow-hidden">
-                        <img *ngIf="user.photo" [src]="user.photo" alt="User photo"
-                            class="w-full h-full object-cover" />
+                <div class="w-full flex items-center">
+                    <div class="flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-full overflow-hidden">
+                            <img *ngIf="user.photo" [src]="user.photo" alt="User photo"
+                                class="w-full h-full object-cover" />
+                        </div>
                     </div>
-                    <div class="flex flex-col ml-2">
-                        <h2 class="text-lg font-bold">{{ user.displayName }}</h2>
+                    <div class="w-full flex flex-col items-start ml-2">
+                        <h2 class="text-lg font-bold ml-0">{{ user.displayName }}</h2>
                         <div class="flex items-center gap-2">
                             <ng-container *ngIf="user.lastMessage?.receiverId != currentUserId">
                                 <ng-container>
@@ -31,6 +34,9 @@
                             </ng-container>
                             <p class="opacity-50">{{ user.lastMessage.text }}</p>
                         </div>
+                    </div>
+                    <div class="w-full flex justify-end" *ngIf="user.lastMessage.read == false && user.lastMessage.receiverId == currentUserId">
+                        <div class="w-4 h-4 bg-[#159A9C] rounded-full"></div>
                     </div>
                 </div>
             </div>

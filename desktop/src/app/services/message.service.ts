@@ -76,4 +76,28 @@ export class MessageService {
       })
     );
   }
+
+  getUnreadMessagesCount(): Observable<ApiResponse<number>> {
+    return this.auth.getUserToken().pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders({
+          Authorization: `Bearer ${token}`
+        });
+
+        return this.http.get<ApiResponse<number>>(`${this.baseUrl}/unread/count`, { headers });
+      })
+    );
+  }
+
+  getUnreadMessagesCountBetweenUsers(userA: string, userB: string): Observable<ApiResponse<number>> {
+    return this.auth.getUserToken().pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders({
+          Authorization: `Bearer ${token}`
+        });
+
+        return this.http.get<ApiResponse<number>>(`${this.baseUrl}/unread/count/users`, { headers });
+      })
+    );
+  }
 }

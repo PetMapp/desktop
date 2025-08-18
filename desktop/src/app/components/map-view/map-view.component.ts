@@ -63,6 +63,8 @@ import {
 
 import { Router } from '@angular/router';
 
+import { PetFoundButtonComponent } from '../pet-found-button/pet-found-button.component';
+
 @Component({
   selector: 'app-map-view',
   standalone: true,
@@ -102,7 +104,8 @@ import { Router } from '@angular/router';
     HlmAlertDirective,
     HlmAlertDescriptionDirective,
     HlmAlertIconDirective,
-    HlmAlertTitleDirective
+    HlmAlertTitleDirective,
+    PetFoundButtonComponent
   ],
   templateUrl: './map-view.component.html',
   styleUrls: ['./map-view.component.scss'],

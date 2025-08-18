@@ -72,12 +72,9 @@
                 </div>
               </div>
               <div class="w-full flex items-center gap-2">
-                <button hlmBtn class="w-full bg-[#159A9C] hover:bg-[#117778] flex justify-center items-center gap-2">
-                  <spartan-icon iconName="lucidePawPrint" iconSize="base" class="flex justify-center items-center">
-                  </spartan-icon>
-                  Encontrei este pet
-                </button>
-                <button variant="outline" hlmBtn class="flex justify-center items-center gap-2" (click)="goToMessage(petDetail.userId)">
+                <app-pet-found-button class="w-full"></app-pet-found-button>
+                <button variant="outline" hlmBtn class="flex justify-center items-center gap-2"
+                  (click)="goToMessage(petDetail.userId)">
                   <spartan-icon iconName="lucideMail" iconSize="base" class="flex justify-center items-center">
                   </spartan-icon>
                 </button>

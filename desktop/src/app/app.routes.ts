@@ -8,6 +8,7 @@ import { NotificationComponent } from './notification/notification.component';
 import { ConfigComponent } from './config/config.component';
 import { AppearenceComponent } from './config/appearence/appearence.component';
 import { MessagesComponent } from './messages/messages.component';
+import { RequestsComponent } from './requests/requests.component';
 
 // Exportando a constante routes
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'map', component: MapComponent },
   { path: 'pets', component: PetsComponent },
+  { path: 'requests', component: RequestsComponent },
   { path: 'notifications', component: NotificationComponent },
   { path: 'messages/:id', component: MessagesComponent },
   { path: 'messages', component: MessagesComponent },

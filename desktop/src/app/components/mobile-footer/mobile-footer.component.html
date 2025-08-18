@@ -16,6 +16,14 @@
                 [ngClass]="{ 'stroke-[#159A9C]': isActive('/pets'), 'stroke-muted-foreground': !isActive('/pets') }" />
         </button>
 
+        <!-- 🔔 Solicitações -->
+        <button hlmBtn class="flex items-center justify-center" variant="ghost" size="sm"
+            [ngClass]="{ 'text-[#159A9C]': isActive('/requests'), 'text-muted-foreground': !isActive('/requests') }"
+            (click)="navigateTo('/requests')">
+            <ng-icon hlm size="lg" class="mr-2" name="lucideSquareArrowUp"
+                [ngClass]="{ 'stroke-[#159A9C]': isActive('/requests'), 'stroke-muted-foreground': !isActive('/requests') }" />
+        </button>
+
         <!-- 🔔 Notificações -->
         <button hlmBtn class="flex items-center justify-center" variant="ghost" size="sm"
             [ngClass]="{ 'text-[#159A9C]': isActive('/notifications'), 'text-muted-foreground': !isActive('/notifications') }"

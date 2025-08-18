@@ -1,0 +1,40 @@
+<hlm-dialog>
+    <button hlmBtn brnDialogTrigger
+        class="w-full bg-[#159A9C] hover:bg-[#117778] flex justify-center items-center gap-2 rounded-sm p-2 text-white">
+        <spartan-icon iconName="lucidePawPrint" iconSize="base" class="flex justify-center items-center"></spartan-icon>
+        Encontrei este pet
+    </button>
+
+    <hlm-dialog-content *brnDialogContent="let ctx" class="flex flex-col h-screen max-h-screen">
+
+        <hlm-dialog-header>
+            <h3 brnDialogTitle hlm>Criar solicitação</h3>
+            <p brnDialogDescription hlm>
+                Você está prestes a enviar uma solicitação ao dono deste pet. Ele poderá aceitar ou recusar seu aviso.
+            </p>
+        </hlm-dialog-header>
+
+        <form class="flex-1 overflow-y-auto p-2 flex flex-col gap-4">
+            <label hlmLabel>
+                Mensagem (opcional)
+                <textarea hlmInput placeholder="" class="min-h-[80px] w-full border rounded-sm"></textarea>
+            </label>
+
+            <label hlmLabel>
+                Foto
+                <input class="w-full" hlmInput type="file" (change)="onFileSelected($event)" />
+            </label>
+
+            <div class="flex justify-center">
+                <img alt="Foto do pet" class="max-h-40 rounded-md object-cover" />
+            </div>
+        </form>
+
+        <hlm-dialog-footer class="flex justify-end gap-2 border-t bg-white p-2">
+            <button hlmBtn type="button" variant="outline" (click)="ctx.close()">Cancelar</button>
+            <button hlmBtn type="submit" class="bg-[#159A9C]">
+                Enviar solicitação
+            </button>
+        </hlm-dialog-footer>
+    </hlm-dialog-content>
+</hlm-dialog>

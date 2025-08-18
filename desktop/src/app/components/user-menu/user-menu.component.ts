@@ -18,6 +18,7 @@ import { AuthService } from '../../services/auth.service';
 
 import { NotificationsComponent } from '../notifications/notifications.component';
 import { ButtonIconComponent } from '../iconButton/iconButton.component';
+import { RequestComponentComponent } from '../request-component/request-component.component';
 
 @Component({
   selector: 'app-user-menu',
@@ -31,7 +32,8 @@ import { ButtonIconComponent } from '../iconButton/iconButton.component';
     HlmMenuGroupComponent,
     HlmMenuItemDirective,
     HlmMenuSeparatorComponent,
-    ButtonIconComponent
+    ButtonIconComponent,
+    RequestComponentComponent
   ],
   templateUrl: './user-menu.component.html',
   styleUrls: ['./user-menu.component.scss']

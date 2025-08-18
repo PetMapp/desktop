@@ -50,16 +50,13 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="w-full sm:w-5/6 sm:h-full h-64 rounded-sm">
+                        <div class="w-full sm:w-5/6 sm:h-full h-36 rounded-sm pt-4">
                             <div id="map-dialog" class="w-full h-full rounded border"></div>
                         </div>
-
-                        <div class="block sm:hidden w-full">
-                            <button hlmBtn class="mt-2 w-full bg-[#159A9C]" (click)="onSubmitPet()">Salvar</button>
-                        </div>
                     </div>
-                    <hlm-dialog-footer>
-                        <button hlmBtn class="mt-2 bg-[#159A9C]" (click)="onSubmitPet()">Salvar</button>
+                    <hlm-dialog-footer
+                        class="sticky bottom-0 left-0 w-full flex justify-end gap-2  bg-white p-2 sm:static">
+                        <button hlmBtn class="w-full sm:w-auto bg-[#159A9C]" (click)="onSubmitPet()">Salvar</button>
                     </hlm-dialog-footer>
                 </ng-container>
 

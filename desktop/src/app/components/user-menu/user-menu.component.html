@@ -1,6 +1,10 @@
 <div class="hidden md:flex items-center gap-2">
   <ng-container *ngIf="userLogged as user; else login">
     <div class="flex justify-center items-center">
+      <spartan-button-icon [iconName]="'lucideSquareArrowUp'" [brnMenuTriggerFor]="requests"></spartan-button-icon>
+    </div>
+
+    <div class="flex justify-center items-center">
       <div class="w-2 h-2 rounded-full bg-[#159A9C] absolute ml-3 mb-3" *ngIf="unredMessagesCount > 0"></div>
       <spartan-button-icon [iconName]="'lucideMail'" (click)="goToMessages()"></spartan-button-icon>
     </div>
@@ -23,6 +27,12 @@
         <hlm-menu-group>
           <button hlmMenuItem (click)="logout()">Sair</button>
         </hlm-menu-group>
+      </hlm-menu>
+    </ng-template>
+
+    <ng-template #requests>
+      <hlm-menu class="w-80 h-96">
+        <app-request-component></app-request-component>
       </hlm-menu>
     </ng-template>
   </ng-container>

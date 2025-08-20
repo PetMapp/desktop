@@ -72,7 +72,9 @@
                 </div>
               </div>
               <div class="w-full flex items-center gap-2">
-                <app-pet-found-button class="w-full"></app-pet-found-button>
+                <app-pet-found-button [currentUserId]="currentUserId" [petId]="activePetId"
+                  [petOwnerId]="petDetail?.user?.uid" (requestCreated)="onRequestCreated($event)">
+                </app-pet-found-button>
                 <button variant="outline" hlmBtn class="flex justify-center items-center gap-2"
                   (click)="goToMessage(petDetail.userId)">
                   <spartan-icon iconName="lucideMail" iconSize="base" class="flex justify-center items-center">

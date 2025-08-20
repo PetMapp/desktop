@@ -5,7 +5,7 @@
         Encontrei este pet
     </button>
 
-    <hlm-dialog-content *brnDialogContent="let ctx" class="flex flex-col h-screen max-h-screen">
+    <hlm-dialog-content *brnDialogContent="let ctx" class="flex flex-col sm:h-auto h-screen max-h-screen">
 
         <hlm-dialog-header>
             <h3 brnDialogTitle hlm>Criar solicitação</h3>
@@ -17,23 +17,24 @@
         <form class="flex-1 overflow-y-auto p-2 flex flex-col gap-4">
             <label hlmLabel>
                 Mensagem (opcional)
-                <textarea hlmInput placeholder="" class="min-h-[80px] w-full border rounded-sm"></textarea>
+                <textarea hlmInput [(ngModel)]="message" name="message" class="min-h-[80px] w-full border rounded-sm"></textarea>
             </label>
 
             <label hlmLabel>
                 Foto
-                <input class="w-full" hlmInput type="file" (change)="onFileSelected($event)" />
+                <input class="w-full" hlmInput type="file" accept=".jpg,.jpeg,.png,.webp,image/*" (change)="onFileSelected($event)" />
             </label>
 
-            <div class="flex justify-center">
-                <img alt="Foto do pet" class="max-h-40 rounded-md object-cover" />
+            <div class="flex justify-start" *ngIf="previewUrl">
+                <img [src]="previewUrl" alt="preview" class="max-h-40 rounded-md object-cover" />
             </div>
         </form>
 
-        <hlm-dialog-footer class="flex justify-end gap-2 border-t bg-white p-2">
+        <hlm-dialog-footer class="flex justify-end gap-2 bg-white p-2">
             <button hlmBtn type="button" variant="outline" (click)="ctx.close()">Cancelar</button>
-            <button hlmBtn type="submit" class="bg-[#159A9C]">
-                Enviar solicitação
+            <button hlmBtn type="button" class="bg-[#159A9C]" (click)="submitRequest(ctx)" [disabled]="isLoading">
+                <ng-container *ngIf="isLoading">Enviando...</ng-container>
+                <ng-container *ngIf="!isLoading">Enviar solicitação</ng-container>
             </button>
         </hlm-dialog-footer>
     </hlm-dialog-content>

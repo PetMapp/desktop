@@ -65,6 +65,8 @@ import { Router } from '@angular/router';
 
 import { PetFoundButtonComponent } from '../pet-found-button/pet-found-button.component';
 
+import { PetRequest } from '../../services/request.service';
+
 @Component({
   selector: 'app-map-view',
   standalone: true,
@@ -649,5 +651,9 @@ export class MapViewComponent implements AfterViewInit {
 
   goToMessage(userId: string) {
     this.router.navigate(['/messages', userId]);
+  }
+
+  onRequestCreated(request: PetRequest) {
+    console.log('Request criada', request);
   }
 }

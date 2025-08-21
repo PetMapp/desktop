@@ -5,12 +5,7 @@ import { switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import { CreateMessageDTO_Req } from '../interfaces/DTOs/req/CreateMessageDTO_Req';
-
-export interface ApiResponse<T> {
-  data: T;
-  errorMessage: string | null;
-  success: boolean;
-}
+import { ApiResponse } from '../models/api-response';
 
 @Injectable({
   providedIn: 'root'

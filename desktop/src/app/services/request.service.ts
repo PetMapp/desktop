@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
+import { ApiResponse } from '../models/api-response';
 
 export interface PetRequest {
   id?: string;
@@ -13,7 +14,19 @@ export interface PetRequest {
   message?: string;
   status: 'pending' | 'accepted' | 'rejected';
   createdAt: string;
-  imageUrl: string | null;
+  fromUser?: {
+    displayName: string;
+    photoURL: string;
+  };
+  petOwner?: {
+    displayName: string;
+    photoURL: string;
+  };
+  pet?: {
+    apelido?: string;
+    petImage?: string | null;
+  };
+  proofImageUrl?: string;
 }
 
 @Injectable({
@@ -41,26 +54,25 @@ export class RequestService {
     return this.auth.getUserToken().pipe(
       switchMap(token => {
         const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-        // não setar Content-Type, o browser define o boundary automaticamente
         return this.http.post<PetRequest>(this.baseUrl, form, { headers });
       })
     );
   }
 
-  getRequestsByUser(userId: string): Observable<PetRequest[]> {
+  getRequestsByUser(userId: string): Observable<ApiResponse<PetRequest[]>> {
     return this.auth.getUserToken().pipe(
       switchMap(token => {
         const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-        return this.http.get<PetRequest[]>(`${this.baseUrl}/user/${userId}`, { headers });
+        return this.http.get<ApiResponse<PetRequest[]>>(`${this.baseUrl}/user/${userId}`, { headers });
       })
     );
   }
 
-  getRequestsForUserPet(userPetId: string): Observable<PetRequest[]> {
+  getRequestsForUserPet(userPetId: string): Observable<ApiResponse<PetRequest[]>> {
     return this.auth.getUserToken().pipe(
       switchMap(token => {
         const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-        return this.http.get<PetRequest[]>(`${this.baseUrl}/pet/${userPetId}`, { headers });
+        return this.http.get<ApiResponse<PetRequest[]>>(`${this.baseUrl}/pet/${userPetId}`, { headers });
       })
     );
   }

@@ -3,14 +3,125 @@
         <button hlmTabsTrigger="myRequests">Minhas Solicitações</button>
         <button hlmTabsTrigger="requests">Para meus pets</button>
     </hlm-tabs-list>
+
     <div hlmTabsContent="myRequests">
-        <div class="flex justify-center items-center h-full text-center text-sm">
-            <p class="opacity-60">Solicitações enviadas por você serão exibidas aqui.</p>
-        </div>
+        <ng-container *ngIf="myRequests.length > 0; else noMyRequests">
+            <div *ngFor="let req of myRequests" class="p-2 border rounded-sm mb-2 overflow-hidden">
+                <div class="flex justify-between items-center p-2">
+                    <div class="flex flex-col items-start">
+                        <div class="w-full flex justify-between items-center gap-2 ml-2">
+                            <div class="flex justify-end items-center gap-2">
+                                <div class="flex justify-end items-end relative">
+                                    <div class="w-10 h-10 rounded-full">
+                                        <img *ngIf="req.pet?.petImage" [src]="req.pet?.petImage"
+                                            class="object-cover w-full h-full rounded-full" />
+                                    </div>
+                                    <div class="w-6 h-6 rounded-full absolute border-2 ml-2 mt-4">
+                                        <img *ngIf="req.fromUser?.photoURL" [src]="req.fromUser?.photoURL"
+                                            class="object-cover w-full h-full rounded-full" />
+                                        <span *ngIf="!req.fromUser?.photoURL"
+                                            class="text-white text-sm font-bold flex items-center justify-center h-full">{{
+                                            req.fromUser?.displayName?.[0] || '?' }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <p class="font-bold">{{ req.pet?.apelido || 'Desconhecido' }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-start ml-2 overflow-hidden">
+                            <p class="w-[340px] h-auto opacity-60 pb-2 line-clamp-2 break-words text-start">
+                                {{ req.message }}
+                            </p>
+                            <div
+                                class="w-full max-h-60 rounded-md overflow-hidden flex justify-center items-center">
+                                <img *ngIf="req.proofImageUrl" [src]="req.proofImageUrl" class="object-cover" />
+                            </div>
+                            <div class="flex mt-2">
+                                <p class="text-sm opacity-60">{{ formatDateBR(req.createdAt) }} · </p>
+                                <p class="text-sm opacity-60 ml-1">{{ translateStatus(req.status) }}</p>
+                            </div>
+                            <button hlmBtn variant="link" class="text-[#159A9C] text-xs hover:underline self-start p-0">
+                                Ver mais
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #noMyRequests>
+            <div class="flex justify-center items-center h-full text-center text-sm">
+                <p class="opacity-60">Solicitações enviadas por você serão exibidas aqui.</p>
+            </div>
+        </ng-template>
     </div>
+
     <div hlmTabsContent="requests">
-        <div class="flex justify-center items-center h-full text-center text-sm">
-            <p class="opacity-60">Solicitações para seus pets serão exibidas aqui.</p>
-        </div>
+        <ng-container *ngIf="requestsForMyPets.length > 0; else noRequestsForPets">
+            <div *ngFor="let req of requestsForMyPets" class="p-2 border rounded-sm mb-2 overflow-hidden">
+                <div class="flex justify-between items-center p-2">
+                    <div class="flex flex-col items-start">
+                        <div class="w-full flex justify-between items-center gap-2 ml-2">
+                            <div class="flex justify-end items-center gap-2">
+                                <div class="flex justify-end items-end relative">
+                                    <div class="w-10 h-10 rounded-full">
+                                        <img *ngIf="req.pet?.petImage" [src]="req.pet?.petImage"
+                                            class="object-cover w-full h-full rounded-full" />
+                                    </div>
+                                    <div class="w-6 h-6 rounded-full absolute border-2 ml-2 mt-4">
+                                        <img *ngIf="req.fromUser?.photoURL" [src]="req.fromUser?.photoURL"
+                                            class="object-cover w-full h-full rounded-full" />
+                                        <span *ngIf="!req.fromUser?.photoURL"
+                                            class="text-white text-sm font-bold flex items-center justify-center h-full">{{
+                                            req.fromUser?.displayName?.[0] || '?' }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <p class="font-bold">{{ req.pet?.apelido || 'Desconhecido' }}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2 ml-5">
+                                <div class="w-full rounded-sm p-2 flex justify-between items-center gap-2">
+                                    <button hlmBtn variant="outline">
+                                        <spartan-icon iconName="lucideCheck" iconSize="sm"
+                                            class="flex justify-center items-center text-green-500">
+                                        </spartan-icon>
+                                    </button>
+                                    <button hlmBtn variant="outline">
+                                        <spartan-icon iconName="lucideX" iconSize="sm"
+                                            class="flex justify-center items-center text-red-500">
+                                        </spartan-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-start ml-2 overflow-hidden">
+                            <p class="w-[340px] h-auto opacity-60 pb-2 line-clamp-2 break-words text-start">
+                                {{ req.message }}
+                            </p>
+                            <div
+                                class="w-full max-h-60 rounded-md overflow-hidden flex justify-center items-center">
+                                <img *ngIf="req.proofImageUrl" [src]="req.proofImageUrl" class="object-cover" />
+                            </div>
+                            <div class="flex mt-2">
+                                <p class="text-sm opacity-60">{{ formatDateBR(req.createdAt) }} · </p>
+                                <p class="text-sm opacity-60 ml-1">{{ translateStatus(req.status) }}</p>
+                            </div>
+                            <button hlmBtn variant="link" class="text-[#159A9C] text-xs hover:underline self-start p-0">
+                                Ver mais
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #noRequestsForPets>
+            <div class="flex justify-center items-center h-full text-center text-sm">
+                <p class="opacity-60">Solicitações para seus pets serão exibidas aqui.</p>
+            </div>
+        </ng-template>
     </div>
 </hlm-tabs>

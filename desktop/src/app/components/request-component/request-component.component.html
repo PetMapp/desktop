@@ -34,8 +34,7 @@
                             <p class="w-[340px] h-auto opacity-60 pb-2 line-clamp-2 break-words text-start">
                                 {{ req.message }}
                             </p>
-                            <div
-                                class="w-full max-h-60 rounded-md overflow-hidden flex justify-center items-center">
+                            <div class="w-full max-h-60 rounded-md overflow-hidden flex justify-center items-center">
                                 <img *ngIf="req.proofImageUrl" [src]="req.proofImageUrl" class="object-cover" />
                             </div>
                             <div class="flex mt-2">
@@ -82,18 +81,50 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-2 ml-5">
+                            <div class="flex sm:hidden items-center gap-2 ml-5">
                                 <div class="w-full rounded-sm p-2 flex justify-between items-center gap-2">
-                                    <button hlmBtn variant="outline">
-                                        <spartan-icon iconName="lucideCheck" iconSize="sm"
-                                            class="flex justify-center items-center text-green-500">
-                                        </spartan-icon>
-                                    </button>
-                                    <button hlmBtn variant="outline">
-                                        <spartan-icon iconName="lucideX" iconSize="sm"
-                                            class="flex justify-center items-center text-red-500">
-                                        </spartan-icon>
-                                    </button>
+                                    <hlm-alert-dialog>
+                                        <button hlmBtn variant="outline" brnAlertDialogTrigger>
+                                            <spartan-icon iconName="lucideCheck" iconSize="sm"
+                                                class="flex justify-center items-center text-green-500">
+                                            </spartan-icon>
+                                        </button>
+                                        <hlm-alert-dialog-content *brnAlertDialogContent="let ctx">
+                                            <hlm-alert-dialog-header>
+                                                <h2 hlmAlertDialogTitle>Aceitar solicitação</h2>
+                                                <p hlmAlertDialogDescription>
+                                                    Aceitar essa solicitação irá permitir que o usuário
+                                                    {{ req.fromUser?.displayName || 'Desconhecido' }} entre em contato
+                                                    com você.
+                                                </p>
+                                            </hlm-alert-dialog-header>
+                                            <hlm-alert-dialog-footer>
+                                                <button hlmAlertDialogCancel (click)="ctx.close()">Cancelar</button>
+                                                <button hlmAlertDialogAction (click)="ctx.close()" class="bg-[#159A9C]">Aceitar</button>
+                                            </hlm-alert-dialog-footer>
+                                        </hlm-alert-dialog-content>
+                                    </hlm-alert-dialog>
+
+                                    <hlm-alert-dialog>
+                                        <button hlmBtn variant="outline" brnAlertDialogTrigger>
+                                            <spartan-icon iconName="lucideX" iconSize="sm"
+                                                class="flex justify-center items-center text-red-500">
+                                            </spartan-icon>
+                                        </button>
+                                        <hlm-alert-dialog-content *brnAlertDialogContent="let ctx">
+                                            <hlm-alert-dialog-header>
+                                                <h2 hlmAlertDialogTitle>Negar solicitação</h2>
+                                                <p hlmAlertDialogDescription>
+                                                    O animal da imagem não é o seu pet? Ao negar essa solicitação, 
+                                                    ela será descartada e o usuário não terá como prosseguir com o contato.
+                                                </p>
+                                            </hlm-alert-dialog-header>
+                                            <hlm-alert-dialog-footer>
+                                                <button hlmAlertDialogCancel (click)="ctx.close()">Cancelar</button>
+                                                <button hlmAlertDialogAction (click)="ctx.close()" class="bg-red-500">Negar</button>
+                                            </hlm-alert-dialog-footer>
+                                        </hlm-alert-dialog-content>
+                                    </hlm-alert-dialog>
                                 </div>
                             </div>
                         </div>
@@ -102,8 +133,7 @@
                             <p class="w-[340px] h-auto opacity-60 pb-2 line-clamp-2 break-words text-start">
                                 {{ req.message }}
                             </p>
-                            <div
-                                class="w-full max-h-60 rounded-md overflow-hidden flex justify-center items-center">
+                            <div class="w-full max-h-60 rounded-md overflow-hidden flex justify-center items-center">
                                 <img *ngIf="req.proofImageUrl" [src]="req.proofImageUrl" class="object-cover" />
                             </div>
                             <div class="flex mt-2">

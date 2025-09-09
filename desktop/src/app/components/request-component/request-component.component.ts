@@ -26,6 +26,8 @@ import {
   HlmAlertDialogTitleDirective,
 } from '@spartan-ng/helm/alert-dialog';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-request-component',
   standalone: true,
@@ -57,15 +59,19 @@ export class RequestComponentComponent implements OnInit {
   formatDateBR = formatDateBR;
   myRequests: PetRequest[] = [];
   requestsForMyPets: PetRequest[] = [];
+  isRequestsPage = false;
 
   loading = true;
 
   constructor(
     private requestService: RequestService,
-    private auth: AuthService
+    private auth: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.isRequestsPage = this.router.url === '/requests';
+    
     this.auth.getUserLogged().subscribe(user => {
       if (!user) return;
 
@@ -97,5 +103,9 @@ export class RequestComponentComponent implements OnInit {
       );
       ctx.close();
     });
+  }
+
+  goToRequests() {
+    this.router.navigate(['/requests']);
   }
 }

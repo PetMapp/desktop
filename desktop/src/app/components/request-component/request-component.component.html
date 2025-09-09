@@ -41,7 +41,10 @@
                                 <p class="text-sm opacity-60">{{ formatDateBR(req.createdAt) }} · </p>
                                 <p class="text-sm opacity-60 ml-1">{{ translateStatus(req.status) }}</p>
                             </div>
-                            <button hlmBtn variant="link" class="text-[#159A9C] text-xs hover:underline self-start p-0">
+                            <button *ngIf="!isRequestsPage"
+                            hlmBtn variant="link" 
+                            class="text-[#159A9C] text-xs hover:underline self-start p-0"
+                            (click)="goToRequests()">
                                 Ver mais
                             </button>
                         </div>

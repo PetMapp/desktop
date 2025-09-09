@@ -16,7 +16,7 @@ import {
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconDirective } from '@spartan-ng/ui-icon-helm';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideMenu, lucideMap, lucidePawPrint, lucideBell, lucideCircleUserRound, lucideSettings, lucidePiggyBank } from '@ng-icons/lucide';
+import { lucideMenu, lucideMap, lucidePawPrint, lucideBell, lucideCircleUserRound, lucideSettings, lucidePiggyBank, lucideSquareArrowUp } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-sidebar',
@@ -35,7 +35,7 @@ import { lucideMenu, lucideMap, lucidePawPrint, lucideBell, lucideCircleUserRoun
     HlmSheetHeaderComponent,
     HlmSheetTitleDirective,
   ],
-  providers: [provideIcons({ lucideMenu, lucideMap, lucidePawPrint, lucideBell, lucideCircleUserRound, lucideSettings, lucidePiggyBank })],
+  providers: [provideIcons({ lucideMenu, lucideMap, lucidePawPrint, lucideBell, lucideCircleUserRound, lucideSettings, lucidePiggyBank, lucideSquareArrowUp })],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })

@@ -63,14 +63,56 @@
           <ng-container *ngIf="petDetail.isMissing">
             <ng-container *ngIf="petDetail.userId != currentUserId; else petOwner">
               <div hlmAlert class="flex justify-start items-center gap-2">
-                <spartan-icon iconName="lucideBinoculars" iconSize="base" class="flex justify-center items-center"
-                  hlmAlertIcon>
-                </spartan-icon>
-                <div class="flex flex-col ml-2">
-                  <h6 hlmAlertTitle class="text-sm">Este pet está perdido</h6>
-                  <div hlmAlertDescription>Você pode notificar o usuário caso o encontre.</div>
-                </div>
+
+                <ng-container *ngIf="requestStatus === 'accepted'">
+                  <div hlmAlert class="flex justify-start items-center gap-2 bg-green-100 text-green-800">
+                    <spartan-icon iconName="lucideCheckCircle" iconSize="base" hlmAlertIcon></spartan-icon>
+                    <div class="flex flex-col ml-2">
+                      <h6 hlmAlertTitle class="text-sm">Solicitação aceita!</h6>
+                      <div hlmAlertDescription>
+                        Você já notificou o dono e sua solicitação foi aceita.
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="requestStatus === 'pending'">
+                  <div hlmAlert class="flex justify-start items-center gap-2 bg-yellow-100 text-yellow-800">
+                    <spartan-icon iconName="lucideClock" iconSize="base" hlmAlertIcon></spartan-icon>
+                    <div class="flex flex-col ml-2">
+                      <h6 hlmAlertTitle class="text-sm">Solicitação pendente</h6>
+                      <div hlmAlertDescription>
+                        Você já enviou uma solicitação para este pet, aguarde a resposta do dono.
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="requestStatus === 'rejected'">
+                  <div hlmAlert class="flex justify-start items-center gap-2 bg-red-100 text-red-800">
+                    <spartan-icon iconName="lucideXCircle" iconSize="base" hlmAlertIcon></spartan-icon>
+                    <div class="flex flex-col ml-2">
+                      <h6 hlmAlertTitle class="text-sm">Solicitação rejeitada</h6>
+                      <div hlmAlertDescription>
+                        Sua solicitação foi rejeitada pelo dono.
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="!requestStatus">
+                  <spartan-icon iconName="lucideBinoculars" iconSize="base" class="flex justify-center items-center"
+                    hlmAlertIcon>
+                  </spartan-icon>
+                  <div class="flex flex-col ml-2">
+                    <h6 hlmAlertTitle class="text-sm">Este pet está perdido</h6>
+                    <div hlmAlertDescription>
+                      Você pode notificar o usuário caso o encontre.
+                    </div>
+                  </div>
+                </ng-container>
               </div>
+
               <div class="w-full flex items-center gap-2">
                 <app-pet-found-button [currentUserId]="currentUserId" [petId]="activePetId"
                   [petOwnerId]="petDetail?.user?.uid" (requestCreated)="onRequestCreated($event)" class="w-full">
@@ -79,24 +121,19 @@
             </ng-container>
 
             <ng-template #petOwner>
-              <div hlmAlert class="flex justify-start items-center gap-2">
-                <spartan-icon iconName="lucideInfo" iconSize="base" class="flex justify-center items-center"
-                  hlmAlertIcon>
-                </spartan-icon>
+              <div hlmAlert class="flex justify-start items-center gap-2 bg-blue-100 text-blue-800">
+                <spartan-icon iconName="lucideInfo" iconSize="base" hlmAlertIcon></spartan-icon>
                 <div class="flex flex-col ml-2">
-                  <h6 hlmAlertTitle class="text-sm">Você marcou este pet como perdido</h6>
-                  <div hlmAlertDescription>Outros usuários poderão entrar em contato se o encontrarem.</div>
+                  <h6 hlmAlertTitle class="text-sm">Você é o dono deste pet</h6>
+                  <div hlmAlertDescription>
+                    Outros usuários poderão enviar notificações caso o encontrem.
+                  </div>
                 </div>
               </div>
-              <button hlmBtn class="w-full bg-[#159A9C] hover:bg-[#117778] flex justify-center items-center gap-2">
-                <spartan-icon iconName="lucideCheck" iconSize="base" class="flex justify-center items-center">
-                </spartan-icon>
-                Marcar como encontrado
-              </button>
             </ng-template>
           </ng-container>
 
-          <!-- Comentários -->
+
           <div class="w-full h-full flex flex-col items-start pt-2">
             <h1 class="font-bold mb-2">Discussão</h1>
 

@@ -80,4 +80,22 @@ export class RequestComponentComponent implements OnInit {
       });
     });
   }
+
+  acceptRequest(requestId: string, ctx: any) {
+    this.requestService.updateRequestStatus(requestId, 'accepted').subscribe(updatedRequest => {
+      this.requestsForMyPets = this.requestsForMyPets.map(req =>
+        req.id === updatedRequest.id ? updatedRequest : req
+      );
+      ctx.close();
+    });
+  }
+
+  rejectRequest(requestId: string, ctx: any) {
+    this.requestService.updateRequestStatus(requestId, 'rejected').subscribe(updatedRequest => {
+      this.requestsForMyPets = this.requestsForMyPets.map(req =>
+        req.id === updatedRequest.id ? updatedRequest : req
+      );
+      ctx.close();
+    });
+  }
 }

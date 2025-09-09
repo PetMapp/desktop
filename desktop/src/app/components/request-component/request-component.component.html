@@ -82,7 +82,7 @@
                             </div>
 
                             <div class="flex sm:hidden items-center gap-2 ml-5">
-                                <div class="w-full rounded-sm p-2 flex justify-between items-center gap-2">
+                                <div class="w-full rounded-sm p-2 flex justify-between items-center gap-2" *ngIf="req.status === 'pending'">
                                     <hlm-alert-dialog>
                                         <button hlmBtn variant="outline" brnAlertDialogTrigger>
                                             <spartan-icon iconName="lucideCheck" iconSize="sm"
@@ -100,7 +100,7 @@
                                             </hlm-alert-dialog-header>
                                             <hlm-alert-dialog-footer>
                                                 <button hlmAlertDialogCancel (click)="ctx.close()">Cancelar</button>
-                                                <button hlmAlertDialogAction (click)="ctx.close()" class="bg-[#159A9C]">Aceitar</button>
+                                                <button hlmAlertDialogAction (click)="acceptRequest(req.id, ctx)" class="bg-[#159A9C]">Aceitar</button>
                                             </hlm-alert-dialog-footer>
                                         </hlm-alert-dialog-content>
                                     </hlm-alert-dialog>
@@ -121,7 +121,7 @@
                                             </hlm-alert-dialog-header>
                                             <hlm-alert-dialog-footer>
                                                 <button hlmAlertDialogCancel (click)="ctx.close()">Cancelar</button>
-                                                <button hlmAlertDialogAction (click)="ctx.close()" class="bg-red-500">Negar</button>
+                                                <button hlmAlertDialogAction (click)="rejectRequest(req.id, ctx)" class="bg-red-500">Negar</button>
                                             </hlm-alert-dialog-footer>
                                         </hlm-alert-dialog-content>
                                     </hlm-alert-dialog>

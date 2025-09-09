@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, AfterViewInit, ViewChild, NgZone, ChangeDetectorRef, ElementRef, HostListener, OnInit } from '@angular/core';
 import * as L from 'leaflet';
+import { firstValueFrom } from 'rxjs';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { IconComponent } from '../icon-component/icon-component.component';
 import { ButtonIconComponent } from '../iconButton/iconButton.component';
@@ -20,6 +21,7 @@ import {
 
 import { ApiServiceService } from '../../services/api-service.service';
 import { AuthService } from '../../services/auth.service';
+import { RequestService } from '../../services/request.service';
 import { PetLocationModel } from '../../models/pet-location-model';
 import { PetdetailDTORes } from '../../interfaces/DTOs/petdetail-dto-res';
 import { PetDetailUser } from '../../interfaces/DTOs/petuser-dto-res';
@@ -134,6 +136,7 @@ export class MapViewComponent implements AfterViewInit {
   private map!: L.Map;
   public isMobile = false;
   private userLocationMarker: L.Marker | null = null;
+  public requestStatus: "pending" | "accepted" | "rejected" | null = null;
 
   constructor(
     private api: ApiServiceService,
@@ -141,6 +144,7 @@ export class MapViewComponent implements AfterViewInit {
     private cdr: ChangeDetectorRef,
     private auth: AuthService,
     private commentaryService: CommentaryService,
+    private requestService: RequestService,
     private router: Router
   ) { }
 
@@ -544,22 +548,29 @@ export class MapViewComponent implements AfterViewInit {
       this.activePetId = petId.toString();
       this.loadComments(petId.toString());
 
-      console.log(this.activePetId, 'Pet ID ativo');
-
       const petDetail = await this.api.get<PetdetailDTORes>(
         `/pet/find/get/${petId}`,
         true
       );
-      console.log('Pet detail:', petDetail);
 
       if (petDetail) {
-        const usuario = await this.auth.getUserById(petDetail.userId);
+        const user = await this.auth.getUserById(petDetail.userId);
 
-        this.ngZone.run(() => {
+        this.ngZone.run(async () => {
           this.petDetail = {
             ...petDetail,
-            user: usuario
+            user: user
           };
+
+          const result = await firstValueFrom(
+            this.requestService.getUserRequestForPet(this.currentUserId!, petId.toString())
+          );
+
+          if (result?.data.exists) {
+            this.requestStatus = result.data.status ?? null;
+          } else {
+            this.requestStatus = null;
+          }
 
           this.cdr.detectChanges();
 
@@ -655,5 +666,20 @@ export class MapViewComponent implements AfterViewInit {
 
   onRequestCreated(request: PetRequest) {
     console.log('Request criada', request);
+  }
+
+  public async getRequestStatus(requestId: string): Promise<"pending" | "accepted" | "rejected" | null> {
+    if (!this.currentUserId) {
+      return null;
+    }
+    try {
+      const response = await firstValueFrom(
+        this.requestService.getRequestStatus(requestId)
+      );
+      return response?.data ?? null;
+    } catch (err) {
+      console.error('Erro ao obter status da requisição:', err);
+      return null;
+    }
   }
 }

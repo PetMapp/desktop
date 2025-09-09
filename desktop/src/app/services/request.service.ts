@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 import { ApiResponse } from '../models/api-response';
 
 export interface PetRequest {
-  id?: string;
+  id: string;
   userId: string;
   petId: string;
   userPetId: string;
@@ -91,6 +91,33 @@ export class RequestService {
       switchMap(token => {
         const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
         return this.http.get<{ count: number }>(`${this.baseUrl}/user/${userId}/count?status=${status}`, { headers });
+      })
+    );
+  }
+
+  getUserRequestForPet(userId: string, petId: string): Observable<{ data: { exists: boolean; status?: 'pending' | 'accepted' | 'rejected' } }> {
+    return this.auth.getUserToken().pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+        return this.http.get<{ data: { exists: boolean; status?: 'pending' | 'accepted' | 'rejected' } }>(`${this.baseUrl}/user/${userId}/${petId}`, { headers });
+      })
+    );
+  }
+
+  checkIfUserRequestWasAccepted(userId: string, petId: string): Observable<{ data: boolean }> {
+    return this.auth.getUserToken().pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+        return this.http.get<{ data: boolean }>(`${this.baseUrl}/user/${userId}/${petId}/accepted`, { headers });
+      })
+    );
+  }
+
+  getRequestStatus(requestId: string): Observable<{ data: 'pending' | 'accepted' | 'rejected' | null }> {
+    return this.auth.getUserToken().pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+        return this.http.get<{ data: 'pending' | 'accepted' | 'rejected' | null }>(`${this.baseUrl}/${requestId}/status`, { headers });
       })
     );
   }

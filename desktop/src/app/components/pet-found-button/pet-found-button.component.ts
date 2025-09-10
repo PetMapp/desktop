@@ -7,6 +7,7 @@ import { HlmDialogComponent, HlmDialogContentComponent, HlmDialogDescriptionDire
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { RequestService, PetRequest } from '../../services/request.service';
+import { ToastService } from '../../services/toast.service';
 import { IconComponent } from '../icon-component/icon-component.component';
 
 @Component({
@@ -44,11 +45,13 @@ export class PetFoundButtonComponent {
   previewUrl?: string;
   isLoading = false;
   fileError: string | null = null;
-
   readonly allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
   readonly maxFileSizeBytes = 5 * 1024 * 1024;
 
-  constructor(private requestService: RequestService) { }
+  constructor(
+    private requestService: RequestService,
+    private toastService: ToastService
+  ) { }
 
   onFileSelected(event: any) {
     this.fileError = null;
@@ -89,10 +92,12 @@ export class PetFoundButtonComponent {
         this.fileInput.nativeElement.value = '';
       }
     } catch (e) {
-      console.error('Erro ao limpar input de arquivo', e);}
+      console.error('Erro ao limpar input de arquivo', e);
+    }
   }
 
   submitRequest(ctx?: any) {
+    
     if (!this.currentUserId || !this.petId || !this.petOwnerId) {
       console.error('Faltam ids para criar a request');
       return;
@@ -116,14 +121,19 @@ export class PetFoundButtonComponent {
       next: (created: PetRequest) => {
         this.isLoading = false;
         this.requestCreated.emit(created);
+        this.toastService.show(
+          'Você criou uma solicitação',
+          'Aguarde a resposta do dono do pet.'
+        );
         this.clearFile();
-        this.message = '';
         if (ctx?.close) ctx.close();
       },
       error: (err) => {
-        console.error('Erro ao criar request', err);
         this.isLoading = false;
-        // TODO: mostrar toast / notificação
+        this.toastService.show(
+          'Erro ao criar solicitação',
+          'Erro ao criar solicitação. Tente novamente.'
+        );
       }
     });
   }

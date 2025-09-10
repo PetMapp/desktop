@@ -22,6 +22,7 @@ import {
 import { ApiServiceService } from '../../services/api-service.service';
 import { AuthService } from '../../services/auth.service';
 import { RequestService } from '../../services/request.service';
+import { ToastService } from '../../services/toast.service';
 import { PetLocationModel } from '../../models/pet-location-model';
 import { PetdetailDTORes } from '../../interfaces/DTOs/petdetail-dto-res';
 import { PetDetailUser } from '../../interfaces/DTOs/petuser-dto-res';
@@ -145,6 +146,7 @@ export class MapViewComponent implements AfterViewInit {
     private auth: AuthService,
     private commentaryService: CommentaryService,
     private requestService: RequestService,
+    private toastService: ToastService,
     private router: Router
   ) { }
 
@@ -373,6 +375,9 @@ export class MapViewComponent implements AfterViewInit {
           try {
             const rootCommentId = this.replyingToRootId || await this.findRootCommentId(this.replyingToId);
             await this.refreshReplies(rootCommentId);
+            this.toastService.show(
+              'Você comentou no post de um pet! 🐶'
+            );
             this.cdr.markForCheck();
             this.cdr.detectChanges();
           } catch (err) {
@@ -387,7 +392,9 @@ export class MapViewComponent implements AfterViewInit {
         this.replyingToName = null;
         this.replyingToRootId = null;
       } else {
-        console.error('Erro ao enviar comentário:', result.error);
+        this.toastService.show(
+          'Erro ao enviar comentário, tente novamente.',
+        );
       }
     } finally {
       this.isLoadingComment = false;
@@ -468,7 +475,6 @@ export class MapViewComponent implements AfterViewInit {
     const parentId = this.commentToDelete.parentId;
 
     if (parentId) {
-      // Encontre o comentário pai raiz
       const rootParentId = await this.findRootCommentId(parentId);
       await this.refreshReplies(rootParentId);
     } else {
@@ -501,7 +507,6 @@ export class MapViewComponent implements AfterViewInit {
   public async toggleReplies(commentId: string) {
     this.showReplies[commentId] = !this.showReplies[commentId];
 
-    // Se for para exibir e ainda não buscou, então busca
     if (this.showReplies[commentId] && !this.replies[commentId]) {
       const fetchedReplies = await this.commentaryService.getReplies(commentId);
       this.replies[commentId] = fetchedReplies ?? [];
@@ -513,7 +518,6 @@ export class MapViewComponent implements AfterViewInit {
     this.replyingToId = comment.id;
     this.replyingToName = comment.user?.displayName ?? 'Usuário';
 
-    // Descobrir o comentário raiz dessa resposta
     this.replyingToRootId = await this.findRootCommentId(comment.id);
 
     this.isEditing = false;
@@ -593,7 +597,6 @@ export class MapViewComponent implements AfterViewInit {
     this.petDetail = null;
   }
 
-  // Método para debug - você pode chamar no template
   public openSheetManually() {
     console.log('Debug: Tentando abrir sheet manualmente');
     console.log('Sheet exists:', !!this.sheet);
@@ -606,7 +609,6 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  // Método alternativo usando trigger
   public openSheetViaTrigger() {
     console.log('Debug: Tentando abrir via trigger');
     if (this.hiddenTrigger && this.hiddenTrigger.nativeElement) {

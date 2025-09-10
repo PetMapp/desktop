@@ -18,6 +18,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmSwitchComponent } from '@spartan-ng/helm/switch';
 import { PetsService } from '../../services/pets.service';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 import * as L from 'leaflet';
 import { CommonModule } from '@angular/common';
@@ -53,7 +54,6 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
 
   usuarioAutenticado = false;
   mensagemErro = '';
-  // Variáveis para formulário
   apelido = '';
   descricao = '';
   localizacaoTexto = '';
@@ -67,6 +67,7 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
     private petsService: PetsService,
     private authService: AuthService,
     private router: Router,
+    private toastService: ToastService
   ) { }
 
   ngAfterViewInit() {
@@ -119,7 +120,6 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
   async onDialogOpened() {
     const user = await this.authService.checkAuthWithoutRedirect();
 
-    // Evita continuar se o componente foi destruído
     if (this.destroyed) return;
 
     console.log('Usuário autenticado:', user);
@@ -168,7 +168,6 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
         return data.display_name;
       }
 
-      // Se não conseguir o nome, retorna as coordenadas como fallback
       return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
     } catch (error) {
       console.error('Erro no reverse geocoding:', error);
@@ -211,7 +210,6 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
 
       this.currentMarker = L.marker(e.latlng).addTo(this.mapDialog);
 
-      // CORREÇÃO: Buscar o nome do local ao invés de usar apenas coordenadas
       this.localizacaoTexto = await this.reverseGeocode(e.latlng.lat, e.latlng.lng);
       this.localizacaoCoords.lat = e.latlng.lat;
       this.localizacaoCoords.lon = e.latlng.lng;
@@ -243,7 +241,6 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
 
       this.currentMarker = L.marker([lat, lon]).addTo(this.mapDialog).bindPopup(query).openPopup();
 
-      // CORREÇÃO: Manter o nome pesquisado ao invés de substituir por coordenadas
       this.localizacaoTexto = data[0].display_name || query;
       this.localizacaoCoords.lat = lat;
       this.localizacaoCoords.lon = lon;
@@ -296,9 +293,14 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
       isMissing: this.isMissing,
       missingSince: this.isMissing ? new Date().toISOString() : null
     }).subscribe({
-      next: () => alert('Pet registrado com sucesso!'),
+      next: () => this.toastService.show(
+          'Você registrou um pet! 🐶'
+        ),
       error: (err) => {
-        console.error(err);
+        this.toastService.show(
+          'Erro ao registrar um pet',
+          'Erro ao registrar um pet. Tente novamente.'
+        );
         alert('Erro ao registrar o pet.');
       }
     });

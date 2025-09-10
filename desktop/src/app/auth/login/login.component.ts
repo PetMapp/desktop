@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 import {
   HlmCardContentDirective,
@@ -47,21 +48,23 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private toastService: ToastService
+  ) { }
 
   goToRegister() {
     this.router.navigate(['/register']);
   }
 
   async login() {
-    this.errorMessage = '';
     try {
       await this.authService.login(this.email, this.password);
-      this.router.navigate(['/map']); // redireciona para home (ajuste para a rota correta)
+      this.router.navigate(['/map']);
     } catch (error) {
-      this.errorMessage = 'Usuário ou senha inválidos.';
-      console.error(error);
+      this.toastService.show(
+        'Erro no login',
+        'Usuário ou senha inválidos.'
+      );
     }
   }
 }

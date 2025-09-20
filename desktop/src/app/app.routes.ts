@@ -9,10 +9,11 @@ import { ConfigComponent } from './config/config.component';
 import { AppearenceComponent } from './config/appearence/appearence.component';
 import { MessagesComponent } from './messages/messages.component';
 import { RequestsComponent } from './requests/requests.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 // Exportando a constante routes
 export const routes: Routes = [
-  { path: '', component: LoginComponent },
+  { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'map', component: MapComponent },

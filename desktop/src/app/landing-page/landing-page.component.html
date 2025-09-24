@@ -1,4 +1,4 @@
-<div class="w-full h-20 border-b flex items-center px-4 fixed bg-white z-9999">
+<div class="w-full h-20 border-b flex items-center px-4 fixed bg-white" style="z-index: 9999;">
     <app-mapets-icon />
 
     <div class="w-full flex justify-between items-center ml-6">
@@ -10,14 +10,16 @@
             <div class="text-xs opacity-60 hover:underline cursor-pointer">
                 Sobre o Mapets
             </div>
+
+            
         </div>
 
         <div class="flex items-center space-x-2">
-            <button class="bg-[#159A9C] text-white px-4 py-2 rounded hover:bg-[#0F9597]">
+            <button class="bg-[#159A9C] text-white px-4 py-2 rounded hover:bg-[#0F9597]" (click)="goToLogin()">
                 Entrar
             </button>
 
-            <button class="bg-[#159A9C] text-white px-4 py-2 rounded hover:bg-[#0F9597]">
+            <button class="bg-[#159A9C] text-white px-4 py-2 rounded hover:bg-[#0F9597]" (click)="goToRegister()">
                 Registrar
             </button>
         </div>
@@ -49,13 +51,13 @@
         </div>
     </div>
 
-    <div class="flex-grow flex items-center justify-start p-20 text-center space-y-6 border-b gap-10">
+    <div class="flex-grow flex items-center justify-start p-20 text-center space-y-6 border-b gap-20">
 
-        <div class="w-1/2 h-96 border rounded overflow-hidden bg-black/20">
+        <div class="w-1/2 h-96 border rounded overflow-hidden">
             <app-map-view />
         </div>
 
-        <div class="flex flex-col items-center space-y-6 max-w-2xl ">
+        <div class="flex flex-col items-start space-y-6 max-w-2xl ">
             <h1 class="text-4xl font-bold text-center font-poppins">
                 Veja os animais perto de você
             </h1>
@@ -68,7 +70,7 @@
     </div>
 
     <div class="flex-grow flex items-center justify-start text-center p-20 space-y-6 border-b gap-20">
-        <div class="flex flex-col items-center space-y-6 max-w-2xl ">
+        <div class="flex flex-col items-start space-y-6 max-w-2xl ">
             <h1 class="text-4xl font-bold text-center font-poppins">
                 Animais perdidos
             </h1>
@@ -89,15 +91,25 @@
 
         </div>
 
-        <div class="flex flex-col items-center space-y-6 max-w-2xl ">
-            <h1 class="text-4xl font-bold text-center font-poppins">
+        <div class="flex flex-col items-center space-y-6 max-w-2xl">
+            <h1 class="text-4xl font-bold text-start font-poppins">
                 Entre em contato com os tutores que perderam seus pets
             </h1>
 
-            <p class="text-lg max-w-xl text-justify font-poppins">
+            <p class="text-lg text-justify font-poppins">
                 Caso o tutor aceite a solicitação, utilize nossa plataforma para entrar em contato com o tutor que o
                 registrou. Juntos, podemos ajudar a reunir animais perdidos com suas famílias!
             </p>
         </div>
+    </div>
+</div>
+
+<div class="w-full h-20 border-t flex items-center px-4 justify-between bg-white p-20" style="z-index: 9999;">
+    <app-mapets-icon />
+
+    <div>
+        <p class="text-xs opacity-60 ml-6">
+            © 2025 Mapets. Todos os direitos reservados.
+        </p>
     </div>
 </div>

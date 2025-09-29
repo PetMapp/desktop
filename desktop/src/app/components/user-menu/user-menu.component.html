@@ -19,9 +19,8 @@
     <ng-template #menu>
       <hlm-menu>
         <hlm-menu-group>
-          <button hlmMenuItem>Perfil</button>
-          <button hlmMenuItem>Meus pets</button>
-          <button hlmMenuItem>Configurações</button>
+          <button hlmMenuItem (click)="goToPets()">Meus pets</button>
+          <button hlmMenuItem (click)="goToConfig()">Configurações</button>
           <hlm-menu-separator />
         </hlm-menu-group>
         <hlm-menu-group>

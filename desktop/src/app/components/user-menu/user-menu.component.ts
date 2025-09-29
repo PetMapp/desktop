@@ -19,6 +19,7 @@ import { AuthService } from '../../services/auth.service';
 import { NotificationsComponent } from '../notifications/notifications.component';
 import { ButtonIconComponent } from '../iconButton/iconButton.component';
 import { RequestComponentComponent } from '../request-component/request-component.component';
+import { Redirection } from '../../utils/redirection';
 
 @Component({
   selector: 'app-user-menu',
@@ -42,13 +43,15 @@ export class UserMenuComponent {
   @Input() userLogged!: User | null;
   unredMessagesCount: number = 0;
   private wsSubscription!: Subscription;
-
+  private redirection: Redirection
   constructor(
     private router: Router,
     private messageService: MessageService,
     private wsService: WebSocketService,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+  ) { 
+    this.redirection = new Redirection(this.router);
+  }
 
   ngOnInit() {
     this.authService.getUserLogged().subscribe(user => {
@@ -72,12 +75,20 @@ export class UserMenuComponent {
     }
   }
 
-  goToLogin() {
-    this.router.navigate(['/login']);
+  goToLogin(): void {
+    this.redirection.goTo('/login');
   }
 
   goToMessages() {
-    this.router.navigate(['/messages']);
+    this.redirection.goTo('/messages');
+  }
+
+  goToPets() {
+    this.redirection.goTo('/pets');
+  }
+
+  goToConfig() {
+    this.redirection.goTo('/config');
   }
 
   private loadUnreadMessagesCount() {

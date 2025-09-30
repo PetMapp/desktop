@@ -66,6 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userLogged: User | null = null;
   nearbyPets: any[] = [];
   isMapRoute = false;
+  isSearchOpen = false;
   private userSub!: Subscription;
   @ViewChild(BrnDialogComponent) dialogRef!: BrnDialogComponent;
   @ViewChild('scrollContainer', { static: false }) scrollContainer!: ElementRef;
@@ -146,6 +147,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/map'], { queryParams: { search: query } });
     }
+  }
+
+  toggleSearch() {
+    this.isSearchOpen = !this.isSearchOpen;
   }
 
   async logout() {

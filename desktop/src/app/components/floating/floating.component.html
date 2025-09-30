@@ -1,11 +1,16 @@
 <div id="floating">
     <div class="flex flex-col justify-around items-center bg-transparent rounded-xl">
-        <spartan-button-icon [size]="'icon'" [class]="'mb-2 shadow'" [variant]="'secondary'"
-            [iconName]="'lucideLocateFixed'" [iconSize]="'lg'" (click)="recenter()"></spartan-button-icon>
-
+        <button variant="secondary" hlmBtn class="border flex justify-center items-center shadow p-2"
+            (click)="recenter()">
+            <spartan-icon iconName="lucideLocateFixed" iconSize="lg"
+                class="flex justify-center items-center"></spartan-icon>
+        </button>
         <hlm-dialog>
-            <spartan-button-icon [size]="'icon'" [variant]="'secondary'" [iconName]="'lucideCamera'" [iconSize]="'lg'"
-                brnDialogTrigger (click)="handleDialogClick()"></spartan-button-icon>
+            <button variant="secondary" hlmBtn class="border flex justify-center items-center shadow p-2 mt-2"
+                brnDialogTrigger (click)="handleDialogClick()">
+                <spartan-icon iconName="lucideCamera" iconSize="lg"
+                    class="flex justify-center items-center"></spartan-icon>
+            </button>
             <hlm-dialog-content *brnDialogContent="let ctx" class="w-auto" BrnDialogState="onDialogOpened()">
                 <ng-container *ngIf="usuarioAutenticado; else naoLogado">
                     <hlm-dialog-header>

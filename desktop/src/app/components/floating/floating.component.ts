@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonIconComponent } from '../iconButton/iconButton.component';
+import { IconComponent } from '../icon-component/icon-component.component';
 
 import { BrnDialogModule } from '@spartan-ng/brain/dialog';
 import { HlmDialogModule } from '@spartan-ng/helm/dialog';
@@ -14,6 +15,7 @@ import { HlmDialogModule } from '@spartan-ng/helm/dialog';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmLabelDirective } from '@spartan-ng/ui-label-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { BrnDialogComponent } from '@spartan-ng/brain/dialog';
 
 import { HlmSwitchComponent } from '@spartan-ng/helm/switch';
 import { PetsService } from '../../services/pets.service';
@@ -32,6 +34,7 @@ import { Router } from '@angular/router';
     FormsModule,
     HlmSwitchComponent,
     ButtonIconComponent,
+    IconComponent,
     BrnDialogModule,
     HlmDialogModule,
     HlmInputDirective,
@@ -48,9 +51,8 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
   private mapObserver!: MutationObserver;
   private dialogVisible = false;
   private openCount = 0;
-
-
   private currentMarker: L.Marker | null = null;
+  public readonly viewchildDialogRef = viewChild(BrnDialogComponent);
 
   usuarioAutenticado = false;
   mensagemErro = '';
@@ -114,6 +116,10 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
       this.onDialogOpened();
     }, 50);
   }
+
+  closeDialog() {
+		this.viewchildDialogRef()?.close({});
+	}
 
   private destroyed = false;
 
@@ -293,9 +299,11 @@ export class FloatingComponent implements AfterViewInit, OnDestroy {
       isMissing: this.isMissing,
       missingSince: this.isMissing ? new Date().toISOString() : null
     }).subscribe({
-      next: () => this.toastService.show(
-          'Você registrou um pet! 🐶'
-        ),
+      next: (newPet) => {
+        this.toastService.show('Você registrou um pet! 🐶');
+        window.dispatchEvent(new CustomEvent("petCreated", { detail: newPet }));
+        this.closeDialog();
+      },   
       error: (err) => {
         this.toastService.show(
           'Erro ao registrar um pet',

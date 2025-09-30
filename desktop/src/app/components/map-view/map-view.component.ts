@@ -179,6 +179,11 @@ export class MapViewComponent implements AfterViewInit {
       await this.loadPetMarkers();
       this.setupLocationHandlers();
     }, 100);
+
+    window.addEventListener("petCreated", async () => {
+      console.log("Novo pet criado, atualizando mapa...");
+      await this.loadPetMarkers();
+    });
   }
 
   private initMap() {

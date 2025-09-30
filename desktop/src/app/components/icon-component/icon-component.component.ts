@@ -35,6 +35,8 @@ import {
   lucideChevronsRight,
   lucideClock,
   lucideCircleCheck,
+  lucideLocateFixed,
+  lucideCamera,
 } from '@ng-icons/lucide';
 
 @Component({
@@ -73,7 +75,9 @@ import {
       lucideCheckCheck,
       lucideSendHorizontal,
       lucideClock,
-      lucideCircleCheck
+      lucideCircleCheck,
+      lucideLocateFixed,
+      lucideCamera
     }),
   ],
   template: `

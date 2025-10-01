@@ -63,9 +63,10 @@
     </hlm-sheet>
 </div>
 
-<div class="flex flex-col h-full p-20">
+<div class="flex flex-col h-full sm:p-20 p-5 pt-20">
 
-    <div class="flex-grow flex items-center justify-start p-20 text-center space-y-6 border-b">
+    <div
+        class="flex-grow flex sm:flex-row flex-col items-center justify-start sm:p-20 p-5 text-center sm:space-y-6 border-b">
 
         <div class="flex flex-col items-start space-y-6 max-w-2xl">
             <h1 class="text-4xl font-bold text-start font-poppins">
@@ -78,19 +79,20 @@
                 que precisam de cuidados. Junte-se a nós para fazer a diferença!
             </p>
 
-            <button class="bg-[#159A9C] text-white px-6 py-3 rounded hover:bg-[#0F9597]">
+            <button class="bg-[#159A9C] text-white px-6 py-3 rounded hover:bg-[#0F9597] self-center sm:self-start">
                 Comece agora
             </button>
         </div>
 
-        <div flex class="flex-grow flex justify-center items-end h-full">
+        <div flex class="flex-grow flex justify-center items-end h-full sm:pt-0 pt-5">
             <img src="../../assets/images/dogs.svg" alt="by Freepik" class="" />
         </div>
     </div>
 
-    <div class="flex-grow flex items-center justify-start p-20 text-center space-y-6 border-b gap-20">
+    <div
+        class="flex-grow flex sm:flex-row flex-col items-center justify-start sm:p-20 p-5 text-center sm:space-y-6 border-b sm:gap-20">
 
-        <div class="w-1/2 h-96 border rounded overflow-hidden">
+        <div class="sm:w-1/2 w-full h-96 border rounded sm:mb-0 mb-5">
             <app-map-view />
         </div>
 
@@ -106,8 +108,9 @@
         </div>
     </div>
 
-    <div class="flex-grow flex items-center justify-start text-center p-20 space-y-6 border-b gap-20">
-        <div class="flex flex-col items-start space-y-6 max-w-2xl ">
+    <div
+        class="flex-grow flex sm:flex-row flex-col items-center justify-start text-center sm:p-20 p-5 sm:space-y-6 border-b sm:gap-20">
+        <div class="flex flex-col items-start space-y-6 max-w-2xl">
             <h1 class="text-4xl font-bold text-center font-poppins">
                 Animais perdidos
             </h1>
@@ -118,13 +121,14 @@
             </p>
         </div>
 
-        <div class="w-full h-96 border rounded overflow-hidden bg-black/20">
+        <div class="w-full sm:h-96 h-60 border rounded overflow-hidden bg-black/20 mt-5">
 
         </div>
     </div>
 
-    <div class="flex-grow flex items-center justify-start text-center p-20 space-y-6 border-b gap-20">
-        <div class="w-full h-96 border rounded overflow-hidden bg-black/20">
+    <div
+        class="flex-grow flex sm:flex-row flex-col items-center justify-start text-center sm:p-20 p-5 space-y-6 sm:gap-20">
+        <div class="w-full sm:block hidden h-96 border rounded overflow-hidden bg-black/20">
 
         </div>
 
@@ -138,10 +142,14 @@
                 registrou. Juntos, podemos ajudar a reunir animais perdidos com suas famílias!
             </p>
         </div>
+
+        <div class="w-full sm:hidden block h-60 border rounded overflow-hidden bg-black/20">
+
+        </div>
     </div>
 </div>
 
-<div class="w-full h-20 border-t flex items-center px-4 justify-between bg-white p-20" style="z-index: 9999;">
+<div class="w-full h-20 border-t flex items-center px-4 justify-between bg-white sm:p-20 p-5" style="z-index: 9999;">
     <app-mapets-icon />
 
     <div>

@@ -1,7 +1,8 @@
-<div class="w-full h-20 border-b flex items-center px-4 fixed bg-white" style="z-index: 9999;">
+<div class="w-full h-20 border-b flex items-center justify-between sm:justify-normal px-4 fixed bg-white"
+    style="z-index: 9999;">
     <app-mapets-icon />
 
-    <div class="w-full flex justify-between items-center ml-6">
+    <div class="w-full hidden sm:flex justify-between items-center ml-6">
         <div class="flex items-center space-x-2">
             <div class="text-xs opacity-60 hover:underline cursor-pointer">
                 Ver o mapa
@@ -10,8 +11,6 @@
             <div class="text-xs opacity-60 hover:underline cursor-pointer">
                 Sobre o Mapets
             </div>
-
-            
         </div>
 
         <div class="flex items-center space-x-2">
@@ -24,6 +23,44 @@
             </button>
         </div>
     </div>
+
+    <hlm-sheet class="sm:hidden">
+        <ng-container *ngIf="!isSheetOpen">
+            <button brnSheetTrigger class="flex justify-center items-center" (click)="openSheet()">
+                <spartan-icon iconName="lucideMenu" iconSize="lg"
+                    class="flex justify-center items-center"></spartan-icon>
+            </button>
+        </ng-container>
+
+        <ng-container *ngIf="isSheetOpen">
+            <button brnSheetTrigger class="flex justify-center items-center" (click)="closeSheet()">
+                <spartan-icon iconName="lucideX" iconSize="lg" class="flex justify-center items-center"></spartan-icon>
+            </button>
+        </ng-container>
+
+        <hlm-sheet-content *brnSheetContent="let ctx" class="h-full flex flex-col">
+            <hlm-sheet-header class="w-full flex justify-between">
+                <div class="flex justify-between items-center space-x-2">
+                    <app-mapets-icon />
+                    <button brnSheetTrigger class="flex justify-end items-center" (click)="closeSheet()">
+                        <spartan-icon iconName="lucideX" iconSize="lg"
+                            class="flex justify-center items-center"></spartan-icon>
+                    </button>
+                </div>
+            </hlm-sheet-header>
+            <div class="flex flex-col items-start space-y-2">
+                <div class="text-md opacity-60 hover:underline cursor-pointer">Ver o mapa</div>
+                <div class="text-md opacity-60 hover:underline cursor-pointer">Sobre o Mapets</div>
+            </div>
+
+            <div class="mt-auto flex items-center justify-center gap-2 pb-4">
+                <button class="bg-[#159A9C] text-white px-4 py-2 rounded hover:bg-[#0F9597]"
+                    (click)="goToLogin()">Entrar</button>
+                <button class="bg-[#159A9C] text-white px-4 py-2 rounded hover:bg-[#0F9597]"
+                    (click)="goToRegister()">Registrar</button>
+            </div>
+        </hlm-sheet-content>
+    </hlm-sheet>
 </div>
 
 <div class="flex flex-col h-full p-20">

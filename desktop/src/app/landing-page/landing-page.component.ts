@@ -60,6 +60,9 @@ export class LandingPageComponent {
     this.redirection.goTo('/register');
   }
 
+  goToMap(): void {
+    this.redirection.goTo('/map');
+  }
 
   onSheetChange(open: Event) {
     this.isSheetOpen = !!open;

@@ -4,7 +4,7 @@
 
     <div class="w-full hidden sm:flex justify-between items-center ml-6">
         <div class="flex items-center space-x-2">
-            <div class="text-xs opacity-60 hover:underline cursor-pointer">
+            <div class="text-xs opacity-60 hover:underline cursor-pointer" (click)="goToMap()">
                 Ver o mapa
             </div>
 
@@ -49,7 +49,7 @@
                 </div>
             </hlm-sheet-header>
             <div class="flex flex-col items-start space-y-2">
-                <div class="text-md opacity-60 hover:underline cursor-pointer">Ver o mapa</div>
+                <div class="text-md opacity-60 hover:underline cursor-pointer" (click)="goToMap()">Ver o mapa</div>
                 <div class="text-md opacity-60 hover:underline cursor-pointer">Sobre o Mapets</div>
             </div>
 
@@ -70,7 +70,7 @@
 
         <div class="flex flex-col items-start space-y-6 max-w-2xl">
             <h1 class="text-4xl font-bold text-start font-poppins">
-                <span class="text-[#159A9C]">Encontre</span> e <span class="text-[#159A9C]">ajude</span> animais de rua
+                <span class="text-[#159A9C]">Encontre</span> e <span class="text-[#159A9C]">ajude</span> animais
                 perto de você
             </h1>
 
@@ -79,9 +79,15 @@
                 que precisam de cuidados. Junte-se a nós para fazer a diferença!
             </p>
 
-            <button class="bg-[#159A9C] text-white px-6 py-3 rounded hover:bg-[#0F9597] self-center sm:self-start">
-                Comece agora
-            </button>
+            <div class="flex items-center justify-center gap-2">
+                <button class="bg-[#159A9C] text-white px-6 py-3 rounded hover:bg-[#0F9597]">
+                    Comece agora
+                </button>
+                <div class="flex flex-col items-center">
+                    <div class="absolute rounded-full bg-[#159A9C] text-white ml-20 translate-x-8 text-xs p-1">Em breve</div>
+                    <img src="../../assets/images/google-play-badge.png" alt="by Freepik" class="h-16" />
+                </div>
+            </div>
         </div>
 
         <div flex class="flex-grow flex justify-center items-end h-full sm:pt-0 pt-5">
@@ -92,12 +98,12 @@
     <div
         class="flex-grow flex sm:flex-row flex-col items-center justify-start sm:p-20 p-5 text-center sm:space-y-6 border-b sm:gap-20">
 
-        <div class="sm:w-1/2 w-full h-96 border rounded sm:mb-0 mb-5">
+        <div class="sm:w-1/2 w-full h-80 sm:h-96 border rounded overflow-hidden sm:mb-0 mb-5">
             <app-map-view />
         </div>
 
         <div class="flex flex-col items-start space-y-6 max-w-2xl ">
-            <h1 class="text-4xl font-bold text-center font-poppins">
+            <h1 class="text-4xl font-bold sm:text-center text-start font-poppins">
                 Veja os animais perto de você
             </h1>
 
@@ -127,7 +133,7 @@
     </div>
 
     <div
-        class="flex-grow flex sm:flex-row flex-col items-center justify-start text-center sm:p-20 p-5 space-y-6 sm:gap-20">
+        class="flex-grow flex sm:flex-row flex-col items-center justify-start text-center sm:p-20 p-5 sm:space-y-6 sm:gap-20">
         <div class="w-full sm:block hidden h-96 border rounded overflow-hidden bg-black/20">
 
         </div>
@@ -143,7 +149,7 @@
             </p>
         </div>
 
-        <div class="w-full sm:hidden block h-60 border rounded overflow-hidden bg-black/20">
+        <div class="w-full sm:hidden block h-60 border rounded overflow-hidden sm:mt-0 mt-5 bg-black/20">
 
         </div>
     </div>
